@@ -1,13 +1,13 @@
-import { useState } from 'react';
-
 import './App.css';
+import SignInForm from './components/auth/sign-in/signIn';
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  
 
   return (
     <>
-  
+        <SignInForm />
     </>
   )
 }
