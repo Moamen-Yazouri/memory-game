@@ -33,13 +33,16 @@ export interface ICurrentMode {
 }
 
 export interface IFinishedLevel {
+    mode: GameModesTypes,
     level: string,
     score: number,
     time: number,
     attempt: number,
 }
 
-export type FinishedModes = Partial<Record<GameModesTypes, IFinishedLevel>>;
+export type CompletedLevels = {
+  [mode in GameModesTypes]: Partial<Record<LevelsTypes, IFinishedLevel>>
+};
 
 export interface IMonster {
     unlocked: boolean,
@@ -48,4 +51,8 @@ export interface IMonster {
     time: number,
 }
 
-
+export interface IGameCard {
+    id: number,
+    isFlipped: boolean,
+    isMatched: boolean,
+}
