@@ -4,10 +4,9 @@ import GameBoard from './components/game-board/gameBoard';
 
 function App() {
   
-
   return (
     <>
-        <GameBoard />
+        <GameBoard level={"monster"}/>
     </>
   )
 }
