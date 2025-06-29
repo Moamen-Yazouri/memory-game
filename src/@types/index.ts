@@ -23,6 +23,8 @@ enum Levels {
     Easy = 'easy',
     Medium = 'medium',
     Hard = 'hard',
+    VeryHard = 'veryHard',
+    Monster = 'monster'
 }
 
 export type LevelsTypes = `${Levels}`;

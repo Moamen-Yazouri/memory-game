@@ -1,13 +1,12 @@
 import './App.css';
-import SignInForm from './components/auth/sign-in/signIn';
+import GameBoard from './components/game-board/gameBoard';
 
 
 function App() {
   
-
   return (
     <>
-        <SignInForm />
+        <GameBoard level={"monster"}/>
     </>
   )
 }
