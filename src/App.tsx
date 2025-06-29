@@ -6,7 +6,7 @@ function App() {
   
   return (
     <>
-        <GameBoard level={"hard"}/>
+        <GameBoard />
     </>
   )
 }

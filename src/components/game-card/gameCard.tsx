@@ -4,24 +4,34 @@ import { useCallback, useMemo, useState } from "react";
 import { Box, Card, CardContent, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { getCardImage } from "./service/getImage.service";
+import { IGameCard } from "@/@types";
 
-interface IProps {
+interface IProps extends IGameCard{
   value: number;
 }
 
-const GameCard = ({ value }: IProps) => {
-  const [flipped, setFlipped] = useState(false);
+const GameCard = ({ value, isFlipped, isMatched }: IProps) => {
+  const [flipped, setFlipped] = useState(isFlipped);
   const [isHovered, setIsHovered] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const imageUrl = useMemo(() => {
       return getCardImage(value);
-  }, [value]) 
-  const cardSize = {
-    width: isMobile ? "28vw" : "120px",
-    height: isMobile ? "20vh" : "120px",
-    maxWidth: 150,
-  };
+  }, [value]);
+
+  const handleFlipped = useCallback(() => {
+      if(isMatched) return;
+      setFlipped(!flipped);
+  }, [isMatched, flipped]);
+
+  const cardSize = useMemo(() => {
+      return {
+        width: isMobile ? "28vw" : "120px",
+        height: isMobile ? "20vh" : "120px",
+        maxWidth: 150,
+      };
+  }, [isMobile])
 
   const gradient = theme.palette.mode === "light"
     ? "linear-gradient(135deg, rgb(204, 188, 222), rgb(186, 171, 192))"
@@ -47,7 +57,7 @@ const GameCard = ({ value }: IProps) => {
 
   return (
     <Box
-      onClick={() => setFlipped(!flipped)}
+      onClick={handleFlipped}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       sx={{

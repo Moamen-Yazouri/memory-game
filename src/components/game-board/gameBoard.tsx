@@ -2,46 +2,30 @@
 
 import { Box, Grid } from "@mui/material"
 import GameCard from "../game-card/gameCard"
-import { useMemo } from "react"
-import type { LevelsTypes } from "@/@types"
-import { getBoardLenght } from "./utils/getTheBoardLength"
+import { useContext, useEffect, useMemo } from "react"
+import { getBoardLenght, getResponsiveColumns } from "./utils/getTheBoardLength"
+import { GameInfoContext } from "@/providers/game-info/gameInfo"
 
-interface IProps {
-  level: LevelsTypes
-}
 
-const GameBoard = (props: IProps) => {
+
+const GameBoard = () => {
+  const {gameInfo, state, changeLevel, changeMode }= useContext(GameInfoContext);
+  
+  useEffect(() => {
+  
+      changeLevel("hard");
+
+      changeMode("education")
+  }, []);
+
   const cards = useMemo(() => {
-    return getBoardLenght(props.level)
-  }, [props.level])
-
-  const array: number[] = useMemo(() => {
-    return Array.from({ length: cards * 2 }, (_, index) => (index % 2 === 0 ? index + 1 : index + 2)).sort(
-      () => Math.random() - 0.5,
-    )
-  }, [cards])
-
-  // Responsive columns based on level and screen size
-  const getResponsiveColumns = (level: LevelsTypes) => {
-    switch (level) {
-      case 'easy': // 6 cards
-        return { xs: 2, sm: 3, md: 3 } // 3x2, 2x3, 2x3
-      case 'medium': // 12 cards
-        return { xs: 3, sm: 4, md: 4 } // 4x3, 3x4, 3x4
-      case 'hard': // 16 cards
-        return { xs: 4, sm: 4, md: 4 } // 4x4, 4x4, 4x4
-      case 'veryHard': // 24 cards
-        return { xs: 4, sm: 6, md: 6 } // 6x4, 4x6, 4x6
-      case 'monster': // 32 cards
-        return { xs: 4, sm: 6, md: 8 } // 8x4, 6x5.33, 4x8
-      default:
-        return { xs: 2, sm: 3, md: 4 }
-    }
-  }
+    return getBoardLenght(gameInfo.level || "easy")
+  }, [gameInfo])
+  
 
   const responsiveColumns = useMemo(() => {
-    return getResponsiveColumns(props.level)
-  }, [props.level])
+    return getResponsiveColumns(gameInfo.level || "easy")
+  }, [gameInfo])
 
   return (
     <Box
@@ -63,7 +47,7 @@ const GameBoard = (props: IProps) => {
           maxWidth: { xs: "100vw", sm: "90vw", md: "80vw", lg: "600px" }, // Responsive max width
         }}
       >
-        {array.map((value, index) => (
+        {state.cards.map((value, index) => (
           <Grid
             key={index}
             size={1}
@@ -74,7 +58,11 @@ const GameBoard = (props: IProps) => {
               aspectRatio: "1", // Keep cards square
             }}
           >
-            <GameCard value={value} />
+            <GameCard
+              value={value.value} 
+              isFlipped= {value.isFlipped}
+              isMatched={value.isMatched}
+             />
           </Grid>
         ))}
       </Grid>
