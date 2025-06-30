@@ -6,9 +6,7 @@ import { useTheme } from "@mui/material/styles";
 import { getCardImage } from "./service/getImage.service";
 import { IGameCard } from "@/@types";
 
-interface IProps extends IGameCard{
-  value: number;
-}
+interface IProps extends IGameCard{}
 
 const GameCard = ({ value, isFlipped, isMatched }: IProps) => {
   const [flipped, setFlipped] = useState(isFlipped);

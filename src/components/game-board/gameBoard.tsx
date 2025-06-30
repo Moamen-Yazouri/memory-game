@@ -59,6 +59,7 @@ const GameBoard = () => {
             }}
           >
             <GameCard
+              id={index}
               value={value.value} 
               isFlipped= {value.isFlipped}
               isMatched={value.isMatched}

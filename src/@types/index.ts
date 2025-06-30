@@ -54,6 +54,7 @@ export interface IMonster {
 }
 
 export interface IGameCard {
+    id: number,
     value: number,
     isFlipped: boolean,
     isMatched: boolean,
