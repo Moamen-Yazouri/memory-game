@@ -18,9 +18,9 @@ const GameBoard = () => {
       changeMode("education")
   }, []);
 
-  const cards = useMemo(() => {
-    return getBoardLenght(gameInfo.level || "easy")
-  }, [gameInfo])
+  // const cards = useMemo(() => {
+  //   return getBoardLenght(gameInfo.level || "easy")
+  // }, [gameInfo])
   
 
   const responsiveColumns = useMemo(() => {
@@ -59,7 +59,7 @@ const GameBoard = () => {
             }}
           >
             <GameCard
-              id={index}
+              id={value.id}
               value={value.value} 
               isFlipped= {value.isFlipped}
               isMatched={value.isMatched}

@@ -10,7 +10,8 @@ export interface IState {
 
 export type Action = 
     {type: "INITIAL_GAME", payload: LevelsTypes} |
-    {type: "FLIPP_CARD", payload: number}
+    {type: "FLIPP_CARD", payload: number} |
+    {type: "CHECK_MATCHED"} 
 
 export const reducer = (state: IState, action: Action) => {
     switch(action.type) {
@@ -23,60 +24,76 @@ export const reducer = (state: IState, action: Action) => {
         }
 
         case "FLIPP_CARD": {
-            let opened = [...state.openCards];
-            const selected = state.cards.find((c) => {
-                c.id === action.payload;
-            });
-            opened.push(selected!);
+            const clicked = state.cards.find((c) => c.id == action.payload);
+            const exists = state.openCards.find((c) => (c.id == action.payload));
 
-            if(opened.length == 2) {
-                const c1 = opened[0];
-                const c2 = opened[1];
-
-                if(c1.value == c2.value) {
-                    const newCards = state.cards.map((c) => (
-                        c.id == c1.id || c.id == c2.id 
-                        ? {...c, isMatched: true}
-                        : c
-                    ));
-                    opened = [];
-                    return {
-                        ...state,
-                        cards: newCards,
-                        openCards: opened, 
-                    };
-                }
-                else {
-                    setTimeout(() => {
-                        const newCards = state.cards.map((c) => (
-                            c.id == c1.id || c.id == c2.id 
-                                ? {...c, isFlipped: false}
-                                : c
-                        ));
-
-                        opened = [];
-                        return {
-                            ...state,
-                            cards: newCards,
-                            openCards: opened,
-                            wrongMoves: state.wrongMoves +1
-                        }
-                    }, 500);
-                }
-            }
-
-            else {
+            if(exists && state.openCards.length < 2) {
                 const newCards = state.cards.map((c) => (
-                    opened[0].id == c.id 
-                        ? {...c, isFlipped: true}
-                        : c
+                    c.id == action.payload 
+                    ? {...c, isFlipped: false}
+                    : c
                 ));
+                const opened = state.cards.filter((c) => (c.id !== action.payload));
                 return {
                     ...state, 
                     openCards: opened,
                     cards: newCards,
                 }
             }
+
+            if(state.openCards.length > 1 || !clicked ) {
+                return state;
+            }
+            const newCards = state.cards.map((c) => (
+                c.id == action.payload 
+                ? {...c, isFlipped: true}
+                : c
+            ));
+
+            let opened = [...state.openCards, clicked];
+            return {
+                ...state,
+                openCards: opened,
+                cards: newCards,
+            };
+        }
+
+        case "CHECK_MATCHED": {
+            if(state.openCards.length == 2) {
+                const c1 = state.openCards[0];
+                const c2 = state.openCards[1];
+                
+                if(c1.value == c1.value) {
+                    const newCards = state.cards.map((c) => (
+                        c.id == c1.id || c.id == c2.id
+                        ? {...c, isMatched: true}
+                        : c
+                    ));
+
+                    return {
+                        ...state,
+                        cards: newCards,
+                        openCards: [],
+                    }
+                }
+                else {
+                    const newCards = state.cards.map((c) => (
+                        c.id == c1.id || c.id == c2.id
+                        ? {...c, isFlipped: false}
+                        : c
+                    ));
+                    
+                    return {
+                        ...state,
+                        cards: newCards,
+                        openCards: [],
+                    }
+                }
+            }
+            else {
+                return state;
+            }
         }
     }
+
 }
