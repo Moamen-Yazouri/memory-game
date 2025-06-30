@@ -10,10 +10,10 @@ import { GameInfoContext } from "@/providers/game-info/gameInfo"
 
 const GameBoard = () => {
   const {gameInfo, state, changeLevel, changeMode, dispatch }= useContext(GameInfoContext);
-  
+  console.log(state.cards)
   useEffect(() => {
   
-      changeLevel("hard");
+      changeLevel("easy");
 
       changeMode("education")
   }, []);
@@ -28,9 +28,9 @@ const GameBoard = () => {
     }
   },[state.openCards])
 
-  // const cards = useMemo(() => {
-  //   return getBoardLenght(gameInfo.level || "easy")
-  // }, [gameInfo])
+  const cards = useMemo(() => {
+    return getBoardLenght(gameInfo.level || "easy")
+  }, [gameInfo])
   
 
   const responsiveColumns = useMemo(() => {
@@ -50,11 +50,12 @@ const GameBoard = () => {
     >
       <Grid
         container
-        spacing={1} // Responsive spacing
+        spacing={1}
+        columnGap={1} // Responsive spacing
         columns={responsiveColumns}
         sx={{
           width: "100%",
-          maxWidth: { xs: "100vw", sm: "90vw", md: "80vw", lg: "600px" }, // Responsive max width
+          maxWidth: { xs: "60vw", sm: "60vw", md: "60vw", lg: "600px" }, // Responsive max width
         }}
       >
         {state.cards.map((value, index) => (
