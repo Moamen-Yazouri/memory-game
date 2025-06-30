@@ -33,10 +33,10 @@ export const reducer = (state: IState, action: Action) => {
                     ? {...c, isFlipped: false}
                     : c
                 ));
-                const opened = state.cards.filter((c) => (c.id !== action.payload));
+                
                 return {
                     ...state, 
-                    openCards: opened,
+                    openCards: [],
                     cards: newCards,
                 }
             }
@@ -44,6 +44,7 @@ export const reducer = (state: IState, action: Action) => {
             if(state.openCards.length > 1 || !clicked ) {
                 return state;
             }
+            
             const newCards = state.cards.map((c) => (
                 c.id == action.payload 
                 ? {...c, isFlipped: true}
@@ -62,8 +63,9 @@ export const reducer = (state: IState, action: Action) => {
             if(state.openCards.length == 2) {
                 const c1 = state.openCards[0];
                 const c2 = state.openCards[1];
-                
-                if(c1.value == c1.value) {
+                console.log("ttt")
+                if(c1.value == c2.value) {
+                    console.log("matched")
                     const newCards = state.cards.map((c) => (
                         c.id == c1.id || c.id == c2.id
                         ? {...c, isMatched: true}
@@ -77,6 +79,8 @@ export const reducer = (state: IState, action: Action) => {
                     }
                 }
                 else {
+                    console.log("not matched")
+                    console.log("not matched")
                     const newCards = state.cards.map((c) => (
                         c.id == c1.id || c.id == c2.id
                         ? {...c, isFlipped: false}

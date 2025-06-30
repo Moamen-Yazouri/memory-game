@@ -9,7 +9,7 @@ import { GameInfoContext } from "@/providers/game-info/gameInfo"
 
 
 const GameBoard = () => {
-  const {gameInfo, state, changeLevel, changeMode }= useContext(GameInfoContext);
+  const {gameInfo, state, changeLevel, changeMode, dispatch }= useContext(GameInfoContext);
   
   useEffect(() => {
   
@@ -17,6 +17,16 @@ const GameBoard = () => {
 
       changeMode("education")
   }, []);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      dispatch({type: "CHECK_MATCHED"});
+    }, 800);
+    
+    return () => {
+      clearTimeout(timeout);
+    }
+  },[state.openCards])
 
   // const cards = useMemo(() => {
   //   return getBoardLenght(gameInfo.level || "easy")
@@ -40,7 +50,7 @@ const GameBoard = () => {
     >
       <Grid
         container
-        spacing={{ xs: 1, sm: 1.5, md: 2 }} // Responsive spacing
+        spacing={1} // Responsive spacing
         columns={responsiveColumns}
         sx={{
           width: "100%",
@@ -51,7 +61,7 @@ const GameBoard = () => {
           <Grid
             key={index}
             size={1}
-            sx={{
+            sx={{ 
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
