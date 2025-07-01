@@ -1,9 +1,16 @@
-import { Box, Card, CardContent } from "@mui/material";
+import { 
+  Box, 
+  Card, 
+  CardContent, 
+} from "@mui/material";
+
 import type { IGameCard } from "@/@types";
+
 import React from "react";
+
 import useGameBoard from "./hook/useGameBoard";
 
-interface IProps extends IGameCard {}
+interface IProps extends IGameCard {};
 
 const GameCard = (props: IProps) => {
   const {

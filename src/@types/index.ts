@@ -60,3 +60,9 @@ export interface IGameCard {
     isMatched: boolean,
 }
 
+// export interface IUser {
+//     name: string,
+//     email: string,
+
+// }
+
