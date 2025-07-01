@@ -3,18 +3,15 @@ import { getBoardLenght } from "@/components/game-board/utils/getTheBoardLength"
 
 export const getGameCards = (level: LevelsTypes) => {
     const length = getBoardLenght(level);
-    const gameCards: IGameCard[] = Array.from({ length: length * 2 }, (_, index) => 
-        {
-            const value = index % 2 === 0 ? index + 1 : index + 2;
+    const unique = Array.from({ length }, (_, i) => i + 1);
+    const gameCards: IGameCard[] =[...unique, ...unique].map((val, index) => {
             return {
                 id: index,
-                value: value,
+                value: val,
                 isFlipped: false,
                 isMatched: false,
             }
-
-        } 
-    ).sort(
+    }).sort(
       () => Math.random() - 0.5,
     )
     return gameCards;
