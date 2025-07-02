@@ -5,23 +5,27 @@ import App from './App.tsx'
 import ThemeContextProvider from './providers/theme/themeContext.tsx'
 import { GameProvider } from './providers/game-info/gameInfo.tsx'
 import { AuthProvider } from './providers/auth/authContext.tsx'
+import ErrorBoundary from './components/error/error-boundary/errorBoundary.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <ErrorBoundary>
 
-    <AuthProvider>
+      <AuthProvider>
 
-      <ThemeContextProvider>
+        <ThemeContextProvider>
 
-        <GameProvider>
+          <GameProvider>
 
-          <App />
-          
-        </GameProvider>
+            <App />
+            
+          </GameProvider>
 
-      </ThemeContextProvider>
+        </ThemeContextProvider>
 
-    </AuthProvider>
+      </AuthProvider>
+      
+    </ErrorBoundary>
 
   </StrictMode>
 )

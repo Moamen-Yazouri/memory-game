@@ -1,5 +1,6 @@
 import { IUser } from "@/@types";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/firebase/firebase";
 import { createContext, useEffect, useState } from "react";
 
 
@@ -18,7 +19,6 @@ export const AuthProvider = ({ children }: IProviderProps) => {
     const [user, setUser] = useState<IUser | null>(null);
     const [loading, setLoading] = useState(true);
     useEffect(() =>{
-          const auth = getAuth();
           const  disconnect = onAuthStateChanged(auth, (user) => {
             if (user && user.email && user.displayName) {
                 const signedUser: IUser = {
