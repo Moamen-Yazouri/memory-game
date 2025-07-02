@@ -1,8 +1,4 @@
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 import { Component, ErrorInfo, ReactNode } from "react";
-import classes from "./style.module.css";
 import ErrorFallback from "../error-fallback/ErrorFallback";
 
 interface IProps{
