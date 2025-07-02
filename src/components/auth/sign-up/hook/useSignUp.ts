@@ -10,7 +10,7 @@ export const useSignUp = () => {
         resetForm: () => void,
         setSubmitting: (isSubmitting: boolean) => void
     ) => {
-        authService.signUp(values.email, values.password)
+        authService.signUp(values.email, values.password, values.fullName)
         .then((data) => {
             console.log(data?.email);
             setSubmitting(false);
