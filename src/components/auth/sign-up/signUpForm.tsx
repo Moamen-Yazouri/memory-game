@@ -5,6 +5,7 @@ import { useSignUp } from "./hook/useSignUp";
 import { useTheme } from "@mui/material";
 import { useMemo } from "react";
 import { Google } from "@mui/icons-material";
+import authService from "@/service/auth.service";
 
 
 const SignUpForm = () => {
@@ -27,7 +28,7 @@ const SignUpForm = () => {
     ), [theme]);
 
     const handleGoogleSignUp = () => {
-        
+        authService.signUpWithGoogle();
     }
         
   
