@@ -21,7 +21,7 @@ const GuardedRoutes = () => {
     if(!isAuth) {
         return (
             <Navigate
-                to="/"
+                to="/unauthenticated"
                 replace
                 state= {{from: location.pathname}}
             />
