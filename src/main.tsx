@@ -6,6 +6,7 @@ import ThemeContextProvider from './providers/theme/themeContext.tsx'
 import { GameProvider } from './providers/game-info/gameInfo.tsx'
 import { AuthProvider } from './providers/auth/authContext.tsx'
 import ErrorBoundary from './components/error/error-boundary/errorBoundary.tsx'
+import { Toaster } from 'sonner'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -20,8 +21,8 @@ createRoot(document.getElementById('root')!).render(
 
           <GameProvider>
 
+            <Toaster richColors position="bottom-right" />
             <App />
-            
           </GameProvider>
 
 

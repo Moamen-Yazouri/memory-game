@@ -1,5 +1,6 @@
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile} from "firebase/auth";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, updateProfile} from "firebase/auth";
 import {auth} from "../firebase/firebase";
+import { FirebaseError } from "firebase/app";
 
 class AuthService {
     provider = new GoogleAuthProvider();
@@ -11,8 +12,18 @@ class AuthService {
             });
             return userCredential.user;
         }
-        catch {
-            console.log("error")
+        catch (error: unknown){
+            if (error instanceof FirebaseError) {
+                if (error.code === "auth/email-already-in-use") {
+                    return "The email is already used!";
+                }
+                else {
+                    return "Failed to sign-up, please retry later!";    
+                }
+            }
+            else {
+                return "Failed to sign-up, please retry later!";
+            }     
         }
     }
 
@@ -27,6 +38,31 @@ class AuthService {
             
         } catch {
             return "Failed to sign-up with google, try again later!"
+        }
+
+    }
+
+    async signIn (email: string, password: string) {
+        try {
+            const userCredintials = await signInWithEmailAndPassword(auth, email, password);
+            return userCredintials.user;
+        }
+        catch (error: unknown){
+            if(error instanceof FirebaseError) {
+                if(
+                    error.code === "auth/wrong-password" || 
+                    error.code === "auth/user-not-found"
+
+                ) {
+                    return "Invalid credintials";
+                }
+                else {
+                    return "Something went wrong!";    
+                }
+            }
+            else {
+                return "Something went wrong!";
+            }
         }
 
     }
