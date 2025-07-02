@@ -27,10 +27,10 @@ export default function SignUp() {
     <Container 
         maxWidth="xs"
           sx={{
-            height: "100vh",                  // full viewport height
-            display: "flex",                  // flex container
-            justifyContent: "center",         // center horizontally
-            alignItems: "center",             // center vertically
+            height: "100vh",                  
+            display: "flex",                  
+            justifyContent: "center",         
+            alignItems: "center",             
         }}
     >
       <Paper

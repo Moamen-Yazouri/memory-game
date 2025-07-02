@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile} from "firebase/auth";
-import {auth} from "../../firebase/firebase"
+import {auth} from "../firebase/firebase"
 
 class AuthService {
     provider = new GoogleAuthProvider();
