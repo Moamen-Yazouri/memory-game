@@ -3,6 +3,7 @@ import { IFormValues } from "./types"
 import { signUpSchema } from "../validationSchema";
 import { INITIAL_VALUES } from "../constants";
 import authService from "@/service/auth.service";
+import { toast } from "sonner";
 
 export const useSignUp = () => {
     const handleSignUp = (
@@ -12,7 +13,12 @@ export const useSignUp = () => {
     ) => {
         authService.signUp(values.email, values.password, values.fullName)
         .then((data) => {
-            console.log(data?.email);
+            if(typeof data === "string") {
+                toast.error(data)
+            }
+            else {
+                toast.success(`Successfully signed-up with email: ${data.email}`);
+            }
             setSubmitting(false);
             resetForm();
         })
