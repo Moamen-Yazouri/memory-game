@@ -1,8 +1,8 @@
 
-const landing = () => {
+const Landing = () => {
   return (
     <div>landing</div>
   )
 }
 
-export default landing
+export default Landing;

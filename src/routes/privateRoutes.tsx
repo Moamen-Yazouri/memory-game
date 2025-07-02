@@ -5,7 +5,7 @@ import GamePlay from "@/pages/gamePlay";
 import SelectMode from "@/pages/selectMode";
 
 const privateRoutes: RouteObject = {
-    path: "memory-game",
+    path: "/memory-game",
     element: <GuardedRoutes/>,
     children: [
         {

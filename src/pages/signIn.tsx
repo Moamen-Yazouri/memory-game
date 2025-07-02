@@ -1,9 +1,9 @@
 
-const signInForm = () => {
+const SignInPage = () => {
   return (
     <>
     </>
   );
 }
 
-export default signInForm;
+export default SignInPage;
