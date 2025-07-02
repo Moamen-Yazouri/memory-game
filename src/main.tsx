@@ -9,11 +9,14 @@ import ErrorBoundary from './components/error/error-boundary/errorBoundary.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <ThemeContextProvider>
+
+    
     <ErrorBoundary>
 
       <AuthProvider>
 
-        <ThemeContextProvider>
+        
 
           <GameProvider>
 
@@ -21,11 +24,11 @@ createRoot(document.getElementById('root')!).render(
             
           </GameProvider>
 
-        </ThemeContextProvider>
 
       </AuthProvider>
-      
+
     </ErrorBoundary>
+    </ThemeContextProvider>
 
   </StrictMode>
 )

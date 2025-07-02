@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile} from "firebase/auth";
-import {auth} from "../firebase/firebase"
+import {auth} from "../firebase/firebase";
 
 class AuthService {
     provider = new GoogleAuthProvider();
@@ -22,11 +22,11 @@ class AuthService {
             const result = await signInWithPopup(auth, this.provider);
             const user = result.user;
 
-            console.log("Signed in with Google:", user.email);
+            return user.email;
 
-            // Optionally: check if it's a new user and store in Realtime DB
+            
         } catch {
-            console.error("Google sign-in error:");
+            return "Failed to sign-up with google, try again later!"
         }
 
     }
