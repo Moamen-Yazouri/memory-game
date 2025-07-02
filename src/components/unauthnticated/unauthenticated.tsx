@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Unauthenticated() {
   const theme = useTheme()
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
   const gradient = useMemo(
     () =>
       theme.palette.mode === "light"
@@ -32,7 +32,7 @@ export default function Unauthenticated() {
   );
 
   const handleSignIn = () => {
-    navigate("/sign-in");
+    // navigate("/sign-in");
   }
   const handleGoogleSignIn = () => {
 
@@ -40,7 +40,7 @@ export default function Unauthenticated() {
 
 
   const handleSignUp = () => {
-    navigate("/sign-up");
+    // navigate("/sign-up");
   }
 
   return (

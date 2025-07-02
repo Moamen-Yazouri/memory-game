@@ -13,13 +13,13 @@ message,
   handleRetry,
 }: ErrorFallbackProps) {
   const theme = useTheme()
-
+    console.log(theme.palette.mode)
   const gradient = useMemo(
     () =>
       theme.palette.mode === "light"
         ? "linear-gradient(135deg, #fef2f2 0%, #fee2e2 50%, #fecaca 100%)"
         : "linear-gradient(135deg, #4c1d1d 0%, #7f1d1d 50%, #991b1b 100%)",
-    [theme],
+    [theme.palette.mode],
   )
 
   
