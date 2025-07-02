@@ -1,14 +1,14 @@
 import './App.css';
 import SignUp from './components/auth/sign-up/signUp';
-import ErrorFallback from './components/error/error-fallback/ErrorFallback';
+import Unauthenticated from './components/unauthnticated/unauthenticated';
 
 function App() {
   
   return (
     <>
         {/* <GameBoard /> */}
-        <SignUp/>
-        
+        {/* <SignUp/> */}
+        <Unauthenticated />
         
         
     </>
