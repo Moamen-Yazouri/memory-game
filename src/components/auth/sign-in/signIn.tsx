@@ -5,8 +5,9 @@ import {
   Paper,
   useTheme,
 } from "@mui/material";
+import SignInForm from "./signInForm";
 
-export default function SignInForm() {
+export default function SignIn() {
   const theme = useTheme();
 
   const gradient =

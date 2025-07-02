@@ -13,7 +13,7 @@ import SignUpForm from "./signUpForm";
 
 export default function SignUp() {
   const theme = useTheme();
-
+  
   const gradient = useMemo(() => (
         theme.palette.mode === "light"
             ? "linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 50%, #ddd6fe 100%)"

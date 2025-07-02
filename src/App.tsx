@@ -1,13 +1,14 @@
 import './App.css';
+import SignIn from './components/auth/sign-in/signIn';
+import SignUp from './components/auth/sign-up/signUp';
 import Unauthenticated from './components/unauthnticated/unauthenticated';
-import SignUp from './pages/signUp';
+
 
 function App() {
-  
   return (
     <>
         {/* <GameBoard /> */}
-        <SignUp/>
+        <SignIn/>
         
         {/* <Unauthenticated /> */}
         
