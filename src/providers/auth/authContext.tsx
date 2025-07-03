@@ -13,7 +13,7 @@ interface IProviderProps {
     children: React.ReactNode,
 }
 
-const AuthContext = createContext<IAuthContext | null>(null);
+export const AuthContext = createContext<IAuthContext>({user: null, loading: true});
 
 export const AuthProvider = ({ children }: IProviderProps) => {
     const [user, setUser] = useState<IUser | null>(null);
