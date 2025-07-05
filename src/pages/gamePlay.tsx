@@ -1,8 +1,9 @@
+import GameBoard from "@/components/game-board/gameBoard";
 
-const GamePlay = () => {
+const GamePlayPage = () => {
   return (
-    <div>GamePlay</div>
-  )
+    <GameBoard />
+  );
 }
 
-export default GamePlay
+export default GamePlayPage;

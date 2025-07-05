@@ -32,7 +32,7 @@ export const GameProvider = (props: IProps) => {
 
             dispatch({type: "INITIAL_GAME", payload: gameInfo.level})
         }
-    }, [gameInfo]);
+    }, [gameInfo, state]);
 
 
     const changeMode = (mode: GameModesTypes) => {
