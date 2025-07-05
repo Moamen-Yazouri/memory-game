@@ -11,7 +11,7 @@ function App() {
 
        {/* <Timer /> */}
        {/* <SelectMode/> */}
-       {/* <AppRoutes /> */}
+       <AppRoutes />
         
     </>
   )

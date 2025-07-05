@@ -4,6 +4,7 @@ import { Box, Typography, IconButton, Paper, Chip, Stack, Divider, useTheme } fr
 import { RestartAlt, EmojiEvents, Close, Timer, Star, Home } from "@mui/icons-material"
 import { useContext, useEffect, useState } from "react"
 import { GameInfoContext } from "@/providers/game-info/gameInfo"
+import GameTimer from "../timer/timer"
 
 interface GameHeaderProps {
   onBackToMenu?: () => void
@@ -24,7 +25,7 @@ const GameHeader = ({ onBackToMenu }: GameHeaderProps) => {
   
 
   const handleRestart = () => {
-    dispatch({ type: "RESTART_GAME" })
+    dispatch({ type: "RESTART_GAME", pyload: gameInfo.level! });
   }
 
   const handleBackToMenu = () => {
@@ -232,8 +233,8 @@ const GameHeader = ({ onBackToMenu }: GameHeaderProps) => {
             </Typography>
           </Box>
 
-          {/* Timer */}
-          
+          <GameTimer />
+
         </Stack>
 
         {/* Actions */}

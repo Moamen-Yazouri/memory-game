@@ -14,7 +14,7 @@ export type Action =
     {type: "INITIAL_GAME", payload: LevelsTypes} |
     {type: "FLIPP_CARD", payload: number} |
     {type: "CHECK_MATCHED"} |
-    {type: "RESTART_GAME"} 
+    {type: "RESTART_GAME", pyload: LevelsTypes} 
 
 export const reducer = (state: IState, action: Action) => {
     switch(action.type) {
@@ -71,7 +71,6 @@ export const reducer = (state: IState, action: Action) => {
                 const c1 = state.openCards[0];
                 const c2 = state.openCards[1];
                 if(c1.value == c2.value) {
-                    console.log("matched")
                     const newCards = state.cards.map((c) => (
                         c.id == c1.id || c.id == c2.id
                         ? {...c, isMatched: true}
@@ -81,6 +80,7 @@ export const reducer = (state: IState, action: Action) => {
                     return {
                         ...state,
                         isCompleted,
+                        isGameActive: false,
                         cards: newCards,
                         openCards: [],
                     }
@@ -107,13 +107,15 @@ export const reducer = (state: IState, action: Action) => {
         }
 
         case "RESTART_GAME": {
+            const cards = getGameCards(action.pyload);
             return {
                 ...state,
-                cards: [],
+                cards,
                 wrongMoves: 0,
+                isGameActive: false,
                 isCompleted: false,
                 openCards: [],
-                initialized: false,
+                initialized: true,
             }
         }
     }
