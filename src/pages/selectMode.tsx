@@ -1,8 +1,9 @@
+import SelectGame from "@/components/select-game/selectGame";
 
-const SelectMode = () => {
+const SelectModePage = () => {
   return (
-    <div>SelectMode</div>
+    <SelectGame />
   )
 }
 
-export default SelectMode
+export default SelectModePage;

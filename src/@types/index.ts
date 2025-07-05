@@ -35,11 +35,10 @@ export interface ICurrentMode {
 }
 
 export interface IFinishedLevel {
-    mode: GameModesTypes,
     level: string,
     score: number,
     time: number,
-    attempt: number,
+    wrongMoves: number,
 }
 
 export type CompletedLevels = {
@@ -49,7 +48,7 @@ export type CompletedLevels = {
 export interface IMonster {
     unlocked: boolean,
     score: number,
-    attempts: number,
+    wrongMoves: number,
     time: number,
 }
 
