@@ -4,14 +4,17 @@ import { getGameCards } from "./utils/createGameCards";
 export interface IState {
     cards: IGameCard[],
     wrongMoves: number,
+    isCompleted: boolean,
     openCards: IGameCard[],
+    isGameActive: boolean,
     initialized: boolean,
 }
 
 export type Action = 
     {type: "INITIAL_GAME", payload: LevelsTypes} |
     {type: "FLIPP_CARD", payload: number} |
-    {type: "CHECK_MATCHED"} 
+    {type: "CHECK_MATCHED"} |
+    {type: "RESTART_GAME"} 
 
 export const reducer = (state: IState, action: Action) => {
     switch(action.type) {
@@ -19,11 +22,13 @@ export const reducer = (state: IState, action: Action) => {
             const cards = getGameCards(action.payload);
             return {
                 ...state,
+                initialized: true,
                 cards
             }
         }
 
         case "FLIPP_CARD": {
+            
             const clicked = state.cards.find((c) => c.id == action.payload);
             const exists = state.openCards.find((c) => (c.id == action.payload));
 
@@ -35,7 +40,8 @@ export const reducer = (state: IState, action: Action) => {
                 ));
                 
                 return {
-                    ...state, 
+                    ...state,
+                    isGameActive: true, 
                     openCards: [],
                     cards: newCards,
                 }
@@ -54,6 +60,7 @@ export const reducer = (state: IState, action: Action) => {
             const opened = [...state.openCards, clicked];
             return {
                 ...state,
+                isGameActive: true,
                 openCards: opened,
                 cards: newCards,
             };
@@ -63,7 +70,6 @@ export const reducer = (state: IState, action: Action) => {
             if(state.openCards.length == 2) {
                 const c1 = state.openCards[0];
                 const c2 = state.openCards[1];
-                console.log("ttt")
                 if(c1.value == c2.value) {
                     console.log("matched")
                     const newCards = state.cards.map((c) => (
@@ -71,9 +77,10 @@ export const reducer = (state: IState, action: Action) => {
                         ? {...c, isMatched: true}
                         : c
                     ));
-
+                    const isCompleted = newCards.every((c) => c.isMatched);
                     return {
                         ...state,
+                        isCompleted,
                         cards: newCards,
                         openCards: [],
                     }
@@ -96,6 +103,17 @@ export const reducer = (state: IState, action: Action) => {
             }
             else {
                 return state;
+            }
+        }
+
+        case "RESTART_GAME": {
+            return {
+                ...state,
+                cards: [],
+                wrongMoves: 0,
+                isCompleted: false,
+                openCards: [],
+                initialized: false,
             }
         }
     }

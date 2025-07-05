@@ -1,13 +1,26 @@
 import { GameModesTypes, LevelsTypes } from "@/@types";
-import { useEffect, useState } from "react";
+import { GameInfoContext } from "@/providers/game-info/gameInfo";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SelectGame = () => {
   const [gMode, setGMode] = useState<GameModesTypes | null>(null);
   const [gLevel, setGLevel] = useState<LevelsTypes | null>(null);
+  const {changeLevel, changeMode} = useContext(GameInfoContext);
+  const nav = useNavigate();
   useEffect(() => {
       if(gMode) {
-        console.log(gMode)
+        changeMode(gMode);
       }
+
+      if(gLevel) {
+        changeLevel(gLevel);
+      }
+
+      if(gLevel && gMode) {
+        nav("/memory-game/game-play");
+      }
+      return;
   }, [gMode, gLevel])
   return (
     <>

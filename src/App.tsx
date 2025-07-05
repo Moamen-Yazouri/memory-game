@@ -1,7 +1,5 @@
 import './App.css';
-import SignIn from './components/auth/sign-in/signIn';
-import SignUp from './components/auth/sign-up/signUp';
-import SelectMode from './pages/selectMode';
+import Timer from './components/timer/timer';
 import AppRoutes from './routes/AppRoutes';
 
 
@@ -11,8 +9,9 @@ function App() {
   return (
     <>
 
-       {/* <AppRoutes />  */}
-       <SelectMode/>
+       {/* <Timer /> */}
+       {/* <SelectMode/> */}
+       {/* <AppRoutes /> */}
         
     </>
   )

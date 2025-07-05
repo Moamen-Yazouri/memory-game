@@ -5,6 +5,7 @@ import GameCard from "../game-card/gameCard"
 import { useContext, useEffect, useMemo } from "react"
 import { getBoardLenght, getResponsiveColumns } from "./utils/getTheBoardLength"
 import { GameInfoContext } from "@/providers/game-info/gameInfo"
+import GameHeader from "./gameheader"
 
 
 
@@ -12,10 +13,8 @@ const GameBoard = () => {
   const {gameInfo, state, changeLevel, changeMode, dispatch }= useContext(GameInfoContext);
   console.log(state.cards)
   useEffect(() => {
-  
       changeLevel("easy");
-
-      changeMode("education")
+      changeMode("education");
   }, []);
 
   useEffect(() => {
@@ -26,16 +25,16 @@ const GameBoard = () => {
     return () => {
       clearTimeout(timeout);
     }
-  },[state.openCards])
+  },[state.openCards]);
 
   const cards = useMemo(() => {
     return getBoardLenght(gameInfo.level || "easy")
-  }, [gameInfo])
+  }, [gameInfo]);
   
 
   const responsiveColumns = useMemo(() => {
     return getResponsiveColumns(gameInfo.level || "easy")
-  }, [gameInfo])
+  }, [gameInfo]);
 
   return (
     <Box
@@ -43,11 +42,15 @@ const GameBoard = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        flexDirection: "column",
         minHeight: "100vh",
         padding: { xs: 1, sm: 2, md: 3 }, // Responsive padding
         boxSizing: "border-box",
       }}
     >
+      <Box sx={{ maxWidth: "1200px", mx: "auto" }}>
+          <GameHeader />
+        </Box>
       <Grid
         container
         spacing={1}
