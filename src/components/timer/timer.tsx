@@ -16,34 +16,42 @@ const GameTimer = () => {
     const {state} = useContext(GameInfoContext);
     const [time, setTime] = useState(0);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
-useEffect(() => {
-    if (!state.initialized) {
-        return;
-    }
-
-    if (state.isGameActive) {
-        if (timerRef.current) {
-            clearInterval(timerRef.current);
-        }
+    useEffect(() => {
         
-        timerRef.current = setInterval(() => {
-            setTime(t => t + 1); 
-        }, 1000);
-    } else {
-        if (timerRef.current) {
-            clearInterval(timerRef.current);
-            timerRef.current = null;
+        if (!state.initialized) {
+            return;
         }
-    }
 
-    return () => {
-        if (timerRef.current) {
-            setTime(0);
-            clearInterval(timerRef.current);
-            timerRef.current = null;
+        if(state.isCompleted) {
+            console.log("")
         }
-    };
-}, [state.isGameActive, state.initialized]);
+        else {
+            setTime(0);
+        }
+
+        if (state.isGameActive) {
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+            }
+            
+            timerRef.current = setInterval(() => {
+                setTime(t => t + 1); 
+            }, 1000);
+        } 
+        else {
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+                timerRef.current = null;
+            }
+        }
+
+        return () => {
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+                timerRef.current = null;
+            }
+        };
+    }, [state.isGameActive, state.initialized, state.isCompleted]);
 
     
 
