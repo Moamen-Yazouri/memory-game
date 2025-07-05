@@ -29,7 +29,7 @@ enum Levels {
 
 export type LevelsTypes = `${Levels}`;
 
-export interface ICurrentMode {
+export interface ICurrent {
     modeName: GameModesTypes,
     level: LevelsTypes,
 }
@@ -41,7 +41,9 @@ export interface IFinishedLevel {
     wrongMoves: number,
 }
 
-export type CompletedLevels = {
+
+
+export type CompletedDB = {
   [mode in GameModesTypes]: Partial<Record<LevelsTypes, IFinishedLevel>>
 };
 
