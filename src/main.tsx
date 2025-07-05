@@ -7,29 +7,32 @@ import { GameProvider } from './providers/game-info/gameInfo.tsx'
 import { AuthProvider } from './providers/auth/authContext.tsx'
 import ErrorBoundary from './components/error/error-boundary/errorBoundary.tsx'
 import { Toaster } from 'sonner'
+import { BrowserRouter } from 'react-router-dom'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ThemeContextProvider>
+    <BrowserRouter>
+      <ThemeContextProvider>
 
-    
-    <ErrorBoundary>
+      
+      <ErrorBoundary>
 
-      <AuthProvider>
+        <AuthProvider>
 
-        
+          
 
-          <GameProvider>
+            <GameProvider>
 
-            <Toaster richColors position="bottom-right" />
-            <App />
-          </GameProvider>
+              <Toaster richColors position="bottom-right" />
+              <App />
+            </GameProvider>
 
 
-      </AuthProvider>
+        </AuthProvider>
 
-    </ErrorBoundary>
-    </ThemeContextProvider>
+      </ErrorBoundary>
+      </ThemeContextProvider>
+    </BrowserRouter>
 
   </StrictMode>
 )

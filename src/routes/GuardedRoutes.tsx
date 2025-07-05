@@ -1,6 +1,6 @@
 import { auth } from '@/firebase/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 const GuardedRoutes = () => {
