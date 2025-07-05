@@ -11,7 +11,7 @@ import GameHeader from "./gameheader"
 
 const GameBoard = () => {
   const {gameInfo, state, changeLevel, changeMode, dispatch }= useContext(GameInfoContext);
-  console.log(state.cards)
+
   useEffect(() => {
       changeLevel("easy");
       changeMode("education");
