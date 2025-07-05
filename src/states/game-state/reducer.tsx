@@ -51,7 +51,7 @@ export const reducer = (state: IState, action: Action) => {
                 : c
             ));
 
-            let opened = [...state.openCards, clicked];
+            const opened = [...state.openCards, clicked];
             return {
                 ...state,
                 openCards: opened,

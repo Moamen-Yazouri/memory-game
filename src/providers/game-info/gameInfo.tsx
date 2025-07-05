@@ -28,7 +28,6 @@ export const GameProvider = (props: IProps) => {
     const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
     useEffect (() => {
-        console.log(gameInfo)
         if(gameInfo.level && gameInfo.mode) {
 
             dispatch({type: "INITIAL_GAME", payload: gameInfo.level})
