@@ -12,11 +12,7 @@ import AppRoutes from './routes/AppRoutes';
 function App() {
   return (
     <>
-
-       {/* <Timer /> */}
-       {/* <SelectMode/> */}
-       <AppRoutes />
-        
+       <AppRoutes />  
     </>
   )
 }

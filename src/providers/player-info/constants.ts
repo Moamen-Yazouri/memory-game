@@ -2,17 +2,7 @@ import { GameModesTypes, IFinishedLevel } from "@/@types";
 import { IPlayerInfo, IPlayerInfoContext } from "./playerInfoContext";
 import { formatFinishedForDB } from "./utils/formatRealtimeDB";
 const initialMap: Map<GameModesTypes, IFinishedLevel[]> = new Map([ 
-        ["education", [{level: "medium",
-        score: 95,
-        time: 18,
-        wrongMoves: 1
-        },
-        {        
-        level: "easy",
-        score: 80,
-        time: 12,
-        wrongMoves: 2}
-    ]],
+        ["education", []],
         ["emotional", []],
         ["events", []],
         ["states", []],
@@ -31,7 +21,11 @@ export const initialPlayer: IPlayerInfo = {
     }
 }
 
-export const INITIAL_CONTEXT_STATE: IPlayerInfoContext = {playerInfo: initialPlayer};
+export const INITIAL_CONTEXT_STATE: IPlayerInfoContext = {
+    playerInfo: initialPlayer,
+    setCurrent: () => { },
+    addFinished: () => { },
+};
 
 export const INITIAL_FOR_DB = {
     current: initialPlayer.current,
