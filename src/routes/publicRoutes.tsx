@@ -1,3 +1,4 @@
+import SignUpPage from "@/pages/signUp";
 import { lazy } from "react";
 import { RouteObject } from "react-router-dom";
 const Landing = lazy(() => import("@/pages/landing"));
@@ -11,6 +12,10 @@ export const publicRoutes: RouteObject = {
     {
       index: true,
       element: <Landing />,
+    },
+    {
+      path: "sign-up",
+      element: <SignUpPage />,
     },
     {
       path: "sign-in",

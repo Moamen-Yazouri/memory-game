@@ -6,12 +6,14 @@ import { useContext, useEffect, useMemo } from "react"
 import { getBoardLenght, getResponsiveColumns } from "./utils/getTheBoardLength"
 import { GameInfoContext } from "@/providers/game-info/gameInfo"
 import GameHeader from "./gameheader"
+import { PlayerInfoContext } from "@/providers/player-info/playerInfoContext"
 
 
 
 const GameBoard = () => {
   const {gameInfo, state, changeLevel, changeMode, dispatch }= useContext(GameInfoContext);
-
+  const {playerInfo} = useContext(PlayerInfoContext);
+  console.log(playerInfo);
   useEffect(() => {
       changeLevel("easy");
       changeMode("education");

@@ -8,6 +8,7 @@ import { AuthProvider } from './providers/auth/authContext.tsx'
 import ErrorBoundary from './components/error/error-boundary/errorBoundary.tsx'
 import { Toaster } from 'sonner'
 import { BrowserRouter } from 'react-router-dom'
+import { PlayerInfoProvider } from './providers/player-info/playerInfoContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -19,13 +20,12 @@ createRoot(document.getElementById('root')!).render(
 
         <AuthProvider>
 
-          
-
-            <GameProvider>
-
-              <Toaster richColors position="bottom-right" />
-              <App />
-            </GameProvider>
+            <PlayerInfoProvider>
+                <GameProvider>
+                  <Toaster richColors position="bottom-right" />
+                  <App />
+                </GameProvider>
+            </PlayerInfoProvider>
 
 
         </AuthProvider>
