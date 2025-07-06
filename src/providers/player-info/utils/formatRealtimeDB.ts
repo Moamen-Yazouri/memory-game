@@ -10,3 +10,13 @@ export const getFinsihedInfo = (finished: CompletedDB): Map<GameModesTypes, IFin
 
     return finsihedMap;
 }
+
+export const formatFinishedForDB = (finished: Map<GameModesTypes, IFinishedLevel[]>) => {
+    const obj: Record<string, IFinishedLevel[]> = {};
+
+    finished.forEach((levels, mode) => {
+        obj[mode] = levels;
+    })
+
+    return obj;
+}
