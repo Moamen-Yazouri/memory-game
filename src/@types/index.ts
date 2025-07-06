@@ -35,7 +35,7 @@ export interface ICurrent {
 }
 
 export interface IFinishedLevel {
-    level: string,
+    level: LevelsTypes,
     score: number,
     time: number,
     wrongMoves: number,
