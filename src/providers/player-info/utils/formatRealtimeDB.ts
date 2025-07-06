@@ -1,4 +1,5 @@
 import { CompletedDB, GameModesTypes, IFinishedLevel } from "@/@types";
+import { IPlayerInfo } from "../playerInfoContext";
 
 export const getFinsihedInfo = (finished: CompletedDB): Map<GameModesTypes, IFinishedLevel[]> => {
     const finsihedMap: Map<GameModesTypes, IFinishedLevel[]> = new Map(); 
@@ -15,8 +16,24 @@ export const formatFinishedForDB = (finished: Map<GameModesTypes, IFinishedLevel
     const obj: Record<string, IFinishedLevel[]> = {};
 
     finished.forEach((levels, mode) => {
-        obj[mode] = levels;
+        obj[mode] =  levels; 
     })
 
     return obj;
+}
+
+export const addFinished = (dataFromDB: Omit<IPlayerInfo, "finished">) => {
+    const emptyInitialFinished: Map<GameModesTypes, IFinishedLevel[]> = new Map([ 
+        ["education", []],
+        ["emotional", []],
+        ["events", []],
+        ["states", []],
+    ]); 
+
+    const data: IPlayerInfo = {
+        ...dataFromDB,
+        finished: emptyInitialFinished,
+    }
+
+    return data;
 }
