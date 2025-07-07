@@ -1,12 +1,31 @@
-import { GameModesTypes,  ICurrent, IFinishedLevel, IMonster} from "@/@types";
-import { createContext, useEffect, useReducer, useRef } from "react";
-import { INITIAL_CONTEXT_STATE, initialPlayer } from "./constants";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/firebase/firebase";
-import { getDatabase, ref, set } from "firebase/database";
+import { 
+    GameModesTypes,  
+    ICurrent, 
+    IFinishedLevel, 
+    IMonster
+} from "@/@types";
+import { 
+    createContext, 
+    useEffect, 
+    useReducer, 
+    useRef 
+} from "react";
+import { 
+    INITIAL_CONTEXT_STATE, 
+    initialPlayer 
+} from "./constants";
+import { 
+    getDatabase, 
+    ref, 
+    set 
+} from "firebase/database";
 import playerInfoService from "./service/playerInfo.service";
 import { formatFinishedForDB } from "./utils/formatRealtimeDB";
-import { Action, IState, reducer } from "@/reducers/player-state/reducer";
+import { 
+    Action, 
+    IState, 
+    reducer 
+} from "@/reducers/player-state/reducer";
 import authService from "@/service/auth.service";
 
 
@@ -89,7 +108,7 @@ export const PlayerInfoProvider = (props: IProps) => {
         dispatch
     }; 
 
-    return <PlayerInfoContext.Provider value={value}>
-            {props.children}
-    </PlayerInfoContext.Provider>
+    return  <PlayerInfoContext.Provider value={value}>
+                {props.children}
+            </PlayerInfoContext.Provider>
 }
