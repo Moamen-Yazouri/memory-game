@@ -1,8 +1,8 @@
 import { GameModesTypes, LevelsTypes } from "@/@types";
 import { createContext, useEffect, useReducer, useState } from "react";
 import { initialContext, initialGame } from "./constants";
-import { Action, IState, reducer } from "@/states/game-state/reducer";
-import { INITIAL_STATE } from "@/states/game-state/constants";
+import { Action, IState, reducer } from "@/reducers/game-state/reducer";
+import { INITIAL_STATE } from "@/reducers/game-state/constants";
 
 export interface IGameInfo {
     mode: GameModesTypes | null;
