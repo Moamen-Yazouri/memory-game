@@ -1,4 +1,4 @@
-import { INITIAL_STATE } from "@/states/game-state/constants"
+import { INITIAL_STATE } from "@/reducers/game-state/constants"
 import { IGameInfo, IGameInfoContext } from "./gameInfo"
 
 export const initialGame: IGameInfo = {

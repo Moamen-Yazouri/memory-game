@@ -50,7 +50,7 @@ export const getTheme = (mode: ThemeModes) =>
           body: {
             margin: 0,
             padding: 0,
-            overflow: "hidden",
+            overflowY: "scroll",
             backgroundImage:
               mode === "dark"
                 ? `
