@@ -7,6 +7,7 @@ import { getDatabase, ref, set } from "firebase/database";
 import playerInfoService from "./service/playerInfo.service";
 import { formatFinishedForDB } from "./utils/formatRealtimeDB";
 import { Action, IState, reducer } from "@/reducers/player-state/reducer";
+import authService from "@/service/auth.service";
 
 
 export interface IPlayerInfo {
@@ -33,48 +34,55 @@ export const PlayerInfoProvider = (props: IProps) => {
     const id = useRef<string>(null);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (logged) => {
-                if(logged?.uid) {
-                    id.current = logged.uid;
-                    if(!initialized.current) {
-        
-                        playerInfoService.getPlayerInfo(id.current)
-                        .then(
-                            (data) => {
-                                if(data) {
-                                    dispatch({type: "INITIAL_INFO", payload: data})
-                                }
-                            }
-                        );
-                    }
-                    return;
-                }
-            }        
-        );
-
-        return () => {
-            unsubscribe();
+        if(initialized.current) {
+            return;
         }
+
+        const initializeUser = async () => {
+            try {
+                const user = await authService.getLoggedUser();
+                if(user) {      
+                    id.current = user.uid;        
+                    const info = await playerInfoService.getPlayerInfo(id.current);
+                    if(info) {
+                        dispatch({type: "INITIAL_INFO", payload: info});
+                    }
+                    initialized.current = true;
+                }
+            }
+            catch(e) {
+                console.error(e);
+            }
+            
+        }
+
+        initializeUser();
     }, []);
 
     useEffect(() => {
         if(!initialized.current || !id.current) {
-            initialized.current = true;
             return;
         }
-            
-        const db = getDatabase();
-        const infoForDB = {
-            ...state,
-            finished: formatFinishedForDB(state.finished)
-        } 
-        const playerInfoRef = ref(db, `users/${id}/playerInfo`);
-        
-        set(playerInfoRef, infoForDB)
-        .then(() => console.log("Synced"))
-        .catch(() => console.log("error"));
+        const updateDB = async () => {
+            const db = getDatabase();
+            const infoForDB = {
+                ...state,
+                finished: formatFinishedForDB(state.finished)
+            } 
+            const playerInfoRef = ref(db, `users/${id}/playerInfo`);
+            try {
+                await set(playerInfoRef, infoForDB);
+                console.log("Synced");
+            }
+            catch(e) {
+                console.error(e);
+            }
+        }
+
+        updateDB();
 
     }, [state]);
+
     
     const value: IPlayerInfoContext = {
         state,
