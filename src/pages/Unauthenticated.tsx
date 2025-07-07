@@ -1,7 +1,8 @@
+import Unauthenticated from "@/components/unauthnticated/unauthenticated";
 
 const UnauthenticatedPage = () => {
   return (
-    <div>Unauthenticated</div>
+    <Unauthenticated />
   )
 }
 
