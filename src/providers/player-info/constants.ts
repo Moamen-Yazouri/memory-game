@@ -8,7 +8,7 @@ const initialMap: Map<GameModesTypes, IFinishedLevel[]> = new Map([
         ["states", []],
 ])
 export const initialPlayer: IPlayerInfo = {
-    current: {
+    currentInfo: {
         modeName: "education",
         level: "easy",
     },
@@ -22,13 +22,12 @@ export const initialPlayer: IPlayerInfo = {
 }
 
 export const INITIAL_CONTEXT_STATE: IPlayerInfoContext = {
-    playerInfo: initialPlayer,
-    setCurrent: () => { },
-    addFinished: () => { },
+    state: initialPlayer,
+    dispatch: () => {},
 };
 
 export const INITIAL_FOR_DB = {
-    current: initialPlayer.current,
+    currentInfo: initialPlayer.currentInfo,
     finished: formatFinishedForDB(initialPlayer.finished),
     monster: initialPlayer.monster,
 }

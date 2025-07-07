@@ -1,9 +1,9 @@
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, updateProfile} from "firebase/auth";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile} from "firebase/auth";
 import {auth} from "../firebase/firebase";
 import { FirebaseError } from "firebase/app";
 
 class AuthService {
-    provider = new GoogleAuthProvider();
+    private provider = new GoogleAuthProvider();
     async signUp(email: string, password: string, name: string) { 
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -65,6 +65,17 @@ class AuthService {
             }
         }
 
+    }
+
+    async logout() {
+        try {
+            await signOut(auth);
+            return true;
+        }
+        catch {
+            return false;
+        }
+        
     }
 }
 
