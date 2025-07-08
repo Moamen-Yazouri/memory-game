@@ -1,8 +1,11 @@
 import SignUp from "@/components/auth/sign-up/signUp";
+import { Suspense } from "react";
 
 const SignUpPage = () => {
   return (
-    <SignUp />
+    <Suspense fallback={<>Loading</>}>
+      <SignUp />
+    </Suspense>
   );
 }
 

@@ -36,7 +36,7 @@ export interface IPlayerInfo {
 }
 
 export interface IPlayerInfoContext {
-    state: IState;
+    playerState: IState;
     dispatch: React.ActionDispatch<[action: Action]>
 }
 
@@ -48,7 +48,7 @@ interface IProps {
 }
 
 export const PlayerInfoProvider = (props: IProps) => {
-    const [state, dispatch] = useReducer(reducer, initialPlayer)
+    const [playerState, dispatch] = useReducer(reducer, initialPlayer)
     const initialized = useRef<boolean>(false);
     const id = useRef<string>(null);
 
@@ -85,8 +85,8 @@ export const PlayerInfoProvider = (props: IProps) => {
         const updateDB = async () => {
             const db = getDatabase();
             const infoForDB = {
-                ...state,
-                finished: formatFinishedForDB(state.finished)
+                ...playerState,
+                finished: formatFinishedForDB(playerState.finished)
             } 
             const playerInfoRef = ref(db, `users/${id}/playerInfo`);
             try {
@@ -100,11 +100,11 @@ export const PlayerInfoProvider = (props: IProps) => {
 
         updateDB();
 
-    }, [state]);
+    }, [playerState]);
 
     
     const value: IPlayerInfoContext = {
-        state,
+        playerState,
         dispatch
     }; 
 
