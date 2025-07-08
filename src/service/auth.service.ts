@@ -42,6 +42,20 @@ class AuthService {
 
     }
 
+    async signInWithGoogle () {
+        try {
+
+            const result = await signInWithPopup(auth, this.provider);
+            return result.user;
+
+        } catch (error) {
+
+            console.error("Google sign-in error:", error);
+            return "Failed to sign-up with google, try again later!";
+        }
+
+    }
+
     async signIn (email: string, password: string) {
         try {
             const userCredintials = await signInWithEmailAndPassword(auth, email, password);

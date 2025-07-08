@@ -4,6 +4,7 @@ import MemoryGameDashboard from './components/dashboard/playerDashboard';
 import SelectionRequired from './components/game-board/components/selectionRequired';
 import LandingPage from './components/landing/landing';
 import SelectGame from './components/select-game/selectGame';
+import SignInPage from './pages/signIn';
 import AppRoutes from './routes/AppRoutes';
 
 
@@ -19,7 +20,8 @@ function App() {
     // <AlreadyAuthenticated />
     // <SelectGame />
 
-    <MemoryGameDashboard />  
+    // <MemoryGameDashboard />
+    <SignInPage />  
   )
 }
 
