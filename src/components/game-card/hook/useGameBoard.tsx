@@ -13,15 +13,15 @@ interface IProps {
 const useGameBoard = ({isMatched, isFlipped, id, value}: IProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const theme = useTheme();
-  const { dispatch, state } = useContext(GameInfoContext);
+  const { gameDispatch, gameState } = useContext(GameInfoContext);
 
   const imageUrl = useMemo(() => getCardImage(value), [value]);
 
   const handleFlipped = useCallback(() => {
-    if (isMatched || state.openCards.length === 2) return;
+    if (isMatched || gameState.openCards.length === 2) return;
 
-    dispatch({ type: "FLIPP_CARD", payload: id });
-  }, [isMatched, dispatch, id, state.openCards.length]);
+    gameDispatch({ type: "FLIPP_CARD", payload: id });
+  }, [isMatched, gameDispatch, id, gameState.openCards.length]);
 
   const cardStyles = useMemo(() => {
     const isLight = theme.palette.mode === "light";

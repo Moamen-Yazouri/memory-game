@@ -7,31 +7,31 @@ import { getBoardLenght, getResponsiveColumns } from "./utils/getTheBoardLength"
 import { GameInfoContext } from "@/providers/game-info/gameInfo"
 import GameHeader from "./gameheader"
 import { PlayerInfoContext } from "@/providers/player-info/playerInfoContext"
+import SelectionRequired from "./components/selectionRequired"
 
 
 
 const GameBoard = () => {
-  const {gameInfo, state, changeLevel, changeMode, dispatch }= useContext(GameInfoContext);
+  const {gameInfo, gameState, gameDispatch }= useContext(GameInfoContext);
   const {playerState} = useContext(PlayerInfoContext);
   
-  useEffect(() => {
-      changeLevel("easy");
-      changeMode("education");
-  }, []);
+  if(!gameInfo.level || !gameInfo.mode) {
+    return <SelectionRequired />;
+  }
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      dispatch({type: "CHECK_MATCHED"});
+      gameDispatch({type: "CHECK_MATCHED"});
     }, 800);
     
     return () => {
       clearTimeout(timeout);
     }
-  },[state.openCards]);
+  },[gameState.openCards]);
 
-  const cards = useMemo(() => {
-    return getBoardLenght(gameInfo.level || "easy")
-  }, [gameInfo]);
+  // const cards = useMemo(() => {
+  //   return getBoardLenght(gameInfo.level || "easy")
+  // }, [gameInfo]);
   
 
   const responsiveColumns = useMemo(() => {
@@ -63,7 +63,7 @@ const GameBoard = () => {
           maxWidth: { xs: "60vw", sm: "60vw", md: "60vw", lg: "600px" }, // Responsive max width
         }}
       >
-        {state.cards.map((value, index) => (
+        {gameState.cards.map((value, index) => (
           <Grid
             key={index}
             size={1}
