@@ -1,9 +1,10 @@
 import { GameModesTypes, LevelsTypes } from "@/@types"
 import { Favorite, LocationOn, School, Event } from "@mui/icons-material"
 import { Theme } from "@mui/material"
+import { IGameLevel, IGameMode } from "./types"
 export const getGameModesAndLevels = (theme: Theme) => {
 
-  const gameModes = [
+  const gameModes: IGameMode[] = [
     {
       id: "education" as GameModesTypes,
       name: "Education",
@@ -38,7 +39,7 @@ export const getGameModesAndLevels = (theme: Theme) => {
     },
   ]
   
-    const levels = [
+    const levels: IGameLevel[] = [
       {
         id: "easy" as LevelsTypes,
         name: "Easy",
