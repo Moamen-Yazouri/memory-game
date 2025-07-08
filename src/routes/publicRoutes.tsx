@@ -1,3 +1,4 @@
+import AlreadyLoggedPage from "@/pages/alreadyLogged";
 import SignUpPage from "@/pages/signUp";
 import { lazy } from "react";
 import { RouteObject } from "react-router-dom";
@@ -24,6 +25,10 @@ export const publicRoutes: RouteObject = {
     {
       path: "unauthenticated",
       element: <UnauthenticatedPage />,
+    },
+    {
+      path: "already-logged",
+      element: <AlreadyLoggedPage />,
     },
     {
       path: "*",

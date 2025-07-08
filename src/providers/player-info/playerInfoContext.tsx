@@ -1,12 +1,32 @@
-import { GameModesTypes,  ICurrent, IFinishedLevel, IMonster} from "@/@types";
-import { createContext, useEffect, useReducer, useRef } from "react";
-import { INITIAL_CONTEXT_STATE, initialPlayer } from "./constants";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/firebase/firebase";
-import { getDatabase, ref, set } from "firebase/database";
+import { 
+    GameModesTypes,  
+    ICurrent, 
+    IFinishedLevel, 
+    IMonster
+} from "@/@types";
+import { 
+    createContext, 
+    useEffect, 
+    useReducer, 
+    useRef 
+} from "react";
+import { 
+    INITIAL_CONTEXT_STATE, 
+    initialPlayer 
+} from "./constants";
+import { 
+    getDatabase, 
+    ref, 
+    set 
+} from "firebase/database";
 import playerInfoService from "./service/playerInfo.service";
 import { formatFinishedForDB } from "./utils/formatRealtimeDB";
-import { Action, IState, reducer } from "@/reducers/player-state/reducer";
+import { 
+    Action, 
+    IState, 
+    reducer 
+} from "@/reducers/player-state/reducer";
+import authService from "@/service/auth.service";
 
 
 export interface IPlayerInfo {
@@ -16,7 +36,7 @@ export interface IPlayerInfo {
 }
 
 export interface IPlayerInfoContext {
-    state: IState;
+    playerState: IState;
     dispatch: React.ActionDispatch<[action: Action]>
 }
 
@@ -28,60 +48,67 @@ interface IProps {
 }
 
 export const PlayerInfoProvider = (props: IProps) => {
-    const [state, dispatch] = useReducer(reducer, initialPlayer)
+    const [playerState, dispatch] = useReducer(reducer, initialPlayer)
     const initialized = useRef<boolean>(false);
     const id = useRef<string>(null);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (logged) => {
-                if(logged?.uid) {
-                    id.current = logged.uid;
-                    if(!initialized.current) {
-        
-                        playerInfoService.getPlayerInfo(id.current)
-                        .then(
-                            (data) => {
-                                if(data) {
-                                    dispatch({type: "INITIAL_INFO", payload: data})
-                                }
-                            }
-                        );
-                    }
-                    return;
-                }
-            }        
-        );
-
-        return () => {
-            unsubscribe();
+        if(initialized.current) {
+            return;
         }
+
+        const initializeUser = async () => {
+            try {
+                const user = await authService.getLoggedUser();
+                if(user) {      
+                    id.current = user.uid;        
+                    const info = await playerInfoService.getPlayerInfo(id.current);
+                    if(info) {
+                        dispatch({type: "INITIAL_INFO", payload: info});
+                    }
+                    initialized.current = true;
+                }
+            }
+            catch(e) {
+                console.error(e);
+            }
+            
+        }
+
+        initializeUser();
     }, []);
 
     useEffect(() => {
         if(!initialized.current || !id.current) {
-            initialized.current = true;
             return;
         }
-            
-        const db = getDatabase();
-        const infoForDB = {
-            ...state,
-            finished: formatFinishedForDB(state.finished)
-        } 
-        const playerInfoRef = ref(db, `users/${id}/playerInfo`);
-        
-        set(playerInfoRef, infoForDB)
-        .then(() => console.log("Synced"))
-        .catch(() => console.log("error"));
+        const updateDB = async () => {
+            const db = getDatabase();
+            const infoForDB = {
+                ...playerState,
+                finished: formatFinishedForDB(playerState.finished)
+            } 
+            const playerInfoRef = ref(db, `users/${id}/playerInfo`);
+            try {
+                await set(playerInfoRef, infoForDB);
+                console.log("Synced");
+            }
+            catch(e) {
+                console.error(e);
+            }
+        }
 
-    }, [state]);
+        updateDB();
+
+    }, [playerState]);
+
     
     const value: IPlayerInfoContext = {
-        state,
+        playerState,
         dispatch
     }; 
 
-    return <PlayerInfoContext.Provider value={value}>
-            {props.children}
-    </PlayerInfoContext.Provider>
+    return  <PlayerInfoContext.Provider value={value}>
+                {props.children}
+            </PlayerInfoContext.Provider>
 }

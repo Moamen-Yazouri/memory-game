@@ -1,5 +1,6 @@
 import { ThemeModes } from "@/@types";
-import type { Theme } from "@emotion/react";
+import { Theme } from "@mui/material";
+
 
 
 

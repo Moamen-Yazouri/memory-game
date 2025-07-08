@@ -6,11 +6,12 @@ import type {
 } from "./types";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
+import { getTheme } from "./createTheme";
 
-const ThemeContext = createContext<ThemeContext>({
+export const GameThemeContext = createContext<ThemeContext>({
     toggleTheme: () => {},
     mode: "light",
-    theme: {},
+    theme: getTheme("light"),
 });
 
 const ThemeContextProvider = (props: IContextProvider) => {
@@ -27,12 +28,12 @@ const ThemeContextProvider = (props: IContextProvider) => {
         mode,
         theme,
     };
-    return <ThemeContext.Provider value={value}>
+    return <GameThemeContext.Provider value={value}>
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
                     {props.children}
                 </ThemeProvider>
-            </ThemeContext.Provider>
+            </GameThemeContext.Provider>
 };
 
 export default ThemeContextProvider;

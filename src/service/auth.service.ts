@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile} from "firebase/auth";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile, User} from "firebase/auth";
 import {auth} from "../firebase/firebase";
 import { FirebaseError } from "firebase/app";
 
@@ -76,6 +76,15 @@ class AuthService {
             return false;
         }
         
+    }
+
+    async getLoggedUser(): Promise<User | null> {
+        await auth.authStateReady();
+        const user = auth.currentUser;
+        if(user) {
+            return user; 
+        }
+        return null;
     }
 }
 

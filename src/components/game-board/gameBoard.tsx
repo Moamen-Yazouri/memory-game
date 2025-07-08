@@ -12,8 +12,8 @@ import { PlayerInfoContext } from "@/providers/player-info/playerInfoContext"
 
 const GameBoard = () => {
   const {gameInfo, state, changeLevel, changeMode, dispatch }= useContext(GameInfoContext);
-  const {playerInfo} = useContext(PlayerInfoContext);
-  console.log(playerInfo);
+  const {playerState} = useContext(PlayerInfoContext);
+  
   useEffect(() => {
       changeLevel("easy");
       changeMode("education");

@@ -1,5 +1,5 @@
 
-import  { useMemo } from "react";
+import  { use, useMemo } from "react";
 import {
   Box,
   Typography,
@@ -9,11 +9,13 @@ import {
   
 } from "@mui/material";
 import SignUpForm from "./signUpForm";
+import authService from "@/service/auth.service";
+import { Navigate } from "react-router-dom";
 
-
+const getUser = authService.getLoggedUser();
 export default function SignUp() {
   const theme = useTheme();
-  
+  const user = use(getUser);
   const gradient = useMemo(() => (
         theme.palette.mode === "light"
             ? "linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 50%, #ddd6fe 100%)"
@@ -33,30 +35,42 @@ export default function SignUp() {
             alignItems: "center",             
         }}
     >
-      <Paper
-        elevation={6}
-        sx={{
-          mt: 8,
-          p: 4,
-          borderRadius: 3,
-          backgroundImage: gradient,
-          backdropFilter: "blur(10px)",
-          border: theme.palette.mode === "light"
-            ? "1px solid rgba(139, 92, 246, 0.2)"
-            : "1px solid rgba(139, 92, 246, 0.3)",
-          boxShadow: theme.palette.mode === "light"
-            ? "0 8px 32px rgba(139, 92, 246, 0.15)"
-            : "0 8px 32px rgba(0, 0, 0, 0.4)"
-        }}
-      >
-        <Typography variant="h5" align="center" gutterBottom color="text.primary">
-          Sign Up
-        </Typography>
+      {
+        user
+        ? (
+            <Navigate
+              to={"/already-logged"}
+              replace
+              state={{from: location.pathname}}
+            />
+        )
+        : (
+          <Paper
+            elevation={6}
+            sx={{
+              mt: 8,
+              p: 4,
+              borderRadius: 3,
+              backgroundImage: gradient,
+              backdropFilter: "blur(10px)",
+              border: theme.palette.mode === "light"
+                ? "1px solid rgba(139, 92, 246, 0.2)"
+                : "1px solid rgba(139, 92, 246, 0.3)",
+              boxShadow: theme.palette.mode === "light"
+                ? "0 8px 32px rgba(139, 92, 246, 0.15)"
+                : "0 8px 32px rgba(0, 0, 0, 0.4)"
+            }}
+          >
+            <Typography variant="h5" align="center" gutterBottom color="text.primary">
+              Sign Up
+            </Typography>
 
-        <Box  sx={{ mt: 2 }}>
-            <SignUpForm />
-        </Box>
-      </Paper>
+            <Box  sx={{ mt: 2 }}>
+                <SignUpForm />
+            </Box>
+          </Paper>
+        )
+      }
     </Container>
   );
 }
