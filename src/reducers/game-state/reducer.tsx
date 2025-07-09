@@ -4,6 +4,8 @@ import { getGameCards } from "./utils/createGameCards";
 export interface IState {
     cards: IGameCard[],
     wrongMoves: number,
+    score: number,
+    time: number,
     isCompleted: boolean,
     openCards: IGameCard[],
     isGameActive: boolean,
@@ -14,7 +16,8 @@ export type Action =
     {type: "INITIAL_GAME", payload: LevelsTypes} |
     {type: "FLIPP_CARD", payload: number} |
     {type: "CHECK_MATCHED"} |
-    {type: "RESTART_GAME", pyload: LevelsTypes} 
+    {type: "RESTART_GAME", pyload: LevelsTypes} |
+    {type: "HANDLE_TIME", payload: number}  
 
 export const reducer = (state: IState, action: Action) : IState=> {
     switch(action.type) {
@@ -24,6 +27,13 @@ export const reducer = (state: IState, action: Action) : IState=> {
                 ...state,
                 initialized: true,
                 cards
+            }
+        }
+
+        case "HANDLE_TIME": {
+            return {
+                ...state,
+                time: state.time + action.payload,
             }
         }
 
@@ -79,6 +89,7 @@ export const reducer = (state: IState, action: Action) : IState=> {
                     const isCompleted = newCards.every((c) => c.isMatched);
                     return {
                         ...state,
+                        score: state.score + 20,
                         isCompleted,
                         isGameActive: isCompleted ? false : true,
                         cards: newCards,
@@ -96,6 +107,7 @@ export const reducer = (state: IState, action: Action) : IState=> {
                     
                     return {
                         ...state,
+                        score: state.score - 10,
                         cards: newCards,
                         openCards: [],
                     }

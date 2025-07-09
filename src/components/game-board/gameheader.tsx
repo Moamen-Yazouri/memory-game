@@ -1,44 +1,41 @@
-"use client"
-
-import { Box, Typography, IconButton, Paper, Chip, Stack, Divider, useTheme } from "@mui/material"
-import { RestartAlt, EmojiEvents, Close, Timer, Star, Home } from "@mui/icons-material"
-import { useContext, useEffect, useState } from "react"
+import {
+  Box,
+  Typography,
+  IconButton,
+  Paper,
+  Chip,
+  Stack,
+  Divider,
+  useTheme,
+} from "@mui/material"
+import {
+  RestartAlt,
+  EmojiEvents,
+  Close,
+  Star,
+  Home,
+} from "@mui/icons-material"
+import { useContext } from "react"
 import { GameInfoContext } from "@/providers/game-info/gameInfo"
 import GameTimer from "../timer/timer"
+import { useNavigate } from "react-router-dom"
 
-interface GameHeaderProps {
-  onBackToMenu?: () => void
-}
-
-const GameHeader = ({ onBackToMenu }: GameHeaderProps) => {
-  const theme = useTheme()
-  const { gameInfo, state, dispatch } = useContext(GameInfoContext)
-  
-
-
-  // Timer logic
-
-  // Start timer when first card is flipped
-  
-
-  // Stop timer when game is complete
-  
+const GameHeader = () => {
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const { gameInfo, gameState, gameDispatch } = useContext(GameInfoContext)
 
   const handleRestart = () => {
-    dispatch({ type: "RESTART_GAME", pyload: gameInfo.level! });
+    gameDispatch({ type: "RESTART_GAME", pyload: gameInfo.level! })
   }
 
   const handleBackToMenu = () => {
-    if (onBackToMenu) {
-      onBackToMenu()
-    }
+      navigate("/memeory-game/mode-selection");
   }
 
-  
-
   const getScoreColor = () => {
-    if (state.wrongMoves === 0) return "success"
-    if (state.wrongMoves <= 3) return "warning"
+    if (gameState.wrongMoves === 0) return "success"
+    if (gameState.wrongMoves <= 3) return "warning"
     return "error"
   }
 
@@ -55,45 +52,66 @@ const GameHeader = ({ onBackToMenu }: GameHeaderProps) => {
     }
   }
 
-  // Glass morphism background based on theme mode
-  const glassBackground =
+  const glassStyle =
     theme.palette.mode === "dark"
       ? {
           background: `
-          linear-gradient(135deg, 
-            rgba(45, 27, 78, 0.25) 0%, 
-            rgba(26, 15, 46, 0.35) 25%,
-            rgba(139, 92, 246, 0.15) 50%,
-            rgba(6, 182, 212, 0.1) 75%,
-            rgba(45, 27, 78, 0.25) 100%
-          )
-        `,
+            linear-gradient(135deg, 
+              rgba(45, 27, 78, 0.25) 0%, 
+              rgba(26, 15, 46, 0.35) 25%,
+              rgba(139, 92, 246, 0.15) 50%,
+              rgba(6, 182, 212, 0.1) 75%,
+              rgba(45, 27, 78, 0.25) 100%
+            )`,
           backdropFilter: "blur(20px) saturate(180%)",
           border: `1px solid rgba(139, 92, 246, 0.2)`,
           boxShadow: `
-          0 8px 32px rgba(0, 0, 0, 0.3),
-          inset 0 1px 0 rgba(255, 255, 255, 0.1),
-          0 0 0 1px rgba(139, 92, 246, 0.1)
-        `,
+            0 8px 32px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1),
+            0 0 0 1px rgba(139, 92, 246, 0.1)
+          `,
         }
       : {
           background: `
-          linear-gradient(135deg, 
-            rgba(255, 255, 255, 0.4) 0%, 
-            rgba(250, 247, 255, 0.6) 25%,
-            rgba(139, 92, 246, 0.1) 50%,
-            rgba(6, 182, 212, 0.08) 75%,
-            rgba(255, 255, 255, 0.4) 100%
-          )
-        `,
+            linear-gradient(135deg, 
+              rgba(255, 255, 255, 0.4) 0%, 
+              rgba(250, 247, 255, 0.6) 25%,
+              rgba(139, 92, 246, 0.1) 50%,
+              rgba(6, 182, 212, 0.08) 75%,
+              rgba(255, 255, 255, 0.4) 100%
+            )`,
           backdropFilter: "blur(20px) saturate(180%)",
           border: `1px solid rgba(255, 255, 255, 0.3)`,
           boxShadow: `
-          0 8px 32px rgba(139, 92, 246, 0.15),
-          inset 0 1px 0 rgba(255, 255, 255, 0.4),
-          0 0 0 1px rgba(139, 92, 246, 0.1)
-        `,
+            0 8px 32px rgba(139, 92, 246, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4),
+            0 0 0 1px rgba(139, 92, 246, 0.1)
+          `,
         }
+
+  const StatBox = ({
+    icon,
+    label,
+    value,
+    color,
+  }: {
+    icon: React.ReactNode
+    label: string
+    value: number
+    color: string
+  }) => (
+    <Box sx={{ textAlign: "center", minWidth: 60 }}>
+      <Stack direction="row" spacing={0.5} justifyContent="center" alignItems="center">
+        {icon}
+        <Typography variant="body2" color="text.secondary" fontWeight="medium">
+          {label}
+        </Typography>
+      </Stack>
+      <Typography variant="h6" fontWeight="bold" color={`${color}.main`}>
+        {value}
+      </Typography>
+    </Box>
+  )
 
   return (
     <Paper
@@ -104,24 +122,21 @@ const GameHeader = ({ onBackToMenu }: GameHeaderProps) => {
         borderRadius: 4,
         position: "relative",
         overflow: "hidden",
-        ...glassBackground,
+        ...glassStyle,
         "&::before": {
           content: '""',
           position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
+          inset: 0,
           background:
             theme.palette.mode === "dark"
-              ? "linear-gradient(45deg, rgba(139, 92, 246, 0.05) 0%, rgba(6, 182, 212, 0.03) 100%)"
-              : "linear-gradient(45deg, rgba(139, 92, 246, 0.03) 0%, rgba(6, 182, 212, 0.02) 100%)",
+              ? "linear-gradient(45deg, rgba(139, 92, 246, 0.05), rgba(6, 182, 212, 0.03))"
+              : "linear-gradient(45deg, rgba(139, 92, 246, 0.03), rgba(6, 182, 212, 0.02))",
           pointerEvents: "none",
         },
       }}
     >
-      <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="center" justifyContent="space-between">
-        {/* Back Button & Game Title */}
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={2} justifyContent="space-between" alignItems="center">
+        {/* Left Section */}
         <Stack direction="row" spacing={2} alignItems="center">
           <IconButton
             onClick={handleBackToMenu}
@@ -134,42 +149,35 @@ const GameHeader = ({ onBackToMenu }: GameHeaderProps) => {
                 transform: "scale(1.05)",
                 boxShadow: `0 4px 12px ${theme.palette.primary.main}40`,
               },
-              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              transition: "all 0.3s ease",
             }}
           >
             <Home fontSize="small" />
           </IconButton>
 
-          <Box sx={{ textAlign: { xs: "center", sm: "left" } }}>
+          <Box>
             <Typography
               variant="h5"
-              component="h1"
               fontWeight="bold"
               sx={{
                 mb: 0.5,
                 background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
                 backgroundClip: "text",
-                WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 textShadow: theme.palette.mode === "dark" ? "0 0 20px rgba(139, 92, 246, 0.3)" : "none",
               }}
             >
               Memory Game
             </Typography>
-            <Stack direction="row" spacing={1} justifyContent={{ xs: "center", sm: "flex-start" }}>
+            <Stack direction="row" spacing={1}>
               <Chip
                 label={gameInfo.level?.toUpperCase() || "EASY"}
                 color={getLevelColor()}
                 size="small"
-                variant="filled"
-                sx={{
-                  fontWeight: "bold",
-                  boxShadow: `0 2px 8px ${theme.palette[getLevelColor()].main}40`,
-                }}
+                sx={{ fontWeight: "bold", boxShadow: `0 2px 8px ${theme.palette[getLevelColor()].main}40` }}
               />
               <Chip
                 label={gameInfo.mode?.toUpperCase() || "EDUCATION"}
-                color="primary"
                 size="small"
                 variant="outlined"
                 sx={{
@@ -182,7 +190,7 @@ const GameHeader = ({ onBackToMenu }: GameHeaderProps) => {
           </Box>
         </Stack>
 
-        {/* Game Stats */}
+        {/* Center Stats */}
         <Stack
           direction="row"
           spacing={{ xs: 1, sm: 2 }}
@@ -191,7 +199,10 @@ const GameHeader = ({ onBackToMenu }: GameHeaderProps) => {
               orientation="vertical"
               flexItem
               sx={{
-                borderColor: theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(139, 92, 246, 0.2)",
+                borderColor:
+                  theme.palette.mode === "dark"
+                    ? "rgba(255, 255, 255, 0.1)"
+                    : "rgba(139, 92, 246, 0.2)",
               }}
             />
           }
@@ -203,42 +214,19 @@ const GameHeader = ({ onBackToMenu }: GameHeaderProps) => {
             borderRadius: 3,
             p: 1.5,
             border: `1px solid ${
-              theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(139, 92, 246, 0.2)"
+              theme.palette.mode === "dark"
+                ? "rgba(255, 255, 255, 0.1)"
+                : "rgba(139, 92, 246, 0.2)"
             }`,
           }}
         >
-          {/* Score */}
-          <Box sx={{ textAlign: "center", minWidth: 60 }}>
-            <Stack direction="row" alignItems="center" spacing={0.5} justifyContent="center">
-              <Star color={getScoreColor()} fontSize="small" />
-              <Typography variant="body2" color="text.secondary" fontWeight="medium">
-                Score
-              </Typography>
-            </Stack>
-            <Typography variant="h6" fontWeight="bold" color={`${getScoreColor()}.main`}>
-              {0}
-            </Typography>
-          </Box>
-
-          {/* Wrong Moves */}
-          <Box sx={{ textAlign: "center", minWidth: 60 }}>
-            <Stack direction="row" alignItems="center" spacing={0.5} justifyContent="center">
-              <Close color="error" fontSize="small" />
-              <Typography variant="body2" color="text.secondary" fontWeight="medium">
-                Wrong
-              </Typography>
-            </Stack>
-            <Typography variant="h6" fontWeight="bold" color="error.main">
-              {state.wrongMoves || 0}
-            </Typography>
-          </Box>
-
+          <StatBox icon={<Star sx={{ color: getScoreColor() }} fontSize="small" />} label="Score" value={gameState.score} color="warning" />
+          <StatBox icon={<Close color="error" fontSize="small" />} label="Wrong" value={gameState.wrongMoves} color="error" />
           <GameTimer />
-
         </Stack>
 
-        {/* Actions */}
-        <Stack direction="row" spacing={1}>
+        {/* Right Controls */}
+        <Stack direction="row" spacing={1} alignItems="center">
           <IconButton
             onClick={handleRestart}
             sx={{
@@ -250,21 +238,18 @@ const GameHeader = ({ onBackToMenu }: GameHeaderProps) => {
                 transform: "scale(1.05)",
                 boxShadow: `0 6px 20px ${theme.palette.primary.main}60`,
               },
-              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              transition: "all 0.3s ease",
             }}
           >
             <RestartAlt />
           </IconButton>
-
-          {state.isCompleted && (
+          {gameState.isCompleted && (
             <Chip
               icon={<EmojiEvents />}
               label="Complete!"
               color="success"
-              variant="filled"
               sx={{
                 fontWeight: "bold",
-                boxShadow: `0 4px 12px ${theme.palette.success.main}40`,
                 animation: "pulse 2s infinite",
                 "@keyframes pulse": {
                   "0%": { transform: "scale(1)" },
@@ -280,4 +265,4 @@ const GameHeader = ({ onBackToMenu }: GameHeaderProps) => {
   )
 }
 
-export default GameHeader
+export default GameHeader;

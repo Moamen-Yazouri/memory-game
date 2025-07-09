@@ -11,8 +11,8 @@ export interface IGameInfo {
 
 export interface IGameInfoContext {
     gameInfo: IGameInfo;
-    state: IState,
-    dispatch: React.ActionDispatch<[action: Action]>
+    gameState: IState,
+    gameDispatch: React.ActionDispatch<[action: Action]>
     changeLevel: (level: LevelsTypes) => void;
     changeMode: (mode: GameModesTypes) => void;
 }
@@ -25,11 +25,11 @@ export const GameInfoContext = createContext<IGameInfoContext>(initialContext);
 
 export const GameProvider = (props: IProps) => {
     const [gameInfo, setGameInfo] = useState<IGameInfo>(initialGame);
-    const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+    const [gameState, gameDispatch] = useReducer(reducer, INITIAL_STATE);
 
     useEffect (() => {
         if(gameInfo.level && gameInfo.mode) {
-            dispatch({type: "INITIAL_GAME", payload: gameInfo.level})
+            gameDispatch({type: "INITIAL_GAME", payload: gameInfo.level})
         }
     }, [gameInfo]);
 
@@ -43,9 +43,9 @@ export const GameProvider = (props: IProps) => {
     }
 
     const value: IGameInfoContext = {
-        state,
+        gameState,
         gameInfo,
-        dispatch, 
+        gameDispatch, 
         changeLevel,
         changeMode,
     }

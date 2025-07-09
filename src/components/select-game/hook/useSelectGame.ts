@@ -5,18 +5,19 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import { getCompletedAndUnlocked } from "../utils/getCompletedLevelst";
 import { getBackgroundGradient, getCardGradient } from "../utils/getGradients";
 import { getGameModesAndLevels } from "../constants";
+import { GameInfoContext } from "@/providers/game-info/gameInfo";
 
 export const useSelectGame = () => {
     const {mode, theme} = useContext(GameThemeContext);
     const [selectedMode, setSelectedMode] = useState<GameModesTypes | null>(null)
     const [selectedLevel, setSelectedLevel] = useState<LevelsTypes | null>(null)
-    const {playerState, dispatch} = useContext(PlayerInfoContext);
+    const {playerState, playerDispatch} = useContext(PlayerInfoContext);
+    const {changeLevel, changeMode} = useContext(GameInfoContext);
     useEffect(() => {
     if (selectedMode && selectedLevel) {
-        dispatch({type: "CHANGE_CURRENT", payload: {modeName: selectedMode, level: selectedLevel}});
-      setTimeout(() => {
-        
-      }, 500);
+        changeLevel(selectedLevel);
+        changeMode(selectedMode);
+        playerDispatch({type: "CHANGE_CURRENT", payload: {modeName: selectedMode, level: selectedLevel}});
     }
   }, [selectedMode, selectedLevel]);
 

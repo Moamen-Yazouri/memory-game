@@ -1,27 +1,27 @@
 import { ThemeModes } from "@/@types"
 
-export const getGradients =  (mode: ThemeModes) => {
-    const isLight = mode === "light";
-    const gradient = isLight  
-      ? "linear-gradient(135deg, rgb(204, 188, 222), rgb(186, 171, 192))"
-      : "linear-gradient(135deg, #230739 0%, #3d1561 50%, #5c3a8d 100%)";
-
-      return gradient;
+export const getGradients = (mode: ThemeModes) => {
+  const isLight = mode === "light";
+  const gradient = isLight
+    ? "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 25%, rgba(248, 250, 252, 0.90) 50%, rgba(241, 245, 249, 0.80) 75%, rgba(255, 255, 255, 0.95) 100%)"
+    : "linear-gradient(135deg, rgba(45, 27, 78, 0.95) 0%, rgba(35, 20, 60, 0.90) 25%, rgba(25, 15, 45, 0.95) 50%, rgba(30, 18, 55, 0.85) 75%, rgba(45, 27, 78, 0.95) 100%)";
+  
+  return gradient;
 }
 
 export const getShadows = (mode: ThemeModes) => {
-    const isLight = mode === "light";
-    const shadows = {
-      light: {
-        flip: "0 8px 32px rgba(0,0,0,0.15), 0 4px 16px rgba(0,0,0,0.1)",
-        hover: "0 6px 20px rgba(0,0,0,0.12), 0 3px 10px rgba(0,0,0,0.08)",
-        normal: "0 4px 12px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.06)",
-      },
-      dark: {
-        flip: "0 8px 32px rgba(0,0,0,0.4), 0 4px 16px rgba(108, 53, 184, 0.3)",
-        hover: "0 6px 20px rgba(0,0,0,0.3), 0 3px 10px rgba(108, 53, 184, 0.25)",
-        normal: "0 4px 12px rgba(0,0,0,0.2), 0 2px 6px rgba(108, 53, 184, 0.15)",
-      }
-    };
-    return isLight ?  shadows.light :  shadows.dark
+  const isLight = mode === "light";
+  const shadows = {
+    light: {
+      flip: "0 12px 40px rgba(99, 102, 241, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3)",
+      hover: "0 8px 25px rgba(99, 102, 241, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.4)",
+      normal: "0 4px 16px rgba(99, 102, 241, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.2)",
+    },
+    dark: {
+      flip: "0 12px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+      hover: "0 8px 25px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15)",
+      normal: "0 4px 16px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
+    }
+  };
+  return isLight ? shadows.light : shadows.dark;
 }

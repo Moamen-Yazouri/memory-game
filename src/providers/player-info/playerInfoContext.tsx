@@ -37,7 +37,7 @@ export interface IPlayerInfo {
 
 export interface IPlayerInfoContext {
     playerState: IState;
-    dispatch: React.ActionDispatch<[action: Action]>
+    playerDispatch: React.ActionDispatch<[action: Action]>
 }
 
 export const PlayerInfoContext = createContext<IPlayerInfoContext>(INITIAL_CONTEXT_STATE);
@@ -48,7 +48,7 @@ interface IProps {
 }
 
 export const PlayerInfoProvider = (props: IProps) => {
-    const [playerState, dispatch] = useReducer(reducer, initialPlayer)
+    const [playerState, playerDispatch] = useReducer(reducer, initialPlayer)
     const initialized = useRef<boolean>(false);
     const id = useRef<string>(null);
 
@@ -64,7 +64,7 @@ export const PlayerInfoProvider = (props: IProps) => {
                     id.current = user.uid;        
                     const info = await playerInfoService.getPlayerInfo(id.current);
                     if(info) {
-                        dispatch({type: "INITIAL_INFO", payload: info});
+                        playerDispatch({type: "INITIAL_INFO", payload: info});
                     }
                     initialized.current = true;
                 }
@@ -105,7 +105,7 @@ export const PlayerInfoProvider = (props: IProps) => {
     
     const value: IPlayerInfoContext = {
         playerState,
-        dispatch
+        playerDispatch
     }; 
 
     return  <PlayerInfoContext.Provider value={value}>

@@ -1,42 +1,54 @@
-"use client"
-
-import { Box, Grid } from "@mui/material"
-import GameCard from "../game-card/gameCard"
-import { useContext, useEffect, useMemo } from "react"
-import { getBoardLenght, getResponsiveColumns } from "./utils/getTheBoardLength"
-import { GameInfoContext } from "@/providers/game-info/gameInfo"
-import GameHeader from "./gameheader"
-import { PlayerInfoContext } from "@/providers/player-info/playerInfoContext"
+import { Box, Grid } from "@mui/material";
+import GameCard from "../game-card/gameCard";
+import { useContext, useEffect, useMemo } from "react";
+import { getResponsiveColumns } from "./utils/getTheBoardLength";
+import { GameInfoContext } from "@/providers/game-info/gameInfo";
+import GameHeader from "./gameheader";
+import { PlayerInfoContext } from "@/providers/player-info/playerInfoContext";
+import SelectionRequired from "./components/selectionRequired";
+import { IFinishedLevel } from "@/@types";
 
 
 
 const GameBoard = () => {
-  const {gameInfo, state, changeLevel, changeMode, dispatch }= useContext(GameInfoContext);
-  const {playerState} = useContext(PlayerInfoContext);
-  
-  useEffect(() => {
-      changeLevel("easy");
-      changeMode("education");
-  }, []);
+  const {gameInfo, gameState, gameDispatch }= useContext(GameInfoContext);
+  const { playerDispatch } = useContext(PlayerInfoContext);
 
   useEffect(() => {
+      if(gameState.isCompleted) {
+          const finishedLevel: IFinishedLevel = {
+            level: gameInfo.level!,
+            score: gameState.score,
+            time: gameState.time,
+            wrongMoves: gameState.wrongMoves,
+          }
+          playerDispatch({type: "ADD_FINISHED", payload:{mode: gameInfo.mode!, level: finishedLevel}})
+      }  
+  }, [gameState.isCompleted]);
+  
+  
+  useEffect(() => {
     const timeout = setTimeout(() => {
-      dispatch({type: "CHECK_MATCHED"});
+      gameDispatch({type: "CHECK_MATCHED"});
     }, 800);
     
     return () => {
       clearTimeout(timeout);
     }
-  },[state.openCards]);
-
-  const cards = useMemo(() => {
-    return getBoardLenght(gameInfo.level || "easy")
-  }, [gameInfo]);
+  },[gameState.openCards]);
   
-
+  // const cards = useMemo(() => {
+    //   return getBoardLenght(gameInfo.level || "easy")
+    // }, [gameInfo]);
+  
+    
   const responsiveColumns = useMemo(() => {
-    return getResponsiveColumns(gameInfo.level || "easy")
+    return getResponsiveColumns(gameInfo.level!)
   }, [gameInfo]);
+
+  if(!gameInfo.level || !gameInfo.mode) {
+    return <SelectionRequired />;
+  }
 
   return (
     <Box
@@ -63,7 +75,7 @@ const GameBoard = () => {
           maxWidth: { xs: "60vw", sm: "60vw", md: "60vw", lg: "600px" }, // Responsive max width
         }}
       >
-        {state.cards.map((value, index) => (
+        {gameState.cards.map((value, index) => (
           <Grid
             key={index}
             size={1}
