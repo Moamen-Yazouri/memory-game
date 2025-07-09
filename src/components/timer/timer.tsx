@@ -8,34 +8,29 @@ import Stack from "@mui/material/Stack";
 import { 
     useContext, 
     useEffect, 
-    useRef, 
-    useState 
+    useRef,  
 } from "react";
 
 const GameTimer = () => {
-    const {state} = useContext(GameInfoContext);
-    const [time, setTime] = useState(0);
+    const {gameState, gameDispatch} = useContext(GameInfoContext);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
     useEffect(() => {
         
-        if (!state.initialized) {
+        if (!gameState.initialized) {
             return;
         }
 
-        if(state.isCompleted) {
-            console.log("")
+        if(!gameState.isCompleted && !gameState.isGameActive && timerRef.current) {
+            gameDispatch({type: "HANDLE_TIME", payload: -(gameState.time)})
         }
-        else {
-            setTime(0);
-        }
-
-        if (state.isGameActive) {
+        
+        if (gameState.isGameActive) {
             if (timerRef.current) {
                 clearInterval(timerRef.current);
             }
             
             timerRef.current = setInterval(() => {
-                setTime(t => t + 1); 
+                gameDispatch({type: "HANDLE_TIME", payload: 1}) 
             }, 1000);
         } 
         else {
@@ -51,7 +46,7 @@ const GameTimer = () => {
                 timerRef.current = null;
             }
         };
-    }, [state.isGameActive, state.initialized, state.isCompleted]);
+    }, [gameState.isGameActive, gameState.initialized, gameState.isCompleted]);
 
     
 
@@ -69,7 +64,7 @@ const GameTimer = () => {
             </Typography>
         </Stack>
         <Typography variant="h6" fontWeight="bold" color="primary.main">
-            {formatTime(time)}
+            {formatTime(gameState.time)}
         </Typography>
     </Box>
   )

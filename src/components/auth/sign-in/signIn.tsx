@@ -9,7 +9,7 @@ import {
 import SignInForm from "./signInForm";
 import authService from "@/service/auth.service";
 import { use } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Google } from "@mui/icons-material";
 import { toast } from "sonner";
 
@@ -18,10 +18,12 @@ const getUser = authService.getLoggedUser();
 export default function SignIn() {
   const theme = useTheme();
   const user = use(getUser);
+  const navigate = useNavigate();
   const handleGoogleSignIn = async () => {
     const result = await authService.signInWithGoogle();
     if(typeof result === "object") {
-      toast.success(`Successfully logged, ${result.email}`)
+      toast.success(`Successfully logged, ${result.email}`);
+      navigate("/memory-game/mode-selection");
     }
     else {
       toast.error(result);
