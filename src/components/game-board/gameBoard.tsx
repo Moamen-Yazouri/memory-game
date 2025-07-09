@@ -12,8 +12,14 @@ import { IFinishedLevel } from "@/@types";
 
 const GameBoard = () => {
   const {gameInfo, gameState, gameDispatch }= useContext(GameInfoContext);
-  const { playerDispatch } = useContext(PlayerInfoContext);
+  const {playerState ,playerDispatch } = useContext(PlayerInfoContext);
 
+  useEffect(() => {
+    if(gameInfo.level !== playerState.currentInfo.level) {
+      playerDispatch({type: "CHANGE_CURRENT", payload: {level: gameInfo.level!, modeName: gameInfo.mode!}})
+    }
+  }, [gameInfo]);
+  
   useEffect(() => {
       if(gameState.isCompleted) {
           const finishedLevel: IFinishedLevel = {
