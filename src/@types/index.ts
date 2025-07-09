@@ -19,7 +19,7 @@ enum GameModes {
 
 export type GameModesTypes = `${GameModes}`;
 
-enum Levels {
+export enum Levels {
     Easy = 'easy',
     Medium = 'medium',
     Hard = 'hard',

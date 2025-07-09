@@ -1,21 +1,34 @@
 "use client"
 
-import { Box, Typography, Container, Paper, useTheme, Stack, Button, Divider, Chip, Avatar } from "@mui/material"
+import { 
+  Box,
+  Typography,
+  Container,
+  Paper, 
+  Stack, 
+  Button, 
+  Divider, 
+  Chip, 
+  Avatar 
+} from "@mui/material";
+
 import {
   CheckCircle,
   Timer,
-  Star,
   TrendingUp,
   Dashboard,
   Refresh,
   EmojiEvents,
   Error,
-  
-  
-} from "@mui/icons-material"
-import { useMemo } from "react"
-import { getDetails } from "./utils/getDetails"
-import { GameModesTypes, LevelsTypes } from "@/@types"
+} from "@mui/icons-material";
+
+import { useContext, useMemo } from "react";
+import { getDetails } from "./utils/getDetails";
+import { GameModesTypes, Levels, LevelsTypes } from "@/@types";
+import { renderStars } from "./utils/levelStars";
+import { GameThemeContext } from "@/providers/theme/themeContext";
+import { useNavigate } from "react-router-dom";
+import { GameInfoContext } from "@/providers/game-info/gameInfo";
 
 interface LevelCompletedProps {
   level?: Exclude<LevelsTypes, "monster">,
@@ -25,9 +38,6 @@ interface LevelCompletedProps {
   wrongMoves?: number
   stars?: number
   isNewRecord?: boolean
-  onContinue?: () => void
-  onDashboard?: () => void
-  onChangeMode?: () => void
 }
 
 export default function LevelCompleted({
@@ -36,14 +46,11 @@ export default function LevelCompleted({
   score = 15420,
   time = "2:34",
   wrongMoves = 8,
-  stars = 3,
   isNewRecord = true,
-  onContinue,
-  onDashboard,
-  onChangeMode,
 }: LevelCompletedProps) {
-  const theme = useTheme()
-
+  const {theme} = useContext(GameThemeContext) 
+  const navigate = useNavigate();
+  const {changeLevel} = useContext(GameInfoContext);
   const backgroundGradient = useMemo(
     () =>
       theme.palette.mode === "light"
@@ -61,44 +68,25 @@ export default function LevelCompleted({
   )
 
   const handleContinue = () => {
-    if (onContinue) {
-      onContinue()
-    } else {
-      console.log("Continue to next level...")
+    const levels: LevelsTypes[] = Object.values(Levels);
+    const currentLevelIndex = levels.indexOf(level);
+    const nextLevel = levels[currentLevelIndex + 1];
+    changeLevel(nextLevel);
+    if (nextLevel) {
+      navigate(`/memory-game/game-play`);
     }
   }
 
   const handleDashboard = () => {
-    if (onDashboard) {
-      onDashboard()
-    } else {
-      console.log("Go to dashboard...")
-    }
+    navigate("/memory-game/dashboard");
   }
 
   const handleChangeMode = () => {
-    if (onChangeMode) {
-      onChangeMode()
-    } else {
-      console.log("Change mode...")
-    }
+      navigate("/memory-game/mode-selection");
   }
 
-  const renderStars = (count: number) =>
-    Array.from({ length: 3 }, (_, i) => (
-      <Star
-        key={i}
-        sx={{
-          fontSize: 20,
-          color: i < count ? theme.palette.warning.main : theme.palette.grey[400],
-          filter: i < count ? "drop-shadow(0 2px 4px rgba(255, 193, 7, 0.4))" : "none",
-        }}
-      />
-    ))
-
-  // Get mode details
- 
-
+  const starsNumber = useMemo(() => (renderStars(theme, level)) ,[level]);
+  
   const levelDetails = useMemo(() => (getDetails(theme).levelDetails[level]), [level]);
 
   const modeDetails = useMemo(() => (getDetails(theme).modeDetails[mode]), [mode]);
@@ -276,7 +264,7 @@ export default function LevelCompleted({
 
               {/* Stars */}
               <Box display="flex" justifyContent="center" gap={0.5}>
-                {renderStars(stars)}
+                {starsNumber}
               </Box>
             </Stack>
 
