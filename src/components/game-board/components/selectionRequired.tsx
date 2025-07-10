@@ -1,12 +1,13 @@
 import { Box, Typography, Button, Container, useTheme, Stack, Paper } from "@mui/material"
 import { Warning, ArrowBack, SportsEsports } from "@mui/icons-material"
 import { useMemo } from "react"
+import { useNavigate } from "react-router-dom"
 
 
 
 export default function SelectionRequired() {
   const theme = useTheme()
-
+  const navigate = useNavigate();
   const backgroundGradient = useMemo(
     () =>
       theme.palette.mode === "light"
@@ -25,11 +26,13 @@ export default function SelectionRequired() {
 
   const handleGoToSelect = () => {
     
-      console.log("Navigating to select page...")
+      navigate("/memeory-game/mode-selection");
+
     
   }
 
   return (
+    
     <Box
       sx={{
         minHeight: "100vh",
