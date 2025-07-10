@@ -16,7 +16,7 @@ export type Action =
     {type: "INITIAL_GAME", payload: LevelsTypes} |
     {type: "FLIPP_CARD", payload: number} |
     {type: "CHECK_MATCHED"} |
-    {type: "RESTART_GAME", pyload: LevelsTypes} |
+    {type: "RESTART_GAME", payload: LevelsTypes} |
     {type: "HANDLE_TIME", payload: number}  
 
 export const reducer = (state: IState, action: Action) : IState=> {
@@ -119,7 +119,7 @@ export const reducer = (state: IState, action: Action) : IState=> {
         }
 
         case "RESTART_GAME": {
-            const cards = getGameCards(action.pyload);
+            const cards = getGameCards(action.payload);
             return {
                 ...state,
                 cards,
