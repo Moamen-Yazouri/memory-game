@@ -97,8 +97,7 @@ export const reducer = (state: IState, action: Action) : IState=> {
                     }
                 }
                 else {
-                    console.log("not matched")
-                    console.log("not matched")
+                    
                     const newCards = state.cards.map((c) => (
                         c.id == c1.id || c.id == c2.id
                         ? {...c, isFlipped: false}
@@ -107,6 +106,7 @@ export const reducer = (state: IState, action: Action) : IState=> {
                     
                     return {
                         ...state,
+                        wrongMoves: state.wrongMoves +1,
                         score: state.score - 10,
                         cards: newCards,
                         openCards: [],
@@ -124,6 +124,8 @@ export const reducer = (state: IState, action: Action) : IState=> {
                 ...state,
                 cards,
                 wrongMoves: 0,
+                time: 0,
+                score: 0,
                 isGameActive: false,
                 isCompleted: false,
                 openCards: [],

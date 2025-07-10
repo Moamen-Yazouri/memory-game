@@ -1,4 +1,3 @@
-import { Theme } from "@mui/material";
 
 export const getBackgroundGradient = (mode: string) => {
     if(mode === "light") {
@@ -9,7 +8,7 @@ export const getBackgroundGradient = (mode: string) => {
     }
 }
 
-export const getCardGradient = (mode: string) => {
+export const getCardGradient = (mode: string): string => {
     if(mode) {
         return "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 25%, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0.8) 75%, rgba(255, 255, 255, 0.95) 100%)"
     }

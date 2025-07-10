@@ -207,7 +207,6 @@ export default function LandingPage({ onGetStarted, onThemeToggle }: LandingPage
               Get Started
             </Button>
 
-            {/* Features */}
             <Stack
               direction={{ xs: "column", sm: "row" }}
               spacing={3}
@@ -236,7 +235,6 @@ export default function LandingPage({ onGetStarted, onThemeToggle }: LandingPage
         </Box>
       </Container>
 
-      {/* Floating Elements */}
       <Box
         sx={{
           position: "absolute",

@@ -6,6 +6,7 @@ import { getCompletedAndUnlocked } from "../utils/getCompletedLevelst";
 import { getBackgroundGradient, getCardGradient } from "../utils/getGradients";
 import { getGameModesAndLevels } from "../constants";
 import { GameInfoContext } from "@/providers/game-info/gameInfo";
+import { useNavigate } from "react-router-dom";
 
 export const useSelectGame = () => {
     const {mode, theme} = useContext(GameThemeContext);
@@ -13,11 +14,14 @@ export const useSelectGame = () => {
     const [selectedLevel, setSelectedLevel] = useState<LevelsTypes | null>(null)
     const {playerState, playerDispatch} = useContext(PlayerInfoContext);
     const {changeLevel, changeMode} = useContext(GameInfoContext);
+    const navigate = useNavigate();
+
     useEffect(() => {
     if (selectedMode && selectedLevel) {
         changeLevel(selectedLevel);
         changeMode(selectedMode);
         playerDispatch({type: "CHANGE_CURRENT", payload: {modeName: selectedMode, level: selectedLevel}});
+        navigate("/memory-game/game-play");
     }
   }, [selectedMode, selectedLevel]);
 

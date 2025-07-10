@@ -26,7 +26,7 @@ export default function SelectGame() {
     isLevelUnlocked
   } = useSelectGame();
 
-  
+    
   return (
     <Box
       sx={{

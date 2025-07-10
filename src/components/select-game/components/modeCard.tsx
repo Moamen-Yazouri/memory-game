@@ -6,16 +6,21 @@ import { useContext, useMemo } from "react"
 import { GameThemeContext } from "@/providers/theme/themeContext"
 
 interface IProps {
-    gameMode: IGameMode,
-    handleModeSelect: (mode: GameModesTypes) => void
+  gameMode: IGameMode
+  handleModeSelect: (mode: GameModesTypes) => void
 }
-const ModeCard = ({gameMode, handleModeSelect}: IProps) => {
-    const {mode} = useContext(GameThemeContext) 
-      const cardGradient = useMemo(
-    () => (getCardGradient(mode))
-  ,[mode]);
+
+const ModeCard = ({ gameMode, handleModeSelect }: IProps) => {
+  const { mode } = useContext(GameThemeContext)
+  const cardGradient = useMemo(() => (
+      mode === "light"
+        ? "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 25%, rgba(248, 250, 252, 0.90) 50%, rgba(241, 245, 249, 0.80) 75%, rgba(255, 255, 255, 0.95) 100%)"
+        : "linear-gradient(135deg, rgba(45, 27, 78, 0.95) 0%, rgba(35, 20, 60, 0.90) 25%, rgba(25, 15, 45, 0.95) 50%, rgba(30, 18, 55, 0.85) 75%, rgba(45, 27, 78, 0.95) 100%)"
+
+  ), [mode]);
+  console.log(cardGradient)
   return (
-        <Box
+    <Box
       onClick={() => handleModeSelect(gameMode.id)}
       sx={{
         position: "relative",
@@ -44,7 +49,6 @@ const ModeCard = ({gameMode, handleModeSelect}: IProps) => {
         },
       }}
     >
-     
       <Box
         sx={{
           position: "absolute",
@@ -52,7 +56,7 @@ const ModeCard = ({gameMode, handleModeSelect}: IProps) => {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundImage: cardGradient,
+          background: cardGradient, // ✅ use background instead of backgroundImage
           backdropFilter: "blur(10px)",
           WebkitBackdropFilter: "blur(10px)",
           border: `1px solid ${gameMode.color}30`,
@@ -60,7 +64,6 @@ const ModeCard = ({gameMode, handleModeSelect}: IProps) => {
         }}
       />
 
-      
       <Box
         sx={{
           position: "relative",
@@ -102,4 +105,4 @@ const ModeCard = ({gameMode, handleModeSelect}: IProps) => {
   )
 }
 
-export default ModeCard
+export default ModeCard;  
