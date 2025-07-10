@@ -1,4 +1,4 @@
-import { IGameCard, LevelsTypes } from "@/@types";
+import { GameModesTypes, IGameCard, LevelsTypes } from "@/@types";
 import { getBoardLenght } from "@/components/game-board/utils/getTheBoardLength";
 
 export const getGameCards = (level: LevelsTypes) => {

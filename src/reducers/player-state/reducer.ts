@@ -31,8 +31,11 @@ export const reducer = (state: IState, action: Action): IState => {
 
         case "ADD_FINISHED": {
             const prevFinishedLevels = state.finished.get(action.payload.mode) || [];
-            const newMap = new Map(state.finished);
-            newMap.set(action.payload.mode, [...prevFinishedLevels, action.payload.level])
+            const cleanFinished = prevFinishedLevels.filter((l) => l.level !== finishedLevel);
+            const finishedLevel = action.payload.level.level;
+            const newMap = new Map(state.finished);        
+            newMap.set(action.payload.mode, [...cleanFinished, action.payload.level]);
+    
             return {
                 ...state,
                 finished: newMap,

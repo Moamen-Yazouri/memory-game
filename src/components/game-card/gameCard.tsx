@@ -5,11 +5,9 @@ import {
 } from "@mui/material";
 
 import type { IGameCard } from "@/@types";
-
 import React from "react";
-
 import useGameBoard from "./hook/useGameBoard";
-import GameHeader from "../game-board/gameheader";
+
 
 interface IProps extends IGameCard {};
 

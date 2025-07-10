@@ -1,56 +1,38 @@
 "use client"
 
-import { 
-  Box,
-  Typography,
-  Container,
-  Paper, 
-  Stack, 
-  Button, 
-  Divider, 
-  Chip, 
-  Avatar 
-} from "@mui/material";
-
-import {
-  CheckCircle,
-  Timer,
-  TrendingUp,
-  Dashboard,
-  Refresh,
-  EmojiEvents,
-  Error,
-} from "@mui/icons-material";
-
-import { useContext, useMemo } from "react";
-import { getDetails } from "./utils/getDetails";
-import { GameModesTypes, Levels, LevelsTypes } from "@/@types";
-import { renderStars } from "./utils/levelStars";
-import { GameThemeContext } from "@/providers/theme/themeContext";
-import { useNavigate } from "react-router-dom";
-import { GameInfoContext } from "@/providers/game-info/gameInfo";
+import { Box, Typography, Container, Paper, Stack, Button, Divider, Chip, Avatar } from "@mui/material"
+import { CheckCircle, Timer, TrendingUp, Dashboard, Refresh, EmojiEvents, Error, Replay } from "@mui/icons-material"
+import { useContext, useMemo } from "react"
+import { getDetails } from "./utils/getDetails"
+import { type GameModesTypes, Levels, type LevelsTypes } from "@/@types"
+import { renderStars } from "./utils/levelStars"
+import { GameThemeContext } from "@/providers/theme/themeContext"
+import { useNavigate } from "react-router-dom"
+import { GameInfoContext } from "@/providers/game-info/gameInfo"
 
 interface LevelCompletedProps {
-  level?: Exclude<LevelsTypes, "monster">,
-  mode?: GameModesTypes
-  score?: number
-  time?: string
-  wrongMoves?: number
-  stars?: number
-  isNewRecord?: boolean
+  level: Exclude<LevelsTypes, "monster">
+  mode: GameModesTypes
+  score: number
+  time: string
+  wrongMoves: number
+  isNewRecord: boolean
+  onRetry: () => void
 }
 
 export default function LevelCompleted({
-  level = "medium",
-  mode = "education",
-  score = 15420,
-  time = "2:34",
-  wrongMoves = 8,
-  isNewRecord = true,
+  level,
+  mode,
+  score,
+  time,
+  wrongMoves,
+  isNewRecord,
+  onRetry,
 }: LevelCompletedProps) {
-  const {theme} = useContext(GameThemeContext) 
-  const navigate = useNavigate();
-  const {changeLevel} = useContext(GameInfoContext);
+  const { theme } = useContext(GameThemeContext)
+  const navigate = useNavigate()
+  const { changeLevel } = useContext(GameInfoContext)
+
   const backgroundGradient = useMemo(
     () =>
       theme.palette.mode === "light"
@@ -67,30 +49,35 @@ export default function LevelCompleted({
     [theme],
   )
 
+  const handleRetry = () => {
+    if (onRetry) {
+      onRetry()
+    } else {
+      console.log("Retrying level...")
+    }
+  }
+
   const handleContinue = () => {
-    const levels: LevelsTypes[] = Object.values(Levels);
-    const currentLevelIndex = levels.indexOf(level);
-    const nextLevel = levels[currentLevelIndex + 1];
-    changeLevel(nextLevel);
+    const levels: LevelsTypes[] = Object.values(Levels)
+    const currentLevelIndex = levels.indexOf(level)
+    const nextLevel = levels[currentLevelIndex + 1]
+    changeLevel(nextLevel)
     if (nextLevel) {
-      navigate(`/memory-game/game-play`);
+      navigate(`/memory-game/game-play`)
     }
   }
 
   const handleDashboard = () => {
-    navigate("/memory-game/dashboard");
+    navigate("/memory-game/dashboard")
   }
 
   const handleChangeMode = () => {
-      navigate("/memory-game/mode-selection");
+    navigate("/memory-game/mode-selection")
   }
 
-  const starsNumber = useMemo(() => (renderStars(theme, level)) ,[level]);
-  
-  const levelDetails = useMemo(() => (getDetails(theme).levelDetails[level]), [level]);
-
-  const modeDetails = useMemo(() => (getDetails(theme).modeDetails[mode]), [mode]);
-  
+  const starsNumber = useMemo(() => renderStars(theme, level), [level])
+  const levelDetails = useMemo(() => getDetails(theme).levelDetails[level], [level])
+  const modeDetails = useMemo(() => getDetails(theme).modeDetails[mode], [mode])
 
   return (
     <Box
@@ -361,8 +348,34 @@ export default function LevelCompleted({
               }}
             />
 
-            {/* Action Buttons - Compact */}
-            <Stack direction="row" spacing={1.5} sx={{ width: "100%" }}>
+            {/* Action Buttons - Now with 4 buttons including Retry */}
+            <Stack direction="row" spacing={1} sx={{ width: "100%" }}>
+              <Button
+                variant="outlined"
+                size="medium"
+                startIcon={<Replay />}
+                onClick={handleRetry}
+                sx={{
+                  flex: 1,
+                  py: 1.5,
+                  borderRadius: 2,
+                  fontSize: "0.8rem",
+                  fontWeight: 600,
+                  textTransform: "none",
+                  backgroundImage: cardGradient,
+                  backdropFilter: "blur(10px)",
+                  border: `1px solid ${theme.palette.secondary.main}40`,
+                  color: theme.palette.secondary.main,
+                  "&:hover": {
+                    backgroundColor: theme.palette.secondary.main + "15",
+                    transform: "translateY(-1px)",
+                  },
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                }}
+              >
+                Retry
+              </Button>
+
               <Button
                 variant="contained"
                 size="medium"
@@ -372,7 +385,7 @@ export default function LevelCompleted({
                   flex: 1,
                   py: 1.5,
                   borderRadius: 2,
-                  fontSize: "0.9rem",
+                  fontSize: "0.8rem",
                   fontWeight: 600,
                   textTransform: "none",
                   background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
@@ -396,7 +409,7 @@ export default function LevelCompleted({
                   flex: 1,
                   py: 1.5,
                   borderRadius: 2,
-                  fontSize: "0.9rem",
+                  fontSize: "0.8rem",
                   fontWeight: 600,
                   textTransform: "none",
                   backgroundImage: cardGradient,
@@ -422,7 +435,7 @@ export default function LevelCompleted({
                   flex: 1,
                   py: 1.5,
                   borderRadius: 2,
-                  fontSize: "0.9rem",
+                  fontSize: "0.8rem",
                   fontWeight: 600,
                   textTransform: "none",
                   backgroundImage: cardGradient,
