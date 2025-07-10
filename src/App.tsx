@@ -25,7 +25,8 @@ function App() {
     // <MemoryGameDashboard />
     // <SignInPage />
     
-    <LevelCompleted />
+    // <LevelCompleted />
+    <AppRoutes />
   )
 }
 

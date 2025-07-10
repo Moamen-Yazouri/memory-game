@@ -22,8 +22,8 @@ export const initialPlayer: IPlayerInfo = {
 }
 
 export const INITIAL_CONTEXT_STATE: IPlayerInfoContext = {
-    state: initialPlayer,
-    dispatch: () => {},
+    playerState: initialPlayer,
+    playerDispatch: () => { },
 };
 
 export const INITIAL_FOR_DB = {

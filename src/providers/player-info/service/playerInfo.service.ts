@@ -13,10 +13,18 @@ class PlayerInfoService {
 
             if(info.exists()) {
                 if(info.val().finished) {
-                    const finished: Map<GameModesTypes, IFinishedLevel[]> = getFinsihedInfo(info.val() as CompletedDB);
-                    const playerInfo: IPlayerInfo = {
-                        ...info.val(),
-                        finished,
+                    const finished: Map<GameModesTypes, IFinishedLevel[]> = getFinsihedInfo(info.val().finished as CompletedDB);
+                    let playerInfo: IPlayerInfo;
+                    if(finished) {
+                         playerInfo = {
+                            ...info.val(),
+                            finished,
+                        }
+                    }
+                    else {
+                        playerInfo = {
+                            ...info.val(),
+                        }
                     }
                     return playerInfo;
                 }

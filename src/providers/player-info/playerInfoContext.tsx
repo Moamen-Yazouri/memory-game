@@ -51,7 +51,7 @@ export const PlayerInfoProvider = (props: IProps) => {
     const [playerState, playerDispatch] = useReducer(reducer, initialPlayer)
     const initialized = useRef<boolean>(false);
     const id = useRef<string>(null);
-
+    console.log(playerState);
     useEffect(() => {
         if(initialized.current) {
             return;
@@ -64,6 +64,7 @@ export const PlayerInfoProvider = (props: IProps) => {
                     id.current = user.uid;        
                     const info = await playerInfoService.getPlayerInfo(id.current);
                     if(info) {
+                        console.log("initialized")
                         playerDispatch({type: "INITIAL_INFO", payload: info});
                     }
                     initialized.current = true;
@@ -88,7 +89,7 @@ export const PlayerInfoProvider = (props: IProps) => {
                 ...playerState,
                 finished: formatFinishedForDB(playerState.finished)
             } 
-            const playerInfoRef = ref(db, `users/${id}/playerInfo`);
+            const playerInfoRef = ref(db, `users/${id.current}/playerInfo`);
             try {
                 await set(playerInfoRef, infoForDB);
                 console.log("Synced");

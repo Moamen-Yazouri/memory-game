@@ -22,6 +22,7 @@ const GameBoard = () => {
   
   useEffect(() => {
       if(gameState.isCompleted) {
+        console.log("finished")
           const finishedLevel: IFinishedLevel = {
             level: gameInfo.level!,
             score: gameState.score,
