@@ -7,6 +7,7 @@ import GameHeader from "./gameheader";
 import { PlayerInfoContext } from "@/providers/player-info/playerInfoContext";
 import SelectionRequired from "./components/selectionRequired";
 import { IFinishedLevel } from "@/@types";
+import LevelCompleted from "./components/level-completed/levelCompleted";
 
 
 
@@ -56,8 +57,17 @@ const GameBoard = () => {
   if(!gameInfo.level || !gameInfo.mode) {
     return <SelectionRequired />;
   }
-
+  if(gameState.isCompleted && gameInfo.level !== "monster") {
+    return <LevelCompleted
+      level={ gameInfo.level}
+      mode={gameInfo.mode}
+      score={gameState.score}
+      time={gameState.time.toString()}
+      wrongMoves={gameState.wrongMoves}
+    />
+  }
   return (
+    
     <Box
       sx={{
         display: "flex",

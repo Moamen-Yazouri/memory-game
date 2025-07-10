@@ -2,7 +2,6 @@ import { GameModesTypes, LevelsTypes } from "@/@types";
 import { IGameLevel } from "../types";
 import { GameThemeContext } from "@/providers/theme/themeContext";
 import { useContext, useMemo } from "react";
-import { getCardGradient } from "../utils/getGradients";
 import { Box, Chip, Typography } from "@mui/material";
 import { CheckCircle, Lock } from "@mui/icons-material";
 
