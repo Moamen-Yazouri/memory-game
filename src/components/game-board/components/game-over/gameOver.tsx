@@ -35,12 +35,12 @@ interface IProps {
 
 export default function GameOverModal({
   open,
-  onRetry,
   score,
   timeElapsed,
   wrongMoves,
   level,
-  mode 
+  mode, 
+  onRetry,
 }: IProps) {
   const {theme} = useContext(GameThemeContext)
   const navigate = useNavigate();
@@ -276,7 +276,6 @@ export default function GameOverModal({
                 </Typography>
               </Box>
             </Box>
-Q
             <Stack direction="row" spacing={2} sx={{ width: "100%", mt: 2 }}>
               <Button
                 variant="contained"

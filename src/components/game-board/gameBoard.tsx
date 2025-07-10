@@ -20,7 +20,8 @@ const GameBoard = () => {
   const [gameOver, setGameOver] = useState(false);
 
   const handleRetry = () => {
-    gameDispatch({type: "RESTART_GAME", payload: gameInfo.level!})
+    gameDispatch({type: "RESTART_GAME", payload: gameInfo.level!});
+    setGameOver(false);
   }
   useEffect(() => {
     if(gameInfo.level !== playerState.currentInfo.level) {
@@ -29,14 +30,15 @@ const GameBoard = () => {
   }, [gameInfo]);
   
   useEffect(() => {
+      
       if(gameState.isCompleted) {
-        console.log("finished")
           const finishedLevel: IFinishedLevel = {
             level: gameInfo.level!,
             score: gameState.score,
             time: gameState.time,
             wrongMoves: gameState.wrongMoves,
           }
+
           playerDispatch({type: "ADD_FINISHED", payload:{mode: gameInfo.mode!, level: finishedLevel}})
       }  
   }, [gameState.isCompleted]);
@@ -63,16 +65,18 @@ const GameBoard = () => {
     return getResponsiveColumns(gameInfo.level!)
   }, [gameInfo]);
 
-  if(!gameInfo.level || !gameInfo.mode) {
+  if((!gameInfo.level || !gameInfo.mode) && (!playerState.currentInfo.level && !playerState.currentInfo.modeName)) {
     return <SelectionRequired />;
   }
   if(gameState.isCompleted && gameInfo.level !== "monster") {
     return <LevelCompleted
-      level={ gameInfo.level}
-      mode={gameInfo.mode}
+      level={ gameInfo.level!}
+      mode={gameInfo.mode!}
       score={gameState.score}
       time={gameState.time.toString()}
       wrongMoves={gameState.wrongMoves}
+      onRetry= {handleRetry}
+      isNewRecord= {false}
     />
   }
   return (
@@ -80,10 +84,10 @@ const GameBoard = () => {
       <GameOverModal
         open={gameOver}
         onRetry={handleRetry}
-        level= {gameInfo.level}
+        level= {gameInfo.level!}
         score={gameState.score}
         timeElapsed={gameState.time}
-        mode= {gameInfo.mode}
+        mode= {gameInfo.mode!}
         wrongMoves={gameState.wrongMoves}
       />
       <Box

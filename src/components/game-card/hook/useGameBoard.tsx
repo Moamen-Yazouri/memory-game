@@ -13,9 +13,10 @@ interface IProps {
 const useGameBoard = ({isMatched, isFlipped, id, value}: IProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const theme = useTheme();
+  const {gameInfo} = useContext(GameInfoContext);
   const { gameDispatch, gameState } = useContext(GameInfoContext);
 
-  const imageUrl = useMemo(() => getCardImage(value), [value]);
+  const imageUrl = useMemo(() => getCardImage(value, gameInfo.mode), [value]);
 
   const handleFlipped = useCallback(() => {
     if (isMatched || gameState.openCards.length === 2) return;
