@@ -1,6 +1,7 @@
 import './App.css';
 import AlreadyAuthenticated from './components/already-logged/alreadyLogged';
 import MemoryGameDashboard from './components/dashboard/playerDashboard';
+import GameOverModal from './components/game-board/components/game-over/gameOver';
 import SelectionRequired from './components/game-board/components/selectionRequired';
 import LandingPage from './components/landing/landing';
 import LevelCompleted from './components/level-completed/levelCompleted';
@@ -27,6 +28,7 @@ function App() {
     
     // <LevelCompleted />
     <AppRoutes />
+    // <GameOverModal />
   )
 }
 
