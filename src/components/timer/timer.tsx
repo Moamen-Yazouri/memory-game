@@ -14,6 +14,8 @@ import {
 const GameTimer = () => {
     const {gameState, gameDispatch} = useContext(GameInfoContext);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+
     useEffect(() => {
         
         if (!gameState.initialized) {

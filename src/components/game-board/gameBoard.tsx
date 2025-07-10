@@ -1,6 +1,11 @@
 import { Box, Grid } from "@mui/material";
 import GameCard from "../game-card/gameCard";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { 
+  useContext, 
+  useEffect, 
+  useMemo, 
+  useState 
+} from "react";
 import { getResponsiveColumns } from "./utils/getTheBoardLength";
 import { GameInfoContext } from "@/providers/game-info/gameInfo";
 import GameHeader from "./gameheader";
@@ -11,8 +16,6 @@ import LevelCompleted from "./components/level-completed/levelCompleted";
 import { getAllowedWrongs } from "./components/level-completed/utils/getAllowedWrongs";
 import GameOverModal from "./components/game-over/gameOver";
 
-
-
 const GameBoard = () => {
   const {gameInfo, gameState, gameDispatch }= useContext(GameInfoContext);
   const {playerState ,playerDispatch } = useContext(PlayerInfoContext);
@@ -22,6 +25,10 @@ const GameBoard = () => {
   const handleRetry = () => {
     gameDispatch({type: "RESTART_GAME", payload: gameInfo.level!});
     setGameOver(false);
+  }
+
+  const handleOnMainMenu = () => {
+    gameDispatch({type: "RESET_GAME"});
   }
   useEffect(() => {
     if(gameInfo.level !== playerState.currentInfo.level) {
@@ -55,9 +62,10 @@ const GameBoard = () => {
   },[gameState.openCards]);
   
   useEffect(() => {
-      if(gameState.wrongMoves == allowedWrongs) {
-       setGameOver(true);
-      }
+    if(gameState.wrongMoves == allowedWrongs) {
+      
+      setGameOver(true);
+    }
   }, [gameState.wrongMoves]);
   
     
@@ -68,6 +76,7 @@ const GameBoard = () => {
   if((!gameInfo.level || !gameInfo.mode) && (!playerState.currentInfo.level && !playerState.currentInfo.modeName)) {
     return <SelectionRequired />;
   }
+
   if(gameState.isCompleted && gameInfo.level !== "monster") {
     return <LevelCompleted
       level={ gameInfo.level!}
@@ -79,16 +88,18 @@ const GameBoard = () => {
       isNewRecord= {false}
     />
   }
+
   return (
     <>
       <GameOverModal
         open={gameOver}
-        onRetry={handleRetry}
         level= {gameInfo.level!}
         score={gameState.score}
         timeElapsed={gameState.time}
         mode= {gameInfo.mode!}
         wrongMoves={gameState.wrongMoves}
+        onRetry={handleRetry}
+        onMainMenu={handleOnMainMenu}
       />
       <Box
         sx={{
@@ -97,7 +108,7 @@ const GameBoard = () => {
           justifyContent: "center",
           flexDirection: "column",
           minHeight: "100vh",
-          padding: { xs: 1, sm: 2, md: 3 }, // Responsive padding
+          padding: { xs: 1, sm: 2, md: 3 }, 
           boxSizing: "border-box",
         }}
       >
@@ -107,11 +118,11 @@ const GameBoard = () => {
         <Grid
           container
           spacing={1}
-          columnGap={1} // Responsive spacing
+          columnGap={1} 
           columns={responsiveColumns}
           sx={{
             width: "100%",
-            maxWidth: { xs: "60vw", sm: "60vw", md: "60vw", lg: "600px" }, // Responsive max width
+            maxWidth: { xs: "60vw", sm: "60vw", md: "60vw", lg: "600px" }, 
           }}
         >
           {gameState.cards.map((value, index) => (
@@ -122,7 +133,7 @@ const GameBoard = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                aspectRatio: "1", // Keep cards square
+                aspectRatio: "1", 
               }}
             >
               <GameCard
