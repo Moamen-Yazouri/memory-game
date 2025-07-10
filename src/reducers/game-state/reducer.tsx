@@ -17,7 +17,8 @@ export type Action =
     {type: "FLIPP_CARD", payload: number} |
     {type: "CHECK_MATCHED"} |
     {type: "RESTART_GAME", payload: LevelsTypes} |
-    {type: "HANDLE_TIME", payload: number}  
+    {type: "HANDLE_TIME", payload: number}  |
+    {type: "RESET_GAME"}
 
 export const reducer = (state: IState, action: Action) : IState=> {
     switch(action.type) {
@@ -123,6 +124,20 @@ export const reducer = (state: IState, action: Action) : IState=> {
             return {
                 ...state,
                 cards,
+                wrongMoves: 0,
+                time: 0,
+                score: 0,
+                isGameActive: false,
+                isCompleted: false,
+                openCards: [],
+                initialized: true,
+            }
+        }
+
+        case "RESET_GAME": {
+            return {
+                ...state,
+                cards: [],
                 wrongMoves: 0,
                 time: 0,
                 score: 0,

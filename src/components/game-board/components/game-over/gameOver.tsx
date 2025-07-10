@@ -2,7 +2,6 @@ import {
     Box, 
     Typography, 
     Paper, 
-    useTheme, 
     Stack, 
     Button, 
     Modal, 
@@ -19,7 +18,6 @@ import {
     Error 
 } from "@mui/icons-material";
 import { useContext, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import { GameThemeContext } from "@/providers/theme/themeContext";
 import { GameModesTypes, LevelsTypes } from "@/@types";
 
@@ -31,6 +29,7 @@ interface IProps {
   wrongMoves: number
   level: LevelsTypes
   mode: GameModesTypes
+  onMainMenu: () => void
 }
 
 export default function GameOverModal({
@@ -41,9 +40,9 @@ export default function GameOverModal({
   level,
   mode, 
   onRetry,
+  onMainMenu,
 }: IProps) {
   const {theme} = useContext(GameThemeContext)
-  const navigate = useNavigate();
   const isLight = theme.palette.mode === "light"
 
   const gradient = useMemo(() => (
@@ -54,15 +53,13 @@ export default function GameOverModal({
 
   const backdropGradient = useMemo(() => (isLight ? "rgba(0, 0, 0, 0.4)" : "rgba(0, 0, 0, 0.7)"), [isLight])
 
-  const handleMainMenu = () => {
-    navigate("/memory-game/mode-selection");
-  }
+  
 
 
   return (
     <Modal
       open={open}
-      onClose={handleMainMenu}
+      onClose={onMainMenu}
       closeAfterTransition
       sx={{
         display: "flex",
@@ -116,7 +113,7 @@ export default function GameOverModal({
           }}
         >
           <IconButton
-            onClick={handleMainMenu}
+            onClick={onMainMenu}
             sx={{
               position: "absolute",
               top: 12,
@@ -307,7 +304,7 @@ export default function GameOverModal({
                 variant="outlined"
                 size="medium"
                 startIcon={<Home />}
-                onClick={handleMainMenu}
+                onClick={onMainMenu}
                 sx={{
                   flex: 1,
                   py: 1.5,
