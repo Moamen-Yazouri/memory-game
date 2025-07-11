@@ -17,7 +17,7 @@ import {
 } from "@mui/icons-material"
 import { useContext } from "react"
 import { GameInfoContext } from "@/providers/game-info/gameInfo"
-import GameTimer from "../timer/timer"
+import GameTimer from "./timer"
 import { useNavigate } from "react-router-dom"
 
 const GameHeader = () => {
@@ -30,7 +30,7 @@ const GameHeader = () => {
   }
 
   const handleBackToMenu = () => {
-      navigate("/memeory-game/mode-selection");
+      navigate("/memory-game/mode-selection");
   }
 
   const getScoreColor = () => {
