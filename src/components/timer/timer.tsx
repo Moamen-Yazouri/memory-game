@@ -8,13 +8,19 @@ import Stack from "@mui/material/Stack";
 import { 
     useContext, 
     useEffect, 
+    useMemo, 
     useRef,  
 } from "react";
 
 const GameTimer = () => {
     const {gameState, gameDispatch} = useContext(GameInfoContext);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
-
+    const restarted: boolean = useMemo(() => {
+        if(!gameState.isCompleted && !gameState.isGameActive && timerRef.current && !gameState.isOver) {
+            return true;
+        };
+        return false;
+    }, [gameState.isCompleted, gameState.isGameActive, gameState.isOver]); 
 
     useEffect(() => {
         
@@ -22,7 +28,7 @@ const GameTimer = () => {
             return;
         }
 
-        if(!gameState.isCompleted && !gameState.isGameActive && timerRef.current) {
+        if(restarted) {
             gameDispatch({type: "HANDLE_TIME", payload: -(gameState.time)})
         }
         

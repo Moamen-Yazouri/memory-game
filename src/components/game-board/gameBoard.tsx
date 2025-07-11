@@ -4,7 +4,6 @@ import {
   useContext, 
   useEffect, 
   useMemo, 
-  useState 
 } from "react";
 import { getResponsiveColumns } from "./utils/getTheBoardLength";
 import { GameInfoContext } from "@/providers/game-info/gameInfo";
@@ -20,11 +19,10 @@ const GameBoard = () => {
   const {gameInfo, gameState, gameDispatch }= useContext(GameInfoContext);
   const {playerState ,playerDispatch } = useContext(PlayerInfoContext);
   const allowedWrongs = useMemo(() => getAllowedWrongs(gameInfo.level!), [gameInfo.level]);
-  const [gameOver, setGameOver] = useState(false);
 
+  console.log(gameState.isOver)
   const handleRetry = () => {
     gameDispatch({type: "RESTART_GAME", payload: gameInfo.level!});
-    setGameOver(false);
   }
 
   const handleOnMainMenu = () => {
@@ -63,8 +61,8 @@ const GameBoard = () => {
   
   useEffect(() => {
     if(gameState.wrongMoves == allowedWrongs) {
-      
-      setGameOver(true);
+
+        gameDispatch({type: "GAME_OVER"});
     }
   }, [gameState.wrongMoves]);
   
@@ -92,7 +90,7 @@ const GameBoard = () => {
   return (
     <>
       <GameOverModal
-        open={gameOver}
+        open={gameState.isOver}
         level= {gameInfo.level!}
         score={gameState.score}
         timeElapsed={gameState.time}

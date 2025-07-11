@@ -7,6 +7,7 @@ export interface IState {
     score: number,
     time: number,
     isCompleted: boolean,
+    isOver: boolean,
     openCards: IGameCard[],
     isGameActive: boolean,
     initialized: boolean,
@@ -18,7 +19,8 @@ export type Action =
     {type: "CHECK_MATCHED"} |
     {type: "RESTART_GAME", payload: LevelsTypes} |
     {type: "HANDLE_TIME", payload: number}  |
-    {type: "RESET_GAME"}
+    {type: "RESET_GAME"} |
+    {type: "GAME_OVER"} 
 
 export const reducer = (state: IState, action: Action) : IState=> {
     switch(action.type) {
@@ -127,6 +129,7 @@ export const reducer = (state: IState, action: Action) : IState=> {
                 wrongMoves: 0,
                 time: 0,
                 score: 0,
+                isOver: false,
                 isGameActive: false,
                 isCompleted: false,
                 openCards: [],
@@ -139,14 +142,25 @@ export const reducer = (state: IState, action: Action) : IState=> {
                 ...state,
                 cards: [],
                 wrongMoves: 0,
+                isOver: false,
                 time: 0,
                 score: 0,
                 isGameActive: false,
                 isCompleted: false,
                 openCards: [],
-                initialized: true,
+                initialized: false,
+            }
+        }
+
+        case "GAME_OVER": {
+            return {
+                ...state,
+                isGameActive: false,
+                isOver: true,
+
             }
         }
     }
+
 
 }
