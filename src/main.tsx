@@ -9,6 +9,7 @@ import ErrorBoundary from './components/error/error-boundary/errorBoundary.tsx'
 import { Toaster } from 'sonner'
 import { BrowserRouter } from 'react-router-dom'
 import { PlayerInfoProvider } from './providers/player-info/playerInfoContext.tsx'
+import HeaderWrapper from './components/header-wrapper/headerWrapper.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -22,7 +23,9 @@ createRoot(document.getElementById('root')!).render(
               <PlayerInfoProvider>
                   <GameProvider>
                     <Toaster richColors position="bottom-right" />
-                    <App />
+                    <HeaderWrapper>
+                      <App />
+                    </HeaderWrapper>
                   </GameProvider>
               </PlayerInfoProvider>
 

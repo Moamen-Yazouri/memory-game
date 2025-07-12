@@ -1,6 +1,5 @@
-"use client"
 
-import type React from "react"
+import type React from "react";
 
 import {
   Box,
@@ -13,10 +12,10 @@ import {
   ListItemText,
   Divider,
   Switch,
-  useTheme,
 } from "@mui/material"
 import { KeyboardArrowDown, Dashboard, Home, SportsEsports, LightMode, DarkMode, Logout } from "@mui/icons-material"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useContext } from "react"
+import { GameThemeContext } from "@/providers/theme/themeContext"
 
 interface GameHeaderProps {
   userName?: string
@@ -30,16 +29,14 @@ export default function GameHeader({
   userName = "Player",
   logoSrc = "/logo.png",
   onNavigate,
-  onThemeToggle,
   onLogout,
 }: GameHeaderProps) {
-  const theme = useTheme()
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
-
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+    const open = Boolean(anchorEl)
+    const {theme, toggleTheme, mode} = useContext(GameThemeContext);
   const headerGradient = useMemo(
     () =>
-      theme.palette.mode === "light"
+      mode === "light"
         ? "linear-gradient(135deg, rgba(255,255,255,0.8), rgba(248,250,252,0.75))"
         : "linear-gradient(135deg, rgba(45,27,78,0.75), rgba(25,15,45,0.70))",
     [theme],
@@ -47,7 +44,7 @@ export default function GameHeader({
 
   const menuGradient = useMemo(
     () =>
-      theme.palette.mode === "light"
+      mode === "light"
         ? "linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,250,252,0.90))"
         : "linear-gradient(135deg, rgba(45,27,78,0.95), rgba(25,15,45,0.90))",
     [theme],
@@ -62,10 +59,6 @@ export default function GameHeader({
     onNavigate?.(page)
   }
 
-  const handleThemeToggle = () => {
-    onThemeToggle?.()
-    // Don't close menu when toggling theme to show immediate feedback
-  }
 
   const handleLogout = () => {
     handleClose()
@@ -111,6 +104,7 @@ export default function GameHeader({
           width: "100%",
           maxWidth: "95%",
           mx: "auto",
+          overflow: "hidden",
           mt: 2,
           px: 2,
           py: 1,
@@ -123,7 +117,7 @@ export default function GameHeader({
           borderRadius: "20px",
           border: `1px solid ${theme.palette.primary.main}20`,
           boxShadow:
-            theme.palette.mode === "light"
+            mode === "light"
               ? `0 6px 20px ${theme.palette.primary.main}15`
               : `0 6px 20px rgba(0,0,0,0.4)`,
         }}
@@ -213,7 +207,7 @@ export default function GameHeader({
             border: `1px solid ${theme.palette.primary.main}20`,
             borderRadius: 3,
             boxShadow:
-              theme.palette.mode === "light"
+                mode === "light"
                 ? `0 12px 40px ${theme.palette.primary.main}15`
                 : `0 12px 40px rgba(0, 0, 0, 0.4)`,
             "& .MuiMenuItem-root": {
@@ -290,15 +284,15 @@ export default function GameHeader({
                 height: 30,
                 borderRadius: "50%",
                 backgroundColor:
-                  theme.palette.mode === "light" ? `${theme.palette.grey[700]}15` : `${theme.palette.warning.main}15`,
-                border: `1px solid ${theme.palette.mode === "light" ? theme.palette.grey[700] : theme.palette.warning.main}30`,
+                mode === "light" ? `${theme.palette.grey[700]}15` : `${theme.palette.warning.main}15`,
+                border: `1px solid ${mode === "light" ? theme.palette.grey[700] : theme.palette.warning.main}30`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: theme.palette.mode === "light" ? theme.palette.grey[700] : theme.palette.warning.main,
+                color: mode === "light" ? theme.palette.grey[700] : theme.palette.warning.main,
               }}
             >
-              {theme.palette.mode === "light" ? <DarkMode fontSize="small" /> : <LightMode fontSize="small" />}
+              {mode === "light" ? <DarkMode fontSize="small" /> : <LightMode fontSize="small" />}
             </Box>
           </ListItemIcon>
           <ListItemText
@@ -309,8 +303,8 @@ export default function GameHeader({
             }}
           />
           <Switch
-            checked={theme.palette.mode === "dark"}
-            onChange={handleThemeToggle}
+            checked={mode === "dark"}
+            onClick={toggleTheme}
             size="small"
             sx={{
               ml: 1,

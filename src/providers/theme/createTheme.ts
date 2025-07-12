@@ -1,5 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 import type { ThemeModes } from "../../@types";
+import { getBackgroundGradient, getCardGradient } from "@/components/select-game/utils/getGradients";
 
 export const getTheme = (mode: ThemeModes) =>
   createTheme({
@@ -51,16 +52,7 @@ export const getTheme = (mode: ThemeModes) =>
             margin: 0,
             padding: 0,
             overflowY: "scroll",
-            backgroundImage:
-              mode === "dark"
-                ? `
-                  linear-gradient(135deg, #2d1b69 0%, #1a0d3d 50%, #0f051f 100%),
-                  linear-gradient(0deg, rgba(139, 92, 246, 0.15), rgba(6, 182, 212, 0.08))
-                `
-                : `
-                  linear-gradient(135deg, #8b5cf6 0%, #06b6d4 50%, #a78bfa 100%),
-                  linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1))
-                `,
+            backgroundImage: getCardGradient(mode),
             backgroundBlendMode: "overlay",
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",

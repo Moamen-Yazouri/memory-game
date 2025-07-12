@@ -28,8 +28,8 @@ function App() {
     // <SignInPage />
     
     // <LevelCompleted />
-    // <AppRoutes />
-    <GameHeader/>
+    <AppRoutes />
+    // <GameHeader/>
     // <GameOverModal />
   )
 }
