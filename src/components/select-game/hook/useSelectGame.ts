@@ -10,8 +10,8 @@ import { useNavigate } from "react-router-dom";
 
 export const useSelectGame = () => {
     const {mode, theme} = useContext(GameThemeContext);
-    const [selectedMode, setSelectedMode] = useState<GameModesTypes | null>(null)
-    const [selectedLevel, setSelectedLevel] = useState<LevelsTypes | null>(null)
+    const [selectedMode, setSelectedMode] = useState<GameModesTypes | null>(null);
+    const [selectedLevel, setSelectedLevel] = useState<LevelsTypes | null>(null);
     const {playerState, playerDispatch} = useContext(PlayerInfoContext);
     const {changeLevel, changeMode} = useContext(GameInfoContext);
     const navigate = useNavigate();

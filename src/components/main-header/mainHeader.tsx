@@ -30,6 +30,8 @@ import { useState, useMemo, useContext } from "react"
 import { GameThemeContext } from "@/providers/theme/themeContext"
 import { AuthContext } from "@/providers/auth/authContext"
 import SmallLoader from "./components/smallLoader"
+import { useNavigate } from "react-router-dom"
+import authService from "@/service/auth.service"
 
 interface GameHeaderProps {
   userName?: string
@@ -50,10 +52,12 @@ export default function GameHeader({
   onLogin,
   onGetStarted,
 }: GameHeaderProps) {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
-  const { theme, toggleTheme, mode } = useContext(GameThemeContext)
-  const { user, loading } = useContext(AuthContext)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const { theme, toggleTheme, mode } = useContext(GameThemeContext);
+  const { user, loading } = useContext(AuthContext);
+  const [loggingOut, setLoggingOut] = useState(false);
+  const navigate = useNavigate();
     
   const headerGradient = useMemo(
     () =>
@@ -72,7 +76,7 @@ export default function GameHeader({
   )
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
-  const handleClose = () => setAnchorEl(null)
+  const handleClose = () => setAnchorEl(null);
 
   const handleNavigation = (page: "dashboard" | "home" | "select-game") => {
     handleClose()
@@ -80,16 +84,23 @@ export default function GameHeader({
   }
 
   const handleLogout = () => {
-    handleClose()
-    onLogout?.()
+
+    setLoggingOut(true);
+
+    authService.logout()
+    .then(() => {
+        navigate("/sign-in");
+        setLoggingOut(false);
+    });
+    handleClose();
   }
 
   const handleLogin = () => {
-    onLogin?.()
+    navigate("/sign-in")
   }
 
   const handleGetStarted = () => {
-    onGetStarted?.()
+    navigate("/sign-up")
   }
 
   const getInitials = (name: string) =>
@@ -121,14 +132,14 @@ export default function GameHeader({
     },
   ]
 
-  // Render different content based on user state
+  
   const renderUserSection = () => {
     if (loading) {
       return <SmallLoader />
     }
 
     if (!user && !loading) {
-      // Not logged in - show login and get started buttons
+      
       return (
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Button
