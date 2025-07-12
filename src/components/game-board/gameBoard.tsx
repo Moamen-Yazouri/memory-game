@@ -7,7 +7,7 @@ import {
 } from "react";
 import { getResponsiveColumns } from "./utils/getTheBoardLength";
 import { GameInfoContext } from "@/providers/game-info/gameInfo";
-import GameHeader from "./gameheader";
+import GameHeader from "./components/game-header/gameheader";
 import { PlayerInfoContext } from "@/providers/player-info/playerInfoContext";
 import SelectionRequired from "./components/selectionRequired";
 import { IFinishedLevel } from "@/@types";
