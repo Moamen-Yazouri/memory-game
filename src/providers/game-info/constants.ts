@@ -6,8 +6,8 @@ export const initialGame: IGameInfo = {
     level: null,
 }
 export const initialContext: IGameInfoContext = {
-    state: INITIAL_STATE,
-    dispatch: () => { },
+    gameState: INITIAL_STATE,
+    gameDispatch: () => { },
     gameInfo: initialGame,
     changeLevel: () => { },
     changeMode: () => { },

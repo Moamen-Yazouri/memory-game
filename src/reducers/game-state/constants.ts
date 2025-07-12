@@ -5,6 +5,7 @@ export const INITIAL_STATE: IState = {
     wrongMoves: 0,
     time: 0,
     score: 0,
+    isOver: false,
     openCards: [],
     isGameActive: false,
     isCompleted: false,
