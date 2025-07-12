@@ -28,7 +28,7 @@ interface GameHeaderProps {
 
 export default function GameHeader({
   userName = "Player",
-  logoSrc = "/logo",
+  logoSrc = "/logo.png",
   onNavigate,
   onThemeToggle,
   onLogout,
@@ -109,7 +109,7 @@ export default function GameHeader({
           top: 0,
           zIndex: 1000,
           width: "100%",
-          maxWidth: "1320px",
+          maxWidth: "95%",
           mx: "auto",
           mt: 2,
           px: 2,
@@ -120,7 +120,7 @@ export default function GameHeader({
           backgroundImage: headerGradient,
           backdropFilter: "blur(20px)",
           WebkitBackdropFilter: "blur(20px)",
-          borderRadius: "12px",
+          borderRadius: "20px",
           border: `1px solid ${theme.palette.primary.main}20`,
           boxShadow:
             theme.palette.mode === "light"
@@ -135,9 +135,9 @@ export default function GameHeader({
             src={logoSrc}
             alt="Logo"
             sx={{
-              height: 36,
+              height: 60,
               width: "auto",
-              borderRadius: 2,
+              borderRadius: 50,
               border: `1px solid ${theme.palette.primary.main}20`,
               boxShadow: `0 4px 10px ${theme.palette.primary.main}20`,
             }}
@@ -153,7 +153,7 @@ export default function GameHeader({
             gap: 1,
             px: 1.5,
             py: 0.5,
-            borderRadius: 3,
+            borderRadius: 5,
             backgroundImage: headerGradient,
             border: `1px solid ${theme.palette.primary.main}30`,
             boxShadow: `0 2px 8px ${theme.palette.primary.main}15`,

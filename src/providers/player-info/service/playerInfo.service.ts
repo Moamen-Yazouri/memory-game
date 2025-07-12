@@ -1,13 +1,14 @@
-import { get, getDatabase, ref } from "firebase/database";
+import { get, ref } from "firebase/database";
 import { addFinished, getFinsihedInfo } from "../utils/formatRealtimeDB";
 import { CompletedDB, GameModesTypes, IFinishedLevel } from "@/@types";
 import { IPlayerInfo } from "../playerInfoContext";
+import { db } from "@/firebase/firebase";
 
 class PlayerInfoService {
-    private db = getDatabase();
+    
 
     async getPlayerInfo(id: string): Promise<IPlayerInfo | null> {
-        const playerInfoRef = ref(this.db, `users/${id}/playerInfo`);
+        const playerInfoRef = ref(db, `users/${id}/playerInfo`);
         const info = await get(playerInfoRef);
         try {
 
@@ -44,7 +45,6 @@ class PlayerInfoService {
     }
 
     async checkIsExist(id: string) {
-        const db = getDatabase();
         const userRef = ref(db, `users/${id}/playerInfo`); // or whatever path you use
 
         const snapshot = await get(userRef);

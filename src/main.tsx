@@ -12,27 +12,26 @@ import { PlayerInfoProvider } from './providers/player-info/playerInfoContext.ts
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <ThemeContextProvider>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <ThemeContextProvider>
 
-      
-      <ErrorBoundary>
+        
+          <AuthProvider>
 
-        <AuthProvider>
-
-            <PlayerInfoProvider>
-                <GameProvider>
-                  <Toaster richColors position="bottom-right" />
-                  <App />
-                </GameProvider>
-            </PlayerInfoProvider>
+              <PlayerInfoProvider>
+                  <GameProvider>
+                    <Toaster richColors position="bottom-right" />
+                    <App />
+                  </GameProvider>
+              </PlayerInfoProvider>
 
 
-        </AuthProvider>
+          </AuthProvider>
 
-      </ErrorBoundary>
-      </ThemeContextProvider>
-    </BrowserRouter>
+        </ThemeContextProvider>
+      </BrowserRouter>
+    </ErrorBoundary>
 
   </StrictMode>
 )
