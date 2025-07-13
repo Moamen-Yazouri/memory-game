@@ -1,15 +1,11 @@
-"use client"
 
-import type React from "react"
 import {
   Box,
   Typography,
   Container,
   Paper,
   Stack,
-  Chip,
   LinearProgress,
-  Avatar,
   Switch,
   FormControlLabel,
   Button,
@@ -18,7 +14,6 @@ import {
   Slide,
 } from "@mui/material"
 import {
-  EmojiEvents,
   TrendingUp,
   TrackChanges,
   MilitaryTech,
@@ -34,67 +29,37 @@ import {
 import { useContext, useMemo, useState } from "react"
 import { GameThemeContext } from "@/providers/theme/themeContext"
 import { PlayerInfoContext } from "@/providers/player-info/playerInfoContext"
-import { getFinishedNumber, getFinsished } from "./utils/getFinished"
+import { getFinishedLevelsNumber, getFinishedNumber } from "./utils/getFinished"
 import authService from "@/service/auth.service"
-import { calculateModeStars, getModeColor, getModeDescription, getModeDetails, getModeDisplayName } from "./utils/getModeDetails"
+import { getLevelDescription, getModeDescription, getModeDetails, getModeDisplayName } from "./utils/getModeDetails"
 import SettingsMenuItem from "./components/SettingsMenuItems"
-import { renderStars } from "./utils/renderStars"
 import { getBgGradients, getCardBg, getSidebarBg } from "./utils/getGradients"
-import { getModeIcon } from "./utils/getModeIcon"
-import { formatTime } from "./utils/formatTime"
 import { StatCard } from "./components/StateCard"
 import CompletedList from "./components/completedList"
-
-// Import the types (assuming they exist)
-type LevelsTypes = "easy" | "medium" | "hard" | "veryHard" | "expert"
-type GameModesTypes = "education" | "emotional" | "events" | "states"
-
-export interface IFinishedLevel {
-  level: LevelsTypes
-  mode: GameModesTypes
-  score: number
-  time: number
-  wrongMoves: number
-}
+import { getTopScore } from "./utils/getTopScore"
+import { getFormatedlevel, getLevelPercentage } from "./utils/getDiplayLevel"
+import { getNextLevel } from "./utils/getNextLevel"
 
 
-
-interface DashboardProps {
-  topScore?: number
-  currentLevel?: number
-  currentMode?: string
-  levelProgress?: number
-  userRank?: number
-  totalPlayers?: number
-  finishedLevels?: IFinishedLevel[]
-  onThemeToggle?: () => void
-  onLogout?: () => void
-}
-
-export default function MemoryGameDashboard({
-  topScore = 15420,
-  currentLevel = 12,
-  currentMode = "Classic Mode",
-  levelProgress = 75,
-  userRank = 247,
-  totalPlayers = 10000,
-}: DashboardProps) {
+export default function MemoryGameDashboard() {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const { toggleTheme, theme, mode } = useContext(GameThemeContext)
   const {playerState} = useContext(PlayerInfoContext);
 
-  const finishedLevels = useMemo(() => {
-      return getFinsished(playerState.finished);
-  }, [playerState.finished]);
 
   const bg = useMemo(() => getBgGradients(mode), [mode]);
 
   const cardBg = useMemo(() => getCardBg(mode), [mode])
   const sidebarBg = useMemo(() => getSidebarBg(mode), [mode])  
   const numberOfFinishedModes = useMemo(() => getFinishedNumber(playerState.finished), [playerState.finished]);
+  const numberOfFinishedlevels = useMemo(() => getFinishedLevelsNumber(playerState.finished), [playerState.finished]);
+  const topScore = useMemo(() => getTopScore(playerState.finished), [playerState.finished])
   const completedModes = getModeDetails(playerState.finished);
+  const nextLevel = useMemo(() => (getNextLevel(playerState.currentInfo.level)) ,[playerState.currentInfo]);
+  const progress = useMemo(() => getLevelPercentage(playerState.currentInfo.level), [playerState])
+    console.log([...playerState.finished.values()])
   
-
+  
 
   const handleLogout = () => {
     authService.logout();
@@ -141,15 +106,15 @@ export default function MemoryGameDashboard({
           <Stack direction={{ xs: "column", sm: "row" }} spacing={3} useFlexGap flexWrap="wrap">
             <StatCard
               title="Top Score"
-              value={topScore.toLocaleString()}
+              value={topScore}
               subtitle="Personal best"
               icon={<MilitaryTech />}
               iconColor={theme.palette.warning.main}
             />
             <StatCard
               title="Current Level"
-              value={playerState.currentInfo.level}
-              subtitle={getModeDescription(playerState.currentInfo.modeName)}
+              value={getFormatedlevel(playerState.currentInfo.level)}
+              subtitle={getLevelDescription(playerState.currentInfo.level)}
               icon={<TrackChanges />}
               iconColor={theme.palette.info.main}
             />
@@ -160,15 +125,15 @@ export default function MemoryGameDashboard({
               icon={<TrackChanges />}
               iconColor={theme.palette.info.main}
             />
+              <StatCard
+                title="Completed Levels"
+                value={numberOfFinishedlevels}
+                subtitle={`game levels mastered`}
+                icon={<SportsEsports />}
+                iconColor={theme.palette.success.main}
+              />
             <StatCard
               title="Completed Modes"
-              value={numberOfFinishedModes}
-              subtitle={`game modes mastered`}
-              icon={<SportsEsports />}
-              iconColor={theme.palette.success.main}
-            />
-            <StatCard
-              title="Completed Levels"
               value={numberOfFinishedModes}
               subtitle={`game modes mastered`}
               icon={<SportsEsports />}
@@ -196,15 +161,15 @@ export default function MemoryGameDashboard({
                 <TrendingUp
                   sx={{ color: theme.palette.primary.main, filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" }}
                 />
-                <Typography fontWeight={600}>Level Progress - {currentMode}</Typography>
+                <Typography fontWeight={600}>Mode Progress - {getModeDisplayName(playerState.currentInfo.modeName)}</Typography>
               </Stack>
               <Stack direction="row" justifyContent="space-between">
-                <Typography>Level {currentLevel}</Typography>
-                <Typography fontWeight={600}>{levelProgress}%</Typography>
+                <Typography>{`${getFormatedlevel(playerState.currentInfo.level)} - Level`}</Typography>
+                <Typography fontWeight={600}>{progress}%</Typography>
               </Stack>
               <LinearProgress
                 variant="determinate"
-                value={levelProgress}
+                value={progress}
                 sx={{
                   height: 12,
                   borderRadius: 6,
@@ -222,7 +187,7 @@ export default function MemoryGameDashboard({
                   Current Progress
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
-                  Next: Level {currentLevel + 1}
+                  {`Next: ${nextLevel}`}
                 </Typography>
               </Stack>
             </Stack>
@@ -267,7 +232,6 @@ export default function MemoryGameDashboard({
           }}
         >
           <Stack spacing={0} sx={{ height: "100%" }}>
-            {/* Header */}
             <Box
               sx={{
                 p: 3,
