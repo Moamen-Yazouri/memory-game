@@ -52,7 +52,7 @@ export const getTheme = (mode: ThemeModes) =>
             margin: 0,
             padding: 0,
             overflowY: "scroll",
-            backgroundImage: getCardGradient(mode),
+            backgroundImage: getBackgroundGradient(mode),
             backgroundBlendMode: "overlay",
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",

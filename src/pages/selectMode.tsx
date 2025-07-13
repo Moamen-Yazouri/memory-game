@@ -1,8 +1,12 @@
+import GameLoader from "@/components/loader/loader";
 import SelectGame from "@/components/select-game/selectGame";
+import { Suspense } from "react";
 
 const SelectModePage = () => {
   return (
-    <SelectGame />
+    <Suspense fallback={<GameLoader/>}>
+      <SelectGame /> 
+    </Suspense>
   )
 }
 

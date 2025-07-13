@@ -1,8 +1,9 @@
+import MemoryGameDashboard from "@/components/dashboard/playerDashboard";
 
 
 const Dashboard = () => {
   return (
-    <div>dashboard</div>
+    <MemoryGameDashboard />
   )
 }
 

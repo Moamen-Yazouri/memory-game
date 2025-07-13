@@ -1,4 +1,9 @@
-import { GameModesTypes, ICurrent, IFinishedLevel, IMonster } from "@/@types";
+import { 
+    GameModesTypes, 
+    ICurrent, 
+    IFinishedLevel, 
+    IMonster 
+} from "@/@types";
 import { IPlayerInfo } from "@/providers/player-info/playerInfoContext";
 
 export interface IState {
@@ -9,7 +14,7 @@ export interface IState {
 export type Action = 
     {type: "INITIAL_INFO", payload: IPlayerInfo} |
     {type: "CHANGE_CURRENT", payload: ICurrent}  |
-    {type: "ADD_FINISHED", payload: {mode: GameModesTypes, level:IFinishedLevel}} 
+    {type: "ADD_FINISHED", payload: {mode: GameModesTypes, level: IFinishedLevel}} 
 
 export const reducer = (state: IState, action: Action): IState => {
     switch(action.type) {
@@ -30,9 +35,10 @@ export const reducer = (state: IState, action: Action): IState => {
         }
 
         case "ADD_FINISHED": {
+            console.log(action.payload.level.level)
             const prevFinishedLevels = state.finished.get(action.payload.mode) || [];
-            const cleanFinished = prevFinishedLevels.filter((l) => l.level !== finishedLevel);
             const finishedLevel = action.payload.level.level;
+            const cleanFinished = prevFinishedLevels.filter((l) => l.level !== finishedLevel);
             const newMap = new Map(state.finished);        
             newMap.set(action.payload.mode, [...cleanFinished, action.payload.level]);
     

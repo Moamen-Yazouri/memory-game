@@ -1,3 +1,4 @@
+import GameLoader from '@/components/loader/loader';
 import { auth } from '@/firebase/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react'
@@ -16,7 +17,7 @@ const GuardedRoutes = () => {
         })
     }, []);
 
-    if(loading) return <>Loading....</>
+    if(loading) return <GameLoader />
 
     if(!isAuth) {
         return (
