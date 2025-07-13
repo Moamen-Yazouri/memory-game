@@ -6,7 +6,6 @@ import {
   Typography,
   Container,
   Paper,
-  useTheme,
   Stack,
   Chip,
   LinearProgress,
@@ -32,17 +31,39 @@ import {
   Close,
   Person,
   Notifications,
+  School,
+  Favorite,
+  Event,
+  LocationOn,
 } from "@mui/icons-material"
 import { useContext, useMemo, useState } from "react"
 import { GameThemeContext } from "@/providers/theme/themeContext"
+import { PlayerInfoContext } from "@/providers/player-info/playerInfoContext"
+import { getFinishedNumber, getFinsished } from "./utils/getFinished"
+import authService from "@/service/auth.service"
+import { calculateModeStars, getModeDetails } from "./utils/getModeDetails"
+import SettingsMenuItem from "./components/SettingsMenuItems"
+import { renderStars } from "./utils/renderStars"
 
-interface GameMode {
-  id: string
-  name: string
-  completed: boolean
-  difficulty: "Easy" | "Medium" | "Hard" | "Expert"
-  bestTime?: string
-  stars: number
+// Import the types (assuming they exist)
+type LevelsTypes = "easy" | "medium" | "hard" | "veryHard" | "expert"
+type GameModesTypes = "education" | "emotional" | "events" | "states"
+
+export interface IFinishedLevel {
+  level: LevelsTypes
+  mode: GameModesTypes
+  score: number
+  time: number
+  wrongMoves: number
+}
+
+interface CompletedMode {
+  mode: GameModesTypes
+  totalScore: number
+  levelsCompleted: number
+  averageTime: number
+  totalWrongMoves: number
+  bestScore: number
 }
 
 interface DashboardProps {
@@ -52,7 +73,7 @@ interface DashboardProps {
   levelProgress?: number
   userRank?: number
   totalPlayers?: number
-  finishedModes?: GameMode[]
+  finishedLevels?: IFinishedLevel[]
   onThemeToggle?: () => void
   onLogout?: () => void
 }
@@ -64,56 +85,94 @@ export default function MemoryGameDashboard({
   levelProgress = 75,
   userRank = 247,
   totalPlayers = 10000,
-  finishedModes = [
-    { id: "1", name: "Classic Mode", completed: true, difficulty: "Easy", bestTime: "2:34", stars: 3 },
-    { id: "2", name: "Speed Challenge", completed: true, difficulty: "Medium", bestTime: "1:45", stars: 2 },
-    { id: "3", name: "Memory Master", completed: true, difficulty: "Hard", bestTime: "3:12", stars: 3 },
-    { id: "4", name: "Expert Challenge", completed: false, difficulty: "Expert", stars: 0 },
-  ],
-  onThemeToggle,
-  onLogout,
 }: DashboardProps) {
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const { toggleTheme, theme, mode } = useContext(GameThemeContext)
+  const {playerState} = useContext(PlayerInfoContext);
 
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const {toggleTheme, theme} = useContext(GameThemeContext);
-const bg = useMemo(
-() =>
-theme.palette.mode === "light"
-? "linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(248, 250, 252, 0.12) 25%, rgba(241, 245, 249, 0.18) 50%, rgba(248, 250, 252, 0.10) 75%, rgba(255, 255, 255, 0.15) 100%)"
-: "linear-gradient(135deg, rgba(15, 8, 25, 0.85) 0%, rgba(20, 12, 35, 0.90) 25%, rgba(25, 15, 45, 0.80) 50%, rgba(18, 10, 30, 0.88) 75%, rgba(15, 8, 25, 0.85) 100%)",
-[theme]
-);
+  const finishedLevels = useMemo(() => {
+      return getFinsished(playerState.finished);
+  }, [playerState.finished])
+  const bg = useMemo(
+    () =>
+      mode === "light"
+        ? "linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(248, 250, 252, 0.12) 25%, rgba(241, 245, 249, 0.18) 50%, rgba(248, 250, 252, 0.10) 75%, rgba(255, 255, 255, 0.15) 100%)"
+        : "linear-gradient(135deg, rgba(15, 8, 25, 0.85) 0%, rgba(20, 12, 35, 0.90) 25%, rgba(25, 15, 45, 0.80) 50%, rgba(18, 10, 30, 0.88) 75%, rgba(15, 8, 25, 0.85) 100%)",
+    [mode],
+  )
 
-const cardBg = useMemo(
-() =>
-theme.palette.mode === "light"
-? "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 25%, rgba(248, 250, 252, 0.90) 50%, rgba(241, 245, 249, 0.80) 75%, rgba(255, 255, 255, 0.95) 100%)"
-: "linear-gradient(135deg, rgba(45, 27, 78, 0.95) 0%, rgba(35, 20, 60, 0.90) 25%, rgba(25, 15, 45, 0.95) 50%, rgba(30, 18, 55, 0.85) 75%, rgba(45, 27, 78, 0.95) 100%)",
-[theme]
-);
+  const cardBg = useMemo(
+    () =>
+      mode === "light"
+        ? "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 25%, rgba(248, 250, 252, 0.90) 50%, rgba(241, 245, 249, 0.80) 75%, rgba(255, 255, 255, 0.95) 100%)"
+        : "linear-gradient(135deg, rgba(45, 27, 78, 0.95) 0%, rgba(35, 20, 60, 0.90) 25%, rgba(25, 15, 45, 0.95) 50%, rgba(30, 18, 55, 0.85) 75%, rgba(45, 27, 78, 0.95) 100%)",
+    [mode],
+  )
 
-const sidebarBg = useMemo(
-() =>
-theme.palette.mode === "light"
-? "linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.92) 25%, rgba(241, 245, 249, 0.96) 50%, rgba(236, 242, 248, 0.88) 75%, rgba(255, 255, 255, 0.98) 100%)"
-: "linear-gradient(135deg, rgba(45, 27, 78, 0.98) 0%, rgba(35, 20, 60, 0.92) 25%, rgba(25, 15, 45, 0.96) 50%, rgba(30, 18, 55, 0.88) 75%, rgba(45, 27, 78, 0.98) 100%)",
-[theme]
-);
+  const sidebarBg = useMemo(
+    () =>
+      mode === "light"
+        ? "linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.92) 25%, rgba(241, 245, 249, 0.96) 50%, rgba(236, 242, 248, 0.88) 75%, rgba(255, 255, 255, 0.98) 100%)"
+        : "linear-gradient(135deg, rgba(45, 27, 78, 0.98) 0%, rgba(35, 20, 60, 0.92) 25%, rgba(25, 15, 45, 0.96) 50%, rgba(30, 18, 55, 0.88) 75%, rgba(45, 27, 78, 0.98) 100%)",
+    [mode],
+  )
 
-  const getDifficultyColor = (diff: string) => {
-    const map = {
-      Easy: theme.palette.success.main,
-      Medium: theme.palette.warning.main,
-      Hard: theme.palette.error.main,
-      Expert: theme.palette.secondary.main,
+  
+  const getModeDisplayName = (gameMode: GameModesTypes): string => {
+    const modeNames = {
+      education: "Education Mode",
+      emotional: "Emotional Mode",
+      events: "Events Mode",
+      states: "States Mode",
     }
-    return map[diff as keyof typeof map] || theme.palette.grey[500]
+    return modeNames[gameMode];
   }
 
-  const renderStars = (stars: number) =>
-    Array.from({ length: 3 }, (_, i) => (
-      <Star key={i} sx={{ fontSize: 16, color: i < stars ? theme.palette.warning.main : theme.palette.grey[400] }} />
-    ))
+  const getModeIcon = (gameMode: GameModesTypes): React.ReactNode => {
+    const icons = {
+      education: <School sx={{ fontSize: 20 }} />,
+      emotional: <Favorite sx={{ fontSize: 20 }} />,
+      events: <Event sx={{ fontSize: 20 }} />,
+      states: <LocationOn sx={{ fontSize: 20 }} />,
+    }
+    return icons[gameMode] || <SportsEsports sx={{ fontSize: 20 }} />
+  }
+
+  const getModeColor = (gameMode: GameModesTypes) => {
+    const colorMap = {
+      education: theme.palette.info.main,
+      emotional: theme.palette.error.main,
+      events: theme.palette.warning.main,
+      states: theme.palette.success.main,
+    }
+    return colorMap[gameMode] || theme.palette.primary.main
+  }
+
+  const getModeDescription = (gameMode: GameModesTypes): string => {
+    const descriptions = {
+      education: "Learn while you play",
+      emotional: "Express your feelings",
+      events: "Remember special moments",
+      states: "Geography challenge",
+    }
+    return descriptions[gameMode] || "Game mode"
+  }
+  const numberOfFinishedModes = useMemo(() => getFinishedNumber(playerState.finished), [playerState.finished]);
+
+  const completedModes = getModeDetails(playerState.finished);
+  
+
+  
+  
+
+  // Format time from seconds to MM:SS
+  const formatTime = (timeInSeconds: number): string => {
+    const minutes = Math.floor(timeInSeconds / 60)
+    const seconds = timeInSeconds % 60
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`
+  }
+
+  
 
   const StatCard = ({
     title,
@@ -138,7 +197,7 @@ theme.palette.mode === "light"
         WebkitBackdropFilter: "blur(25px)",
         border: `1px solid ${theme.palette.primary.main}20`,
         boxShadow:
-          theme.palette.mode === "light"
+          mode === "light"
             ? `0 12px 40px ${theme.palette.primary.main}15, inset 0 1px 0 rgba(255, 255, 255, 0.3)`
             : `0 12px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1)`,
         display: "flex",
@@ -148,7 +207,7 @@ theme.palette.mode === "light"
         "&:hover": {
           transform: "translateY(-4px) scale(1.02)",
           boxShadow:
-            theme.palette.mode === "light"
+            mode === "light"
               ? `0 16px 50px ${theme.palette.primary.main}25, inset 0 1px 0 rgba(255, 255, 255, 0.4)`
               : `0 16px 50px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.15)`,
         },
@@ -183,93 +242,19 @@ theme.palette.mode === "light"
   )
 
   const handleLogout = () => {
-    if (onLogout) {
-      onLogout()
-    } else {
-      console.log("Logging out...")
-    }
+    authService.logout();
     setSettingsOpen(false)
   }
-
   const handleThemeToggle = () => {
-    if (onThemeToggle) {
-      onThemeToggle()
-    } else {
-      console.log("Toggling theme...")
-    }
+    toggleTheme()
   }
 
-  const SettingsMenuItem = ({
-    icon,
-    title,
-    subtitle,
-    action,
-    iconColor,
-  }: {
-    icon: React.ReactNode
-    title: string
-    subtitle: string
-    action: React.ReactNode
-    iconColor: string
-  }) => (
-    <Box
-      sx={{
-        p: 3,
-        borderRadius: 2,
-        backgroundImage:
-          theme.palette.mode === "light"
-            ? "linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.75) 100%)"
-            : "linear-gradient(135deg, rgba(45, 27, 78, 0.8) 0%, rgba(26, 15, 46, 0.6) 50%, rgba(15, 5, 31, 0.75) 100%)",
-        backdropFilter: "blur(15px)",
-        WebkitBackdropFilter: "blur(15px)",
-        border: `1px solid ${theme.palette.mode === "light" ? "rgba(99, 102, 241, 0.15)" : "rgba(139, 92, 246, 0.2)"}`,
-        boxShadow:
-          theme.palette.mode === "light" ? "0 4px 16px rgba(99, 102, 241, 0.1)" : "0 4px 16px rgba(0, 0, 0, 0.3)",
-        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-        "&:hover": {
-          backgroundImage:
-            theme.palette.mode === "light"
-              ? "linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.85) 100%)"
-              : "linear-gradient(135deg, rgba(45, 27, 78, 0.9) 0%, rgba(26, 15, 46, 0.7) 50%, rgba(15, 5, 31, 0.85) 100%)",
-          transform: "translateX(4px)",
-          boxShadow:
-            theme.palette.mode === "light" ? "0 6px 20px rgba(99, 102, 241, 0.15)" : "0 6px 20px rgba(0, 0, 0, 0.4)",
-        },
-      }}
-    >
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Stack direction="row" alignItems="center" spacing={2}>
-          <Avatar
-            sx={{
-              bgcolor: iconColor + "15",
-              color: iconColor,
-              width: 40,
-              height: 40,
-              border: `2px solid ${iconColor}30`,
-              boxShadow: `0 4px 12px ${iconColor}20`,
-            }}
-          >
-            {icon}
-          </Avatar>
-          <Box>
-            <Typography variant="body1" fontWeight={500}>
-              {title}
-            </Typography>
-            <Typography variant="caption" color="text.secondary">
-              {subtitle}
-            </Typography>
-          </Box>
-        </Stack>
-        {action}
-      </Stack>
-    </Box>
-  )
+  
 
   return (
     <Box minHeight="100vh" py={4} sx={{ background: bg, backgroundAttachment: "fixed" }}>
       <Container maxWidth="lg">
         <Stack spacing={4}>
-          {/* Header with Settings Button */}
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <Box textAlign={{ xs: "center", sm: "left" }}>
               <Typography variant="h4" fontWeight={700}>
@@ -322,14 +307,13 @@ theme.palette.mode === "light"
             />
             <StatCard
               title="Completed Modes"
-              value={finishedModes.filter((m) => m.completed).length}
-              subtitle={`of ${finishedModes.length} total`}
+              value={numberOfFinishedModes}
+              subtitle={`game modes mastered`}
               icon={<SportsEsports />}
               iconColor={theme.palette.success.main}
             />
           </Stack>
 
-          {/* Level Progress */}
           <Paper
             elevation={0}
             sx={{
@@ -340,7 +324,7 @@ theme.palette.mode === "light"
               WebkitBackdropFilter: "blur(25px)",
               border: `1px solid ${theme.palette.primary.main}20`,
               boxShadow:
-                theme.palette.mode === "light"
+                mode === "light"
                   ? `0 12px 40px ${theme.palette.primary.main}15, inset 0 1px 0 rgba(255, 255, 255, 0.3)`
                   : `0 12px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1)`,
             }}
@@ -362,7 +346,7 @@ theme.palette.mode === "light"
                 sx={{
                   height: 12,
                   borderRadius: 6,
-                  backgroundColor: theme.palette.mode === "light" ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.1)",
+                  backgroundColor: mode === "light" ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.1)",
                   boxShadow: "inset 0 2px 4px rgba(0,0,0,0.1)",
                   "& .MuiLinearProgress-bar": {
                     borderRadius: 6,
@@ -382,84 +366,100 @@ theme.palette.mode === "light"
             </Stack>
           </Paper>
 
-          {/* Game Modes */}
+          {/* Completed Modes */}
           <Stack spacing={2}>
             <Typography variant="h6" fontWeight={600}>
-              Game Modes
+              Completed Game Modes
             </Typography>
             <Stack spacing={2}>
-              {finishedModes.map((mode) => (
-                <Paper
-                  key={mode.id}
-                  elevation={0}
-                  sx={{
-                    p: 3,
-                    borderRadius: 2,
-                    backgroundImage:
-                      theme.palette.mode === "light"
-                        ? mode.completed
+              {completedModes.map((modeData) => {
+                const stars = calculateModeStars(modeData)
+                const modeColor = getModeColor(modeData.mode)
+                const modeIcon = getModeIcon(modeData.mode)
+
+                return (
+                  <Paper
+                    key={modeData.mode}
+                    elevation={0}
+                    sx={{
+                      p: 3,
+                      borderRadius: 2,
+                      backgroundImage:
+                        mode === "light"
                           ? "linear-gradient(135deg, rgba(76, 175, 80, 0.08) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(76, 175, 80, 0.05) 100%)"
-                          : "linear-gradient(135deg, rgba(158, 158, 158, 0.08) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(158, 158, 158, 0.05) 100%)"
-                        : mode.completed
-                          ? "linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(45, 27, 78, 0.9) 50%, rgba(76, 175, 80, 0.1) 100%)"
-                          : "linear-gradient(135deg, rgba(158, 158, 158, 0.15) 0%, rgba(45, 27, 78, 0.9) 50%, rgba(158, 158, 158, 0.1) 100%)",
-                    backdropFilter: "blur(15px)",
-                    WebkitBackdropFilter: "blur(15px)",
-                    border: `1px solid ${
-                      mode.completed ? theme.palette.success.main + "30" : theme.palette.grey[400] + "20"
-                    }`,
-                    boxShadow:
-                      theme.palette.mode === "light"
-                        ? `0 4px 16px ${mode.completed ? theme.palette.success.main + "10" : "rgba(0,0,0,0.05)"}`
-                        : `0 4px 16px rgba(0, 0, 0, 0.3)`,
-                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                    "&:hover": {
-                      transform: "translateY(-2px)",
-                      boxShadow:
-                        theme.palette.mode === "light"
-                          ? `0 8px 25px ${mode.completed ? theme.palette.success.main + "20" : "rgba(0,0,0,0.1)"}`
-                          : `0 8px 25px rgba(0, 0, 0, 0.4)`,
-                    },
-                  }}
-                >
-                  <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
-                    <Typography fontWeight={600}>{mode.name}</Typography>
-                    <Chip
-                      label={mode.difficulty}
-                      size="small"
-                      sx={{
-                        backgroundColor: getDifficultyColor(mode.difficulty),
-                        color: "#fff",
-                        fontWeight: 600,
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
-                      }}
-                    />
-                  </Stack>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Box display="flex" gap={0.5}>
-                      {renderStars(mode.stars)}
-                    </Box>
-                    {mode.bestTime && (
-                      <Typography variant="body2" color="text.secondary">
-                        Best: {mode.bestTime}
-                      </Typography>
-                    )}
-                  </Stack>
-                  {!mode.completed && (
-                    <Box mt={1}>
+                          : "linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(45, 27, 78, 0.9) 50%, rgba(76, 175, 80, 0.1) 100%)",
+                      backdropFilter: "blur(15px)",
+                      WebkitBackdropFilter: "blur(15px)",
+                      border: `1px solid ${modeColor}30`,
+                      boxShadow: mode === "light" ? `0 4px 16px ${modeColor}10` : `0 4px 16px rgba(0, 0, 0, 0.3)`,
+                      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                      "&:hover": {
+                        transform: "translateY(-2px)",
+                        boxShadow: mode === "light" ? `0 8px 25px ${modeColor}20` : `0 8px 25px rgba(0, 0, 0, 0.4)`,
+                      },
+                    }}
+                  >
+                    <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
+                      <Stack direction="row" alignItems="center" spacing={2}>
+                        <Avatar
+                          sx={{
+                            bgcolor: modeColor + "15",
+                            color: modeColor,
+                            width: 40,
+                            height: 40,
+                            border: `2px solid ${modeColor}30`,
+                          }}
+                        >
+                          {modeIcon}
+                        </Avatar>
+                        <Box>
+                          <Typography fontWeight={600}>{getModeDisplayName(modeData.mode)}</Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            {getModeDescription(modeData.mode)}
+                          </Typography>
+                        </Box>
+                      </Stack>
                       <Chip
-                        label="Not Completed"
-                        variant="outlined"
+                        label={`${modeData.levelsCompleted} Levels`}
                         size="small"
                         sx={{
-                          backdropFilter: "blur(10px)",
-                          backgroundColor: "rgba(255,255,255,0.1)",
+                          backgroundColor: modeColor,
+                          color: "#fff",
+                          fontWeight: 600,
+                          boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
                         }}
                       />
-                    </Box>
-                  )}
-                </Paper>
-              ))}
+                    </Stack>
+
+                    <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
+                      <Box display="flex" gap={0.5}>
+                        {renderStars(stars, theme)}
+                      </Box>
+                      <Typography variant="body2" color="text.secondary">
+                        Avg Time: {formatTime(modeData.averageTime)}
+                      </Typography>
+                    </Stack>
+
+                    <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
+                      <Typography variant="h6" fontWeight={600} color={modeColor}>
+                        Total Score: {modeData.totalScore.toLocaleString()}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Best: {modeData.bestScore.toLocaleString()}
+                      </Typography>
+                    </Stack>
+
+                    <Stack direction="row" justifyContent="space-between" alignItems="center">
+                      <Typography variant="body2" color="text.secondary">
+                        Levels Completed: {modeData.levelsCompleted}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Total Mistakes: {modeData.totalWrongMoves}
+                      </Typography>
+                    </Stack>
+                  </Paper>
+                )
+              })}
             </Stack>
           </Stack>
         </Stack>
@@ -471,7 +471,7 @@ theme.palette.mode === "light"
         onClick={() => setSettingsOpen(false)}
         sx={{
           zIndex: 1300,
-          backgroundColor: theme.palette.mode === "light" ? "rgba(0,0,0,0.3)" : "rgba(0,0,0,0.6)",
+          backgroundColor: mode === "light" ? "rgba(0,0,0,0.3)" : "rgba(0,0,0,0.6)",
           backdropFilter: "blur(8px)",
           WebkitBackdropFilter: "blur(8px)",
         }}
@@ -487,12 +487,11 @@ theme.palette.mode === "light"
             backgroundImage: sidebarBg,
             backdropFilter: "blur(30px)",
             WebkitBackdropFilter: "blur(30px)",
-            border: `1px solid ${theme.palette.mode === "light" ? "rgba(99, 102, 241, 0.2)" : "rgba(139, 92, 246, 0.3)"}`,
+            border: `1px solid ${mode === "light" ? "rgba(99, 102, 241, 0.2)" : "rgba(139, 92, 246, 0.3)"}`,
             borderLeft: "none",
             zIndex: 1400,
             overflowY: "auto",
-            boxShadow:
-              theme.palette.mode === "light" ? "8px 0 32px rgba(99, 102, 241, 0.15)" : "8px 0 32px rgba(0, 0, 0, 0.5)",
+            boxShadow: mode === "light" ? "8px 0 32px rgba(99, 102, 241, 0.15)" : "8px 0 32px rgba(0, 0, 0, 0.5)",
           }}
         >
           <Stack spacing={0} sx={{ height: "100%" }}>
@@ -500,9 +499,9 @@ theme.palette.mode === "light"
             <Box
               sx={{
                 p: 3,
-                borderBottom: `1px solid ${theme.palette.mode === "light" ? "rgba(99, 102, 241, 0.15)" : "rgba(139, 92, 246, 0.2)"}`,
+                borderBottom: `1px solid ${mode === "light" ? "rgba(99, 102, 241, 0.15)" : "rgba(139, 92, 246, 0.2)"}`,
                 backgroundImage:
-                  theme.palette.mode === "light"
+                  mode === "light"
                     ? "linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.4) 100%)"
                     : "linear-gradient(135deg, rgba(45, 27, 78, 0.6) 0%, rgba(26, 15, 46, 0.4) 100%)",
                 backdropFilter: "blur(20px)",
@@ -524,7 +523,7 @@ theme.palette.mode === "light"
                     backdropFilter: "blur(10px)",
                     backgroundColor: "rgba(255,255,255,0.1)",
                     "&:hover": {
-                      backgroundColor: theme.palette.mode === "light" ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.15)",
+                      backgroundColor: mode === "light" ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.15)",
                       transform: "scale(1.05)",
                     },
                     transition: "all 0.2s ease",
@@ -535,10 +534,8 @@ theme.palette.mode === "light"
               </Stack>
             </Box>
 
-            {/* Settings Content */}
             <Box sx={{ flex: 1, p: 3 }}>
               <Stack spacing={3}>
-                {/* User Profile */}
                 <SettingsMenuItem
                   icon={<Person />}
                   title="Profile"
@@ -553,15 +550,15 @@ theme.palette.mode === "light"
 
                 {/* Theme Toggle */}
                 <SettingsMenuItem
-                  icon={theme.palette.mode === "light" ? <LightMode /> : <DarkMode />}
+                  icon={mode === "light" ? <LightMode /> : <DarkMode />}
                   title="Theme"
                   subtitle="Switch appearance"
-                  iconColor={theme.palette.mode === "light" ? theme.palette.warning.main : theme.palette.info.main}
+                  iconColor={mode === "light" ? theme.palette.warning.main : theme.palette.info.main}
                   action={
                     <FormControlLabel
                       control={
                         <Switch
-                          checked={theme.palette.mode === "dark"}
+                          checked={mode === "dark"}
                           onChange={handleThemeToggle}
                           size="small"
                           sx={{
@@ -607,9 +604,9 @@ theme.palette.mode === "light"
             <Box
               sx={{
                 p: 3,
-                borderTop: `1px solid ${theme.palette.mode === "light" ? "rgba(99, 102, 241, 0.15)" : "rgba(139, 92, 246, 0.2)"}`,
+                borderTop: `1px solid ${mode === "light" ? "rgba(99, 102, 241, 0.15)" : "rgba(139, 92, 246, 0.2)"}`,
                 backgroundImage:
-                  theme.palette.mode === "light"
+                  mode === "light"
                     ? "linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.4) 100%)"
                     : "linear-gradient(135deg, rgba(45, 27, 78, 0.6) 0%, rgba(26, 15, 46, 0.4) 100%)",
                 backdropFilter: "blur(20px)",
@@ -626,7 +623,7 @@ theme.palette.mode === "light"
                   borderColor: theme.palette.error.main,
                   color: theme.palette.error.main,
                   backgroundImage:
-                    theme.palette.mode === "light"
+                    mode === "light"
                       ? "linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%)"
                       : "linear-gradient(135deg, rgba(45, 27, 78, 0.3) 0%, rgba(26, 15, 46, 0.1) 100%)",
                   backdropFilter: "blur(15px)",
