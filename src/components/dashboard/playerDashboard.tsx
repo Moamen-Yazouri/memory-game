@@ -18,7 +18,6 @@ import {
   Slide,
 } from "@mui/material"
 import {
-  Star,
   EmojiEvents,
   TrendingUp,
   TrackChanges,
@@ -31,19 +30,20 @@ import {
   Close,
   Person,
   Notifications,
-  School,
-  Favorite,
-  Event,
-  LocationOn,
 } from "@mui/icons-material"
 import { useContext, useMemo, useState } from "react"
 import { GameThemeContext } from "@/providers/theme/themeContext"
 import { PlayerInfoContext } from "@/providers/player-info/playerInfoContext"
 import { getFinishedNumber, getFinsished } from "./utils/getFinished"
 import authService from "@/service/auth.service"
-import { calculateModeStars, getModeDetails } from "./utils/getModeDetails"
+import { calculateModeStars, getModeColor, getModeDescription, getModeDetails, getModeDisplayName } from "./utils/getModeDetails"
 import SettingsMenuItem from "./components/SettingsMenuItems"
 import { renderStars } from "./utils/renderStars"
+import { getBgGradients, getCardBg, getSidebarBg } from "./utils/getGradients"
+import { getModeIcon } from "./utils/getModeIcon"
+import { formatTime } from "./utils/formatTime"
+import { StatCard } from "./components/StateCard"
+import CompletedList from "./components/completedList"
 
 // Import the types (assuming they exist)
 type LevelsTypes = "easy" | "medium" | "hard" | "veryHard" | "expert"
@@ -57,14 +57,7 @@ export interface IFinishedLevel {
   wrongMoves: number
 }
 
-interface CompletedMode {
-  mode: GameModesTypes
-  totalScore: number
-  levelsCompleted: number
-  averageTime: number
-  totalWrongMoves: number
-  bestScore: number
-}
+
 
 interface DashboardProps {
   topScore?: number
@@ -92,154 +85,16 @@ export default function MemoryGameDashboard({
 
   const finishedLevels = useMemo(() => {
       return getFinsished(playerState.finished);
-  }, [playerState.finished])
-  const bg = useMemo(
-    () =>
-      mode === "light"
-        ? "linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(248, 250, 252, 0.12) 25%, rgba(241, 245, 249, 0.18) 50%, rgba(248, 250, 252, 0.10) 75%, rgba(255, 255, 255, 0.15) 100%)"
-        : "linear-gradient(135deg, rgba(15, 8, 25, 0.85) 0%, rgba(20, 12, 35, 0.90) 25%, rgba(25, 15, 45, 0.80) 50%, rgba(18, 10, 30, 0.88) 75%, rgba(15, 8, 25, 0.85) 100%)",
-    [mode],
-  )
+  }, [playerState.finished]);
 
-  const cardBg = useMemo(
-    () =>
-      mode === "light"
-        ? "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 25%, rgba(248, 250, 252, 0.90) 50%, rgba(241, 245, 249, 0.80) 75%, rgba(255, 255, 255, 0.95) 100%)"
-        : "linear-gradient(135deg, rgba(45, 27, 78, 0.95) 0%, rgba(35, 20, 60, 0.90) 25%, rgba(25, 15, 45, 0.95) 50%, rgba(30, 18, 55, 0.85) 75%, rgba(45, 27, 78, 0.95) 100%)",
-    [mode],
-  )
+  const bg = useMemo(() => getBgGradients(mode), [mode]);
 
-  const sidebarBg = useMemo(
-    () =>
-      mode === "light"
-        ? "linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.92) 25%, rgba(241, 245, 249, 0.96) 50%, rgba(236, 242, 248, 0.88) 75%, rgba(255, 255, 255, 0.98) 100%)"
-        : "linear-gradient(135deg, rgba(45, 27, 78, 0.98) 0%, rgba(35, 20, 60, 0.92) 25%, rgba(25, 15, 45, 0.96) 50%, rgba(30, 18, 55, 0.88) 75%, rgba(45, 27, 78, 0.98) 100%)",
-    [mode],
-  )
-
-  
-  const getModeDisplayName = (gameMode: GameModesTypes): string => {
-    const modeNames = {
-      education: "Education Mode",
-      emotional: "Emotional Mode",
-      events: "Events Mode",
-      states: "States Mode",
-    }
-    return modeNames[gameMode];
-  }
-
-  const getModeIcon = (gameMode: GameModesTypes): React.ReactNode => {
-    const icons = {
-      education: <School sx={{ fontSize: 20 }} />,
-      emotional: <Favorite sx={{ fontSize: 20 }} />,
-      events: <Event sx={{ fontSize: 20 }} />,
-      states: <LocationOn sx={{ fontSize: 20 }} />,
-    }
-    return icons[gameMode] || <SportsEsports sx={{ fontSize: 20 }} />
-  }
-
-  const getModeColor = (gameMode: GameModesTypes) => {
-    const colorMap = {
-      education: theme.palette.info.main,
-      emotional: theme.palette.error.main,
-      events: theme.palette.warning.main,
-      states: theme.palette.success.main,
-    }
-    return colorMap[gameMode] || theme.palette.primary.main
-  }
-
-  const getModeDescription = (gameMode: GameModesTypes): string => {
-    const descriptions = {
-      education: "Learn while you play",
-      emotional: "Express your feelings",
-      events: "Remember special moments",
-      states: "Geography challenge",
-    }
-    return descriptions[gameMode] || "Game mode"
-  }
+  const cardBg = useMemo(() => getCardBg(mode), [mode])
+  const sidebarBg = useMemo(() => getSidebarBg(mode), [mode])  
   const numberOfFinishedModes = useMemo(() => getFinishedNumber(playerState.finished), [playerState.finished]);
-
   const completedModes = getModeDetails(playerState.finished);
   
 
-  
-  
-
-  // Format time from seconds to MM:SS
-  const formatTime = (timeInSeconds: number): string => {
-    const minutes = Math.floor(timeInSeconds / 60)
-    const seconds = timeInSeconds % 60
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`
-  }
-
-  
-
-  const StatCard = ({
-    title,
-    value,
-    subtitle,
-    icon,
-    iconColor,
-  }: {
-    title: string
-    value: string | number
-    subtitle?: string
-    icon: React.ReactNode
-    iconColor: string
-  }) => (
-    <Paper
-      elevation={0}
-      sx={{
-        p: 3,
-        borderRadius: 3,
-        backgroundImage: cardBg,
-        backdropFilter: "blur(25px)",
-        WebkitBackdropFilter: "blur(25px)",
-        border: `1px solid ${theme.palette.primary.main}20`,
-        boxShadow:
-          mode === "light"
-            ? `0 12px 40px ${theme.palette.primary.main}15, inset 0 1px 0 rgba(255, 255, 255, 0.3)`
-            : `0 12px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1)`,
-        display: "flex",
-        flexDirection: "column",
-        gap: 1,
-        transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-        "&:hover": {
-          transform: "translateY(-4px) scale(1.02)",
-          boxShadow:
-            mode === "light"
-              ? `0 16px 50px ${theme.palette.primary.main}25, inset 0 1px 0 rgba(255, 255, 255, 0.4)`
-              : `0 16px 50px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.15)`,
-        },
-      }}
-    >
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography variant="body2" color="text.secondary">
-          {title}
-        </Typography>
-        <Avatar
-          sx={{
-            bgcolor: iconColor + "15",
-            color: iconColor,
-            width: 32,
-            height: 32,
-            border: `2px solid ${iconColor}30`,
-            boxShadow: `0 4px 12px ${iconColor}25`,
-          }}
-        >
-          {icon}
-        </Avatar>
-      </Box>
-      <Typography variant="h4" fontWeight={600}>
-        {value}
-      </Typography>
-      {subtitle && (
-        <Typography variant="caption" color="text.secondary">
-          {subtitle}
-        </Typography>
-      )}
-    </Paper>
-  )
 
   const handleLogout = () => {
     authService.logout();
@@ -293,20 +148,27 @@ export default function MemoryGameDashboard({
             />
             <StatCard
               title="Current Level"
-              value={currentLevel}
-              subtitle={currentMode}
+              value={playerState.currentInfo.level}
+              subtitle={getModeDescription(playerState.currentInfo.modeName)}
               icon={<TrackChanges />}
               iconColor={theme.palette.info.main}
             />
             <StatCard
-              title="Your Rank"
-              value={`#${userRank}`}
-              subtitle={`of ${totalPlayers?.toLocaleString()} players`}
-              icon={<EmojiEvents />}
-              iconColor={theme.palette.primary.main}
+              title="Current Mode"
+              value={getModeDisplayName(playerState.currentInfo.modeName)}
+              subtitle={getModeDescription(playerState.currentInfo.modeName)}
+              icon={<TrackChanges />}
+              iconColor={theme.palette.info.main}
             />
             <StatCard
               title="Completed Modes"
+              value={numberOfFinishedModes}
+              subtitle={`game modes mastered`}
+              icon={<SportsEsports />}
+              iconColor={theme.palette.success.main}
+            />
+            <StatCard
+              title="Completed Levels"
               value={numberOfFinishedModes}
               subtitle={`game modes mastered`}
               icon={<SportsEsports />}
@@ -366,106 +228,16 @@ export default function MemoryGameDashboard({
             </Stack>
           </Paper>
 
-          {/* Completed Modes */}
           <Stack spacing={2}>
             <Typography variant="h6" fontWeight={600}>
               Completed Game Modes
             </Typography>
-            <Stack spacing={2}>
-              {completedModes.map((modeData) => {
-                const stars = calculateModeStars(modeData)
-                const modeColor = getModeColor(modeData.mode)
-                const modeIcon = getModeIcon(modeData.mode)
-
-                return (
-                  <Paper
-                    key={modeData.mode}
-                    elevation={0}
-                    sx={{
-                      p: 3,
-                      borderRadius: 2,
-                      backgroundImage:
-                        mode === "light"
-                          ? "linear-gradient(135deg, rgba(76, 175, 80, 0.08) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(76, 175, 80, 0.05) 100%)"
-                          : "linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(45, 27, 78, 0.9) 50%, rgba(76, 175, 80, 0.1) 100%)",
-                      backdropFilter: "blur(15px)",
-                      WebkitBackdropFilter: "blur(15px)",
-                      border: `1px solid ${modeColor}30`,
-                      boxShadow: mode === "light" ? `0 4px 16px ${modeColor}10` : `0 4px 16px rgba(0, 0, 0, 0.3)`,
-                      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                      "&:hover": {
-                        transform: "translateY(-2px)",
-                        boxShadow: mode === "light" ? `0 8px 25px ${modeColor}20` : `0 8px 25px rgba(0, 0, 0, 0.4)`,
-                      },
-                    }}
-                  >
-                    <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
-                      <Stack direction="row" alignItems="center" spacing={2}>
-                        <Avatar
-                          sx={{
-                            bgcolor: modeColor + "15",
-                            color: modeColor,
-                            width: 40,
-                            height: 40,
-                            border: `2px solid ${modeColor}30`,
-                          }}
-                        >
-                          {modeIcon}
-                        </Avatar>
-                        <Box>
-                          <Typography fontWeight={600}>{getModeDisplayName(modeData.mode)}</Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            {getModeDescription(modeData.mode)}
-                          </Typography>
-                        </Box>
-                      </Stack>
-                      <Chip
-                        label={`${modeData.levelsCompleted} Levels`}
-                        size="small"
-                        sx={{
-                          backgroundColor: modeColor,
-                          color: "#fff",
-                          fontWeight: 600,
-                          boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
-                        }}
-                      />
-                    </Stack>
-
-                    <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
-                      <Box display="flex" gap={0.5}>
-                        {renderStars(stars, theme)}
-                      </Box>
-                      <Typography variant="body2" color="text.secondary">
-                        Avg Time: {formatTime(modeData.averageTime)}
-                      </Typography>
-                    </Stack>
-
-                    <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
-                      <Typography variant="h6" fontWeight={600} color={modeColor}>
-                        Total Score: {modeData.totalScore.toLocaleString()}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Best: {modeData.bestScore.toLocaleString()}
-                      </Typography>
-                    </Stack>
-
-                    <Stack direction="row" justifyContent="space-between" alignItems="center">
-                      <Typography variant="body2" color="text.secondary">
-                        Levels Completed: {modeData.levelsCompleted}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Total Mistakes: {modeData.totalWrongMoves}
-                      </Typography>
-                    </Stack>
-                  </Paper>
-                )
-              })}
-            </Stack>
+            <CompletedList completedModes={completedModes}/>
           </Stack>
         </Stack>
+
       </Container>
 
-      {/* Settings Sidebar */}
       <Backdrop
         open={settingsOpen}
         onClick={() => setSettingsOpen(false)}
@@ -548,7 +320,6 @@ export default function MemoryGameDashboard({
                   }
                 />
 
-                {/* Theme Toggle */}
                 <SettingsMenuItem
                   icon={mode === "light" ? <LightMode /> : <DarkMode />}
                   title="Theme"
@@ -576,7 +347,6 @@ export default function MemoryGameDashboard({
                   }
                 />
 
-                {/* Notifications */}
                 <SettingsMenuItem
                   icon={<Notifications />}
                   title="Notifications"
@@ -600,7 +370,6 @@ export default function MemoryGameDashboard({
               </Stack>
             </Box>
 
-            {/* Footer with Logout */}
             <Box
               sx={{
                 p: 3,

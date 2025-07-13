@@ -1,5 +1,6 @@
 import { GameModesTypes, IFinishedLevel, Levels } from "@/@types";
 import { ICompletedMode } from "../types";
+import { Theme } from "@mui/material";
 
 export const getModeDetails = (finished: Map<GameModesTypes, IFinishedLevel[]>) => {
     const completedDetails: ICompletedMode[] = [];
@@ -42,7 +43,7 @@ const getBestScore = (finished: IFinishedLevel[]) => {
 
 const getAverageTime = (finished: IFinishedLevel[]) => {
     const sum = finished.reduce((curr, acc) => (curr + acc.time),0);
-    return Number((sum/finished.length).toFixed(2));
+    return sum / finished.length;
 }
 
 const getTotalWrongMoves = (finished: IFinishedLevel[]) => {
@@ -58,3 +59,33 @@ export const calculateModeStars = (modeData: ICompletedMode) => {
 
     return Math.min(stars, 3)
 }
+
+export const getModeDisplayName = (gameMode: GameModesTypes): string => {
+    const modeNames = {
+      education: "Education Mode",
+      emotional: "Emotional Mode",
+      events: "Events Mode",
+      states: "States Mode",
+    }
+    return modeNames[gameMode];
+}
+
+export const getModeColor = (gameMode: GameModesTypes, theme: Theme) => {
+    const colorMap = {
+      education: theme.palette.info.main,
+      emotional: theme.palette.error.main,
+      events: theme.palette.warning.main,
+      states: theme.palette.success.main,
+    }
+    return colorMap[gameMode] || theme.palette.primary.main
+}
+
+export const getModeDescription = (gameMode: GameModesTypes): string => {
+    const descriptions = {
+      education: "Educational Cards",
+      emotional: "Feelings Cards",
+      events: "Special moments Cards",
+      states: "Geography Cards",
+    }
+    return descriptions[gameMode] || "Game mode";
+  }

@@ -11,10 +11,11 @@ import { Page } from "../types";
 import authService from "@/service/auth.service";
 import { getInitials } from "../utils/getInitials";
 export const useHeader = () => {
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const { theme, toggleTheme, mode } = useContext(GameThemeContext);
   const { user, loading } = useContext(AuthContext);
+
   const [loggingOut, setLoggingOut] = useState(false);
   const navigate = useNavigate();
     
