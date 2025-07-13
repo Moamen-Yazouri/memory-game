@@ -31,7 +31,6 @@ export default function SelectGame() {
     <Box
       sx={{
         minHeight: "100vh",
-        background: backgroundGradient,
         backgroundAttachment: "fixed",
         py: 4,
       }}

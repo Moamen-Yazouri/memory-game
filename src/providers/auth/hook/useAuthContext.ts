@@ -20,7 +20,7 @@ const useAuthContext = () => {
         }).catch((e) => {
             console.error("Something went wrong on Authentication:", e); 
         })
-        .finally(() => {
+        .finally(() => {    
             setLoading(false);
         });
         

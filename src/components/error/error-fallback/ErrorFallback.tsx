@@ -1,7 +1,8 @@
 
-import { useMemo } from "react"
+import { useContext, useMemo } from "react"
 import { Box, Typography, Container, Paper, Button, useTheme } from "@mui/material"
 import { ErrorOutline, Refresh } from "@mui/icons-material"
+import { GameThemeContext } from "@/providers/theme/themeContext"
 
 interface ErrorFallbackProps {
   message: string
@@ -12,7 +13,7 @@ export default function ErrorFallback({
 message,
   handleRetry,
 }: ErrorFallbackProps) {
-  const theme = useTheme()
+  const {theme} = useContext(GameThemeContext)
 
   const gradient = useMemo(
     () =>
