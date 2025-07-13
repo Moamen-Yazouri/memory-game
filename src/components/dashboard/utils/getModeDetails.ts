@@ -1,4 +1,4 @@
-import { GameModesTypes, IFinishedLevel, Levels } from "@/@types";
+import { GameModesTypes, IFinishedLevel, Levels, LevelsTypes } from "@/@types";
 import { ICompletedMode } from "../types";
 import { Theme } from "@mui/material";
 
@@ -82,10 +82,21 @@ export const getModeColor = (gameMode: GameModesTypes, theme: Theme) => {
 
 export const getModeDescription = (gameMode: GameModesTypes): string => {
     const descriptions = {
-      education: "Educational Cards",
-      emotional: "Feelings Cards",
-      events: "Special moments Cards",
-      states: "Geography Cards",
+      education: "Educational type Cards",
+      emotional: "Feelings type Cards",
+      events: "Special moments type Cards",
+      states: "Geography type Cards",
     }
     return descriptions[gameMode] || "Game mode";
   }
+
+export const getLevelDescription = (level: LevelsTypes) => {
+    const description = {
+        easy: "Grid 3×2 of cards",
+        medium: "Grid 6×2 of cards",
+        hard: "8×2 of cards",
+        veryHard: "12×2 of cards",
+        monster: "16×2 of cards",
+    }
+    return description[level];
+}
