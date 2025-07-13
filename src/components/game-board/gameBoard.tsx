@@ -43,7 +43,7 @@ const GameBoard = () => {
             time: gameState.time,
             wrongMoves: gameState.wrongMoves,
           }
-
+          
           playerDispatch({type: "ADD_FINISHED", payload:{mode: gameInfo.mode!, level: finishedLevel}})
       }  
   }, [gameState.isCompleted]);

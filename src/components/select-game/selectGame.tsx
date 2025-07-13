@@ -1,8 +1,11 @@
-"use client"
-
-import { Box, Typography, Container, Stack, Button } from "@mui/material"
+import { 
+  Box, 
+  Typography, 
+  Container, 
+  Stack, 
+  Button 
+} from "@mui/material";
 import { ArrowBack } from "@mui/icons-material"
-import { useEffect } from "react"
 import LevelCard from "./components/levelCard"
 import ModeCard from "./components/modeCard"
 import { useSelectGame } from "./hook/useSelectGame"
@@ -15,7 +18,6 @@ export default function SelectGame() {
     selectedMode,
     gameModes,
     levels,
-    backgroundGradient,
     cardGradient,
     theme,
     unlockedLevels,

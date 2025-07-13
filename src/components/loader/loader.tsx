@@ -1,8 +1,12 @@
-"use client"
-
-import { Box, Typography, CircularProgress, useTheme, Stack } from "@mui/material"
-import { SportsEsports, Memory, Psychology } from "@mui/icons-material"
-import { useMemo, useEffect, useState } from "react"
+import { 
+    Box, 
+    Typography, 
+    CircularProgress, 
+    useTheme, 
+    Stack 
+} from "@mui/material";
+import { SportsEsports, Memory, Psychology } from "@mui/icons-material";
+import { useMemo, useEffect, useState } from "react";
 
 interface GameLoaderProps {
   message?: string
@@ -13,7 +17,7 @@ interface GameLoaderProps {
 }
 
 export default function GameLoader({
-  message = "Loading your game...",
+  message = "loading...",
   showProgress = false,
   progress = 0,
   size = "medium",
@@ -38,7 +42,6 @@ export default function GameLoader({
     [theme],
   )
 
-  // Animation cycle for icons
   useEffect(() => {
     const interval = setInterval(() => {
       setAnimationStep((prev) => (prev + 1) % 3)
@@ -64,7 +67,7 @@ export default function GameLoader({
           fontSize: "1.5rem",
           spacing: 4,
         }
-      default: // medium
+      default: 
         return {
           containerSize: 300,
           iconSize: 60,
@@ -160,7 +163,6 @@ export default function GameLoader({
           }}
         >
           <Stack spacing={config.spacing} alignItems="center">
-            {/* Animated Icons */}
             <Box
               sx={{
                 display: "flex",
@@ -203,7 +205,6 @@ export default function GameLoader({
               ))}
             </Box>
 
-            {/* Loading Message */}
             <Typography
               variant="h6"
               fontWeight={600}
@@ -219,7 +220,6 @@ export default function GameLoader({
               {message}
             </Typography>
 
-            {/* Progress Bar */}
             {showProgress && (
               <Box sx={{ width: "100%", maxWidth: 200 }}>
                 <Box
@@ -249,7 +249,6 @@ export default function GameLoader({
               </Box>
             )}
 
-            {/* Loading Dots */}
             <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
               {[0, 1, 2].map((index) => (
                 <Box
@@ -272,7 +271,6 @@ export default function GameLoader({
     )
   }
 
-  // Default variant
   return (
     <Box
       sx={{
@@ -305,7 +303,7 @@ export default function GameLoader({
         }}
       >
         <Stack spacing={config.spacing} alignItems="center">
-          {/* Main Loading Icon */}
+
           <Box
             sx={{
               position: "relative",
@@ -349,7 +347,7 @@ export default function GameLoader({
             </Box>
           </Box>
 
-          {/* Loading Message */}
+          
           <Typography
             variant="h6"
             fontWeight={600}
@@ -365,7 +363,6 @@ export default function GameLoader({
             {message}
           </Typography>
 
-          {/* Progress Bar (if enabled) */}
           {showProgress && (
             <Box sx={{ width: "100%", maxWidth: 200 }}>
               <Box

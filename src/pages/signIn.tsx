@@ -1,11 +1,12 @@
 import SignIn from "@/components/auth/sign-in/signIn";
+import GameLoader from "@/components/loader/loader";
 import { Suspense } from "react";
 
 
 const SignInPage = () => {
   
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<GameLoader />}>
       <SignIn />
     </Suspense>
   );

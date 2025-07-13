@@ -1,0 +1,1 @@
+export type Page = "/memory-game/dashboard" | "/" | "/memory-game/mode-selection"

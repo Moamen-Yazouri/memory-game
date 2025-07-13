@@ -32,113 +32,40 @@ import { AuthContext } from "@/providers/auth/authContext"
 import SmallLoader from "./components/smallLoader"
 import { useNavigate } from "react-router-dom"
 import authService from "@/service/auth.service"
-
-interface GameHeaderProps {
-  userName?: string
-  logoSrc?: string
-  onNavigate?: (page: "dashboard" | "home" | "select-game") => void
-  onThemeToggle?: () => void
-  onLogout?: () => void
-  onLogin?: () => void
-  onGetStarted?: () => void
-}
+import { Page } from "./types"
+import { getInitials } from "./utils/getInitials"
+import { useHeader } from "./hook/useHeader"
 
 
-export default function GameHeader({
-  userName = "Player",
-  logoSrc = "/logo.png",
-  onNavigate,
-  onLogout,
-  onLogin,
-  onGetStarted,
-}: GameHeaderProps) {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const { theme, toggleTheme, mode } = useContext(GameThemeContext);
-  const { user, loading } = useContext(AuthContext);
-  const [loggingOut, setLoggingOut] = useState(false);
-  const navigate = useNavigate();
-    
-  const headerGradient = useMemo(
-    () =>
-      mode === "light"
-        ? "linear-gradient(135deg, rgba(255,255,255,0.8), rgba(248,250,252,0.75))"
-        : "linear-gradient(135deg, rgba(45,27,78,0.75), rgba(25,15,45,0.70))",
-    [mode],
-  )
 
-  const menuGradient = useMemo(
-    () =>
-      mode === "light"
-        ? "linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,250,252,0.90))"
-        : "linear-gradient(135deg, rgba(45,27,78,0.95), rgba(25,15,45,0.90))",
-    [mode],
-  )
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
-  const handleClose = () => setAnchorEl(null);
-
-  const handleNavigation = (page: "dashboard" | "home" | "select-game") => {
-    handleClose()
-    onNavigate?.(page)
-  }
-
-  const handleLogout = () => {
-
-    setLoggingOut(true);
-
-    authService.logout()
-    .then(() => {
-        navigate("/sign-in");
-        setLoggingOut(false);
-    });
-    handleClose();
-  }
-
-  const handleLogin = () => {
-    navigate("/sign-in")
-  }
-
-  const handleGetStarted = () => {
-    navigate("/sign-up")
-  }
-
-  const getInitials = (name: string) =>
-    name
-      .split(" ")
-      .map((word) => word.charAt(0))
-      .join("")
-      .toUpperCase()
-      .slice(0, 2)
-
-  const menuItems = [
-    {
-      label: "Home",
-      icon: <Home fontSize="small" />,
-      action: () => handleNavigation("home"),
-      color: theme.palette.primary.main,
-    },
-    {
-      label: "Dashboard",
-      icon: <Dashboard fontSize="small" />,
-      action: () => handleNavigation("dashboard"),
-      color: theme.palette.info.main,
-    },
-    {
-      label: "Select Game",
-      icon: <SportsEsports fontSize="small" />,
-      action: () => handleNavigation("select-game"),
-      color: theme.palette.success.main,
-    },
-  ]
-
+export default function GameHeader() {
+    const {
+        anchorEl,
+        open,
+        user,
+        loading,
+        loggingOut,
+        theme,
+        mode,
+        headerGradient,
+        menuGradient,
+        formatedName,
+        menuItems,
+        handleClick,
+        handleClose,
+        handleLogout,
+        handleNavigation,
+        handleLogin,
+        handleGetStarted,
+        toggleTheme,
+    } = useHeader()
   
   const renderUserSection = () => {
-    if (loading) {
+    if (loading || loggingOut) {
       return <SmallLoader />
     }
 
-    if (!user && !loading) {
+    if (!user && !loading && !loggingOut) {
       
       return (
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -198,7 +125,6 @@ export default function GameHeader({
       )
     }
 
-    // Logged in - show user avatar and dropdown
     return (
       <IconButton
         onClick={handleClick}
@@ -228,7 +154,7 @@ export default function GameHeader({
             border: `2px solid ${theme.palette.primary.main}20`,
           }}
         >
-          {getInitials(user?.name || "")}
+          {formatedName}
         </Avatar>
         <Typography variant="body2" fontWeight={600} sx={{ color: "text.primary" }}>
           {user?.name || ""}
@@ -271,10 +197,10 @@ export default function GameHeader({
         }}
       >
         {/* Logo */}
-        <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }} onClick={() => handleNavigation("home")}>
+        <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }} onClick={() => handleNavigation("/")}>
           <Box
             component="img"
-            src={logoSrc}
+            src={"/logo.png"}
             alt="Logo"
             sx={{
               height: 60,
@@ -286,11 +212,10 @@ export default function GameHeader({
           />
         </Box>
 
-        {/* User Section - Dynamic based on auth state */}
+
         {renderUserSection()}
       </Box>
 
-      {/* Menu - Only show when user is logged in */}
       {user && (
         <Menu
           anchorEl={anchorEl}
@@ -357,7 +282,6 @@ export default function GameHeader({
             </MenuItem>
           ))}
 
-          {/* Theme Toggle Section */}
           <Divider
             sx={{
               my: 1,

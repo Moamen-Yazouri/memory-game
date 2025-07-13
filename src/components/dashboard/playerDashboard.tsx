@@ -33,7 +33,8 @@ import {
   Person,
   Notifications,
 } from "@mui/icons-material"
-import { useMemo, useState } from "react"
+import { useContext, useMemo, useState } from "react"
+import { GameThemeContext } from "@/providers/theme/themeContext"
 
 interface GameMode {
   id: string
@@ -72,8 +73,9 @@ export default function MemoryGameDashboard({
   onThemeToggle,
   onLogout,
 }: DashboardProps) {
-  const theme = useTheme()
-  const [settingsOpen, setSettingsOpen] = useState(false)
+
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const {toggleTheme, theme} = useContext(GameThemeContext);
 const bg = useMemo(
 () =>
 theme.palette.mode === "light"
