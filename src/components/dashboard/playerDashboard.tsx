@@ -1,4 +1,3 @@
-
 import {
   Box,
   Typography,
@@ -12,6 +11,7 @@ import {
   IconButton,
   Backdrop,
   Slide,
+  Avatar,
 } from "@mui/material"
 import {
   TrendingUp,
@@ -23,8 +23,7 @@ import {
   LightMode,
   DarkMode,
   Close,
-  Person,
-  Notifications,
+  Home,
 } from "@mui/icons-material"
 import { useContext, useMemo, useState } from "react"
 import { GameThemeContext } from "@/providers/theme/themeContext"
@@ -39,37 +38,42 @@ import CompletedList from "./components/completedList"
 import { getTopScore } from "./utils/getTopScore"
 import { getFormatedlevel, getLevelPercentage } from "./utils/getDiplayLevel"
 import { getNextLevel } from "./utils/getNextLevel"
-
+import { useNavigate } from "react-router-dom"
+import { AuthContext } from "@/providers/auth/authContext"
+import { getInitials } from "./utils/formatName"
+import GameLoader from "../loader/loader"
 
 export default function MemoryGameDashboard() {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const { toggleTheme, theme, mode } = useContext(GameThemeContext)
-  const {playerState} = useContext(PlayerInfoContext);
-
-
-  const bg = useMemo(() => getBgGradients(mode), [mode]);
-
+  const { playerState } = useContext(PlayerInfoContext)
+  const { user, loading } = useContext(AuthContext)
+  const bg = useMemo(() => getBgGradients(mode), [mode])
   const cardBg = useMemo(() => getCardBg(mode), [mode])
   const sidebarBg = useMemo(() => getSidebarBg(mode), [mode])  
-  const numberOfFinishedModes = useMemo(() => getFinishedNumber(playerState.finished), [playerState.finished]);
-  const numberOfFinishedlevels = useMemo(() => getFinishedLevelsNumber(playerState.finished), [playerState.finished]);
+  const numberOfFinishedModes = useMemo(() => getFinishedNumber(playerState.finished), [playerState.finished])
+  const numberOfFinishedlevels = useMemo(() => getFinishedLevelsNumber(playerState.finished), [playerState.finished])
   const topScore = useMemo(() => getTopScore(playerState.finished), [playerState.finished])
-  const completedModes = getModeDetails(playerState.finished);
-  const nextLevel = useMemo(() => (getNextLevel(playerState.currentInfo.level)) ,[playerState.currentInfo]);
+  const completedModes = getModeDetails(playerState.finished)
+  const nextLevel = useMemo(() => getNextLevel(playerState.currentInfo.level), [playerState.currentInfo])
   const progress = useMemo(() => getLevelPercentage(playerState.currentInfo.level), [playerState])
-    console.log([...playerState.finished.values()])
-  
-  
+  const navigate = useNavigate()
+  const initials = useMemo(() => getInitials(user), [user])
 
+  const handleNavigate = (page: "/" | "/memory-game/mode-selection") => {
+    navigate(page);
+  }
   const handleLogout = () => {
-    authService.logout();
-    setSettingsOpen(false)
+    authService.logout()
+    setSettingsOpen(false);
   }
   const handleThemeToggle = () => {
-    toggleTheme()
+    toggleTheme();
   }
 
-  
+  if (loading) {
+    return <GameLoader />
+  }
 
   return (
     <Box minHeight="100vh" py={4} sx={{ background: bg, backgroundAttachment: "fixed" }}>
@@ -80,29 +84,54 @@ export default function MemoryGameDashboard() {
               <Typography variant="h4" fontWeight={700}>
                 Memory Game Dashboard
               </Typography>
-              <Typography color="text.secondary">Track your progress and achievements</Typography>
+              <Typography color="text.secondary">
+                Track your progress and achievements
+              </Typography>
             </Box>
-            <IconButton
-              onClick={() => setSettingsOpen(true)}
-              sx={{
-                bgcolor: theme.palette.primary.main + "15",
-                color: theme.palette.primary.main,
-                border: `2px solid ${theme.palette.primary.main}30`,
-                backdropFilter: "blur(10px)",
-                boxShadow: `0 4px 16px ${theme.palette.primary.main}25`,
-                "&:hover": {
-                  bgcolor: theme.palette.primary.main + "25",
-                  transform: "scale(1.05)",
-                  boxShadow: `0 6px 20px ${theme.palette.primary.main}35`,
-                },
-                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-              }}
-            >
-              <Settings />
-            </IconButton>
+            <Box display="flex" alignItems="center" gap={1}>
+              <Avatar
+                sx={{
+                  backgroundImage: "linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)", // purple gradient
+                  width: 40,
+                  height: 40,
+                  fontSize: 16,
+                  fontWeight: "bold",
+                  color: "white",
+                  boxShadow: "0 4px 16px rgba(124, 58, 237, 0.25)", // match purple shadow
+                }}
+                alt={user?.name || "Player"}
+              >
+                {initials}
+              </Avatar>
+
+              <Typography
+                variant="body1"
+                fontWeight="bold"
+                color={theme.palette.text.primary}
+              >
+                {user?.name || "Player"}
+              </Typography>
+              <IconButton
+                onClick={() => setSettingsOpen(true)}
+                sx={{
+                  bgcolor: theme.palette.primary.main + "15",
+                  color: theme.palette.primary.main,
+                  border: `2px solid ${theme.palette.primary.main}30`,
+                  backdropFilter: "blur(10px)",
+                  boxShadow: `0 4px 16px ${theme.palette.primary.main}25`,
+                  "&:hover": {
+                    bgcolor: theme.palette.primary.main + "25",
+                    transform: "scale(1.05)",
+                    boxShadow: `0 6px 20px ${theme.palette.primary.main}35`,
+                  },
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                }}
+              >
+                <Settings />
+              </IconButton>
+            </Box>
           </Box>
 
-          {/* Stats Row */}
           <Stack direction={{ xs: "column", sm: "row" }} spacing={3} useFlexGap flexWrap="wrap">
             <StatCard
               title="Top Score"
@@ -125,13 +154,13 @@ export default function MemoryGameDashboard() {
               icon={<TrackChanges />}
               iconColor={theme.palette.info.main}
             />
-              <StatCard
-                title="Completed Levels"
-                value={numberOfFinishedlevels}
-                subtitle={`game levels mastered`}
-                icon={<SportsEsports />}
-                iconColor={theme.palette.success.main}
-              />
+            <StatCard
+              title="Completed Levels"
+              value={numberOfFinishedlevels}
+              subtitle={`game levels mastered`}
+              icon={<SportsEsports />}
+              iconColor={theme.palette.success.main}
+            />
             <StatCard
               title="Completed Modes"
               value={numberOfFinishedModes}
@@ -200,7 +229,6 @@ export default function MemoryGameDashboard() {
             <CompletedList completedModes={completedModes}/>
           </Stack>
         </Stack>
-
       </Container>
 
       <Backdrop
@@ -273,17 +301,27 @@ export default function MemoryGameDashboard() {
             <Box sx={{ flex: 1, p: 3 }}>
               <Stack spacing={3}>
                 <SettingsMenuItem
-                  icon={<Person />}
-                  title="Profile"
-                  subtitle="Manage your account"
+                  icon={<Home />}
+                  title="Home"
+                  subtitle="Learn more about us"
                   iconColor={theme.palette.secondary.main}
                   action={
-                    <IconButton size="small">
-                      <TrendingUp sx={{ fontSize: 16 }} />
+                    <IconButton size="small" onClick={() => handleNavigate("/")}>
+                      <TrendingUp sx={{ fontSize: 16 }}/>
                     </IconButton>
                   }
                 />
-
+                <SettingsMenuItem
+                  icon={<SportsEsports />}
+                  title="Main Menu"
+                  subtitle="Start New Game"
+                  iconColor={theme.palette.info.main}
+                  action={
+                    <IconButton size="small" onClick={() => handleNavigate("/memory-game/mode-selection")}>
+                      <SportsEsports sx={{ fontSize: 16 }}/>
+                    </IconButton>
+                  }
+                />
                 <SettingsMenuItem
                   icon={mode === "light" ? <LightMode /> : <DarkMode />}
                   title="Theme"
@@ -307,27 +345,6 @@ export default function MemoryGameDashboard() {
                         />
                       }
                       label=""
-                    />
-                  }
-                />
-
-                <SettingsMenuItem
-                  icon={<Notifications />}
-                  title="Notifications"
-                  subtitle="Manage alerts"
-                  iconColor={theme.palette.info.main}
-                  action={
-                    <Switch
-                      defaultChecked
-                      size="small"
-                      sx={{
-                        "& .MuiSwitch-switchBase.Mui-checked": {
-                          color: theme.palette.success.main,
-                        },
-                        "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-                          backgroundColor: theme.palette.success.main,
-                        },
-                      }}
                     />
                   }
                 />

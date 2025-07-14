@@ -8,7 +8,7 @@ export const getGameModesAndLevels = (theme: Theme) => {
     {
       id: "education" as GameModesTypes,
       name: "Education",
-      description: "Learn while you play",
+      description: "Education type cards",
       icon: <School sx={{ fontSize: 40 }} />,
       bgImage: "/placeholder.svg?height=200&width=300",
       color: theme.palette.info.main,
@@ -16,7 +16,7 @@ export const getGameModesAndLevels = (theme: Theme) => {
     {
       id: "emotional" as GameModesTypes,
       name: "Emotional",
-      description: "Express your feelings",
+      description: "Feelings type cards",
       icon: <Favorite sx={{ fontSize: 40 }} />,
       bgImage: "/placeholder.svg?height=200&width=300",
       color: theme.palette.error.main,
@@ -24,7 +24,7 @@ export const getGameModesAndLevels = (theme: Theme) => {
     {
       id: "events" as GameModesTypes,
       name: "Events",
-      description: "Remember special moments",
+      description: "Special events type cards",
       icon: <Event sx={{ fontSize: 40 }} />,
       bgImage: "/placeholder.svg?height=200&width=300",
       color: theme.palette.warning.main,
@@ -32,7 +32,7 @@ export const getGameModesAndLevels = (theme: Theme) => {
     {
       id: "states" as GameModesTypes,
       name: "States",
-      description: "Geography challenge",
+      description: "Geographical type cards",
       icon: <LocationOn sx={{ fontSize: 40 }} />,
       bgImage: "/placeholder.svg?height=200&width=300",
       color: theme.palette.success.main,
