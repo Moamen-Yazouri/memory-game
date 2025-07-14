@@ -1,7 +1,6 @@
 import { GameModesTypes } from "@/@types"
 import { IGameMode } from "../types"
 import { Box, Typography } from "@mui/material"
-import { getCardGradient } from "../utils/getGradients"
 import { useContext, useMemo } from "react"
 import { GameThemeContext } from "@/providers/theme/themeContext"
 
@@ -18,7 +17,7 @@ const ModeCard = ({ gameMode, handleModeSelect }: IProps) => {
         : "linear-gradient(135deg, rgba(45, 27, 78, 0.95) 0%, rgba(35, 20, 60, 0.90) 25%, rgba(25, 15, 45, 0.95) 50%, rgba(30, 18, 55, 0.85) 75%, rgba(45, 27, 78, 0.95) 100%)"
 
   ), [mode]);
-  console.log(cardGradient)
+
   return (
     <Box
       onClick={() => handleModeSelect(gameMode.id)}
