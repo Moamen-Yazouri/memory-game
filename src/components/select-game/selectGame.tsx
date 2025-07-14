@@ -9,6 +9,7 @@ import { ArrowBack } from "@mui/icons-material"
 import LevelCard from "./components/levelCard"
 import ModeCard from "./components/modeCard"
 import { useSelectGame } from "./hook/useSelectGame"
+import MonsterLevelCard from "../monster-card/monsterCard";
 
 
 
@@ -66,6 +67,7 @@ export default function SelectGame() {
                     handleModeSelect = {handleModeSelect}     
                   />
                 ))}
+                <MonsterLevelCard />
               </Box>
             </>
           ) : (

@@ -13,9 +13,12 @@ export const useSelectGame = () => {
     const [selectedMode, setSelectedMode] = useState<GameModesTypes | null>(null);
     const [selectedLevel, setSelectedLevel] = useState<LevelsTypes | null>(null);
     const {playerState, playerDispatch} = useContext(PlayerInfoContext);
+    const {gameDispatch} = useContext(GameInfoContext);
     const {changeLevel, changeMode} = useContext(GameInfoContext);
     const navigate = useNavigate();
-
+    useEffect(() => {
+        gameDispatch({type: "RESET_GAME"})
+    }, [])
     useEffect(() => {
     if (selectedMode && selectedLevel) {
         changeLevel(selectedLevel);

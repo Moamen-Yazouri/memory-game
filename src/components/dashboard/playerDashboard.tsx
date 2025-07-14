@@ -49,7 +49,6 @@ export default function MemoryGameDashboard() {
   const { toggleTheme, theme, mode } = useContext(GameThemeContext);
   const { playerState } = useContext(PlayerInfoContext);
   const { user, loading } = useContext(AuthContext);
-  console.log(playerState.currentInfo);
   const bg = useMemo(() => getBgGradients(mode), [mode]);
   const cardBg = useMemo(() => getCardBg(mode), [mode]);
   const sidebarBg = useMemo(() => getSidebarBg(mode), [mode]);  
@@ -72,8 +71,6 @@ export default function MemoryGameDashboard() {
   const handleThemeToggle = () => {
     toggleTheme();
   }
-
-  
 
   if (loading) {
     return <GameLoader />
