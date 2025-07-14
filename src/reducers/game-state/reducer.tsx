@@ -1,4 +1,4 @@
-import { IGameCard, LevelsTypes } from "@/@types";
+import { GameModesTypes, IGameCard, LevelsTypes } from "@/@types";
 import { getGameCards } from "./utils/createGameCards";
 
 export interface IState {
@@ -14,10 +14,10 @@ export interface IState {
 }
 
 export type Action = 
-    {type: "INITIAL_GAME", payload: LevelsTypes} |
+    {type: "INITIAL_GAME", payload: {level: LevelsTypes, mode: GameModesTypes | null}} |
     {type: "FLIPP_CARD", payload: number} |
     {type: "CHECK_MATCHED"} |
-    {type: "RESTART_GAME", payload: LevelsTypes} |
+    {type: "RESTART_GAME", payload: {level: LevelsTypes, mode: GameModesTypes | null}} |
     {type: "HANDLE_TIME", payload: number}  |
     {type: "RESET_GAME"} |
     {type: "GAME_OVER"} 
@@ -25,12 +25,12 @@ export type Action =
 export const reducer = (state: IState, action: Action) : IState=> {
     switch(action.type) {
         case "INITIAL_GAME": {
-            const cards = getGameCards(action.payload);
-            return {
-                ...state,
-                initialized: true,
-                cards
-            }
+                const cards = getGameCards(action.payload.level, action.payload.mode);
+                return {
+                    ...state,
+                    initialized: true,
+                    cards
+                }
         }
 
         case "HANDLE_TIME": {
@@ -122,7 +122,7 @@ export const reducer = (state: IState, action: Action) : IState=> {
         }
 
         case "RESTART_GAME": {
-            const cards = getGameCards(action.payload);
+            const cards = getGameCards(action.payload.level, action.payload.mode);
             return {
                 ...state,
                 cards,

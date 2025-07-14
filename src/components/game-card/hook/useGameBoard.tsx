@@ -1,6 +1,5 @@
 import { useCallback, useContext, useMemo, useState } from "react";
 import { useTheme } from "@mui/material/styles";
-import { getCardImage } from "../service/getImage.service";
 import { GameInfoContext } from "@/providers/game-info/gameInfo";
 import { getGradients, getShadows } from "../../game-board/utils/getGradient";
 
@@ -8,15 +7,12 @@ interface IProps {
     isMatched: boolean,
     isFlipped: boolean,
     id: number,
-    value: number
 }
-const useGameBoard = ({isMatched, isFlipped, id, value}: IProps) => {
+const useGameBoard = ({isMatched, isFlipped, id}: IProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const theme = useTheme();
-  const {gameInfo} = useContext(GameInfoContext);
   const { gameDispatch, gameState } = useContext(GameInfoContext);
 
-  const imageUrl = useMemo(() => getCardImage(value, gameInfo.mode), [value]);
 
   const handleFlipped = useCallback(() => {
     if (isMatched || gameState.openCards.length === 2) return;
@@ -45,7 +41,6 @@ const useGameBoard = ({isMatched, isFlipped, id, value}: IProps) => {
   const handleMouseEnter = useCallback(() => setIsHovered(true), []);
   const handleMouseLeave = useCallback(() => setIsHovered(false), []);
   return {
-    imageUrl,
     cardStyles,
     handleFlipped,
     handleMouseEnter,

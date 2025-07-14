@@ -14,7 +14,8 @@ export interface IState {
 export type Action = 
     {type: "INITIAL_INFO", payload: IPlayerInfo} |
     {type: "CHANGE_CURRENT", payload: ICurrent}  |
-    {type: "ADD_FINISHED", payload: {mode: GameModesTypes, level: IFinishedLevel}} 
+    {type: "ADD_FINISHED", payload: {mode: GameModesTypes, level: IFinishedLevel}} |
+    {type: "FINISH_MONSTER", payload: IMonster} 
 
 export const reducer = (state: IState, action: Action): IState => {
     switch(action.type) {
@@ -48,5 +49,13 @@ export const reducer = (state: IState, action: Action): IState => {
             }
         }
 
+        case "FINISH_MONSTER": {
+            return {
+                ...state,
+                monster: action.payload
+            }
+        }
+
     }
+
 }

@@ -5,46 +5,41 @@ import {
   useEffect, 
   useMemo, 
 } from "react";
-import { getResponsiveColumns } from "./utils/getTheBoardLength";
 import { GameInfoContext } from "@/providers/game-info/gameInfo";
-import GameHeader from "./components/game-header/gameheader";
 import { PlayerInfoContext } from "@/providers/player-info/playerInfoContext";
-import SelectionRequired from "./components/selectionRequired";
-import { IFinishedLevel } from "@/@types";
-import LevelCompleted from "./components/level-completed/levelCompleted";
-import { getAllowedWrongs } from "./components/level-completed/utils/getAllowedWrongs";
-import GameOverModal from "./components/game-over/gameOver";
-import { getCardImage } from "../game-card/service/getImage.service";
+import { getAllowedWrongs } from "../game-board/components/level-completed/utils/getAllowedWrongs";
+import SelectionRequired from "../game-board/components/selectionRequired";
+import GameOverModal from "../game-board/components/game-over/gameOver";
+import GameHeader from "../main-header/mainHeader";
+import { getResponsiveColumns } from "../game-board/utils/getTheBoardLength";
 
 const GameBoard = () => {
   const {gameInfo, gameState, gameDispatch }= useContext(GameInfoContext);
-  const {playerState ,playerDispatch } = useContext(PlayerInfoContext);
+  const {playerState, playerDispatch } = useContext(PlayerInfoContext);
   const allowedWrongs = useMemo(() => getAllowedWrongs(gameInfo.level!), [gameInfo.level]);
-  console.log(gameState.cards)
+  
+
+  useEffect(() => {
+    gameDispatch({type: "INITIAL_GAME", payload: {level: "easy", mode: null}});
+  }, [])
   const handleRetry = () => {
-    gameDispatch({type: "RESTART_GAME", payload: {level: gameInfo.level!, mode: gameInfo.mode || null}});
+    gameDispatch({type: "RESTART_GAME", payload: {level: "easy", mode: null}});
   }
 
   const handleOnMainMenu = () => {
     gameDispatch({type: "RESET_GAME"});
   }
-  useEffect(() => {
-    if(gameInfo.level !== playerState.currentInfo.level) {
-      playerDispatch({type: "CHANGE_CURRENT", payload: {level: gameInfo.level!, modeName: gameInfo.mode!}})
-    }
-  }, [gameInfo]);
+
   
   useEffect(() => {
       
       if(gameState.isCompleted) {
-          const finishedLevel: IFinishedLevel = {
-            level: gameInfo.level!,
+          playerDispatch({type: "FINISH_MONSTER", payload: {
+            unlocked: true,
             score: gameState.score,
-            time: gameState.time,
             wrongMoves: gameState.wrongMoves,
-          }
-
-          playerDispatch({type: "ADD_FINISHED", payload:{mode: gameInfo.mode!, level: finishedLevel}})
+            time: gameState.time,
+          }})
       }  
   }, [gameState.isCompleted]);
   
@@ -76,15 +71,7 @@ const GameBoard = () => {
   }
 
   if(gameState.isCompleted && gameInfo.level !== "monster") {
-    return <LevelCompleted
-      level={ gameInfo.level!}
-      mode={gameInfo.mode!}
-      score={gameState.score}
-      time={gameState.time.toString()}
-      wrongMoves={gameState.wrongMoves}
-      onRetry= {handleRetry}
-      isNewRecord= {false}
-    />
+    console.log("")
   }
 
   return (
@@ -135,8 +122,8 @@ const GameBoard = () => {
               }}
             >
               <GameCard
-                imageUrl={getCardImage(value.value, gameInfo.mode)}
                 id={value.id}
+                imageUrl={value.imageUrl}
                 value={value.value} 
                 isFlipped= {value.isFlipped}
                 isMatched={value.isMatched}

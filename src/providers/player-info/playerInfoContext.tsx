@@ -51,7 +51,7 @@ export const PlayerInfoProvider = (props: IProps) => {
     const [playerState, playerDispatch] = useReducer(reducer, initialPlayer)
     const initialized = useRef<boolean>(false);
     const id = useRef<string>(null);
-    console.log(playerState.finished);
+    
     useEffect(() => {
         if(initialized.current) {
             return;

@@ -35,7 +35,7 @@ export const GameProvider = (props: IProps) => {
     }, [playerState])
     useEffect (() => {
         if(gameInfo.level && gameInfo.mode) {
-            gameDispatch({type: "INITIAL_GAME", payload: gameInfo.level})
+            gameDispatch({type: "INITIAL_GAME", payload: {level: gameInfo.level, mode: gameInfo.mode}})
         }
     }, [gameInfo]);
 

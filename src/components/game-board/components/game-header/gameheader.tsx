@@ -26,7 +26,7 @@ const GameHeader = () => {
   const { gameInfo, gameState, gameDispatch } = useContext(GameInfoContext)
 
   const handleRestart = () => {
-    gameDispatch({ type: "RESTART_GAME", payload: gameInfo.level! })
+    gameDispatch({ type: "RESTART_GAME", payload: {level: gameInfo.level!, mode: gameInfo.mode} })
   }
 
   const handleBackToMenu = () => {
