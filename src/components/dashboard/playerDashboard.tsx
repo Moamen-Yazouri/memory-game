@@ -44,22 +44,24 @@ import { getInitials } from "./utils/formatName"
 import GameLoader from "../loader/loader"
 
 export default function MemoryGameDashboard() {
-  const [settingsOpen, setSettingsOpen] = useState(false)
-  const { toggleTheme, theme, mode } = useContext(GameThemeContext)
-  const { playerState } = useContext(PlayerInfoContext)
-  const { user, loading } = useContext(AuthContext)
-  const bg = useMemo(() => getBgGradients(mode), [mode])
-  const cardBg = useMemo(() => getCardBg(mode), [mode])
-  const sidebarBg = useMemo(() => getSidebarBg(mode), [mode])  
-  const numberOfFinishedModes = useMemo(() => getFinishedNumber(playerState.finished), [playerState.finished])
-  const numberOfFinishedlevels = useMemo(() => getFinishedLevelsNumber(playerState.finished), [playerState.finished])
-  const topScore = useMemo(() => getTopScore(playerState.finished), [playerState.finished])
-  const completedModes = getModeDetails(playerState.finished)
-  const nextLevel = useMemo(() => getNextLevel(playerState.currentInfo.level), [playerState.currentInfo])
-  const progress = useMemo(() => getLevelPercentage(playerState.currentInfo.level), [playerState])
-  const navigate = useNavigate()
-  const initials = useMemo(() => getInitials(user), [user])
-
+  
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const { toggleTheme, theme, mode } = useContext(GameThemeContext);
+  const { playerState } = useContext(PlayerInfoContext);
+  const { user, loading } = useContext(AuthContext);
+  console.log(playerState.currentInfo);
+  const bg = useMemo(() => getBgGradients(mode), [mode]);
+  const cardBg = useMemo(() => getCardBg(mode), [mode]);
+  const sidebarBg = useMemo(() => getSidebarBg(mode), [mode]);  
+  const numberOfFinishedModes = useMemo(() => getFinishedNumber(playerState.finished), [playerState.finished]);
+  const numberOfFinishedlevels = useMemo(() => getFinishedLevelsNumber(playerState.finished), [playerState.finished]);
+  const topScore = useMemo(() => getTopScore(playerState.finished), [playerState.finished]);
+  const completedModes = getModeDetails(playerState.finished);
+  const nextLevel = useMemo(() => getNextLevel(playerState.currentInfo.level), [playerState.currentInfo]);
+  const progress = useMemo(() => getLevelPercentage(playerState.currentInfo.level), [playerState]);
+  const navigate = useNavigate();
+  const initials = useMemo(() => getInitials(user), [user]);
+  
   const handleNavigate = (page: "/" | "/memory-game/mode-selection") => {
     navigate(page);
   }
@@ -70,6 +72,8 @@ export default function MemoryGameDashboard() {
   const handleThemeToggle = () => {
     toggleTheme();
   }
+
+  
 
   if (loading) {
     return <GameLoader />

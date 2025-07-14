@@ -9,11 +9,12 @@ import React from "react";
 import useGameBoard from "./hook/useGameBoard";
 
 
-interface IProps extends IGameCard {};
+interface IProps extends IGameCard {
+  imageUrl: string;
+};
 
 const GameCard = (props: IProps) => {
   const {
-    imageUrl,
     cardStyles,
     handleFlipped,
     handleMouseEnter,
@@ -109,7 +110,7 @@ const GameCard = (props: IProps) => {
         >
           <Box
             component="img"
-            src={imageUrl}
+            src={props.imageUrl}
             alt={`Card ${props.value}`}
             loading="lazy"
             sx={{

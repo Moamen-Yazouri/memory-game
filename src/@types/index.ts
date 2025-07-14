@@ -10,7 +10,7 @@ export interface IUserInfo {
     email: string,
 }
 
-enum GameModes {
+export enum GameModes {
     Education = 'education',
     Emotional = 'emotional',
     Events = "events",
@@ -59,6 +59,7 @@ export interface IGameCard {
     value: number,
     isFlipped: boolean,
     isMatched: boolean,
+    imageUrl: string,
 }
 
 export interface IUser {
