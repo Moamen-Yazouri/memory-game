@@ -31,22 +31,22 @@ import { useNavigate } from "react-router-dom";
 import { GameInfoContext } from "@/providers/game-info/gameInfo";
 
 interface LevelCompletedProps {
-  level?: Exclude<LevelsTypes, "monster">,
-  mode?: GameModesTypes
-  score?: number
-  time?: string
-  wrongMoves?: number
-  stars?: number
-  isNewRecord?: boolean
+  level: Exclude<LevelsTypes, "monster">,
+  mode: GameModesTypes
+  score: number
+  time: string
+  wrongMoves: number
+  stars: number
+  isNewRecord: boolean
 }
 
 export default function LevelCompleted({
-  level = "medium",
-  mode = "education",
-  score = 15420,
-  time = "2:34",
-  wrongMoves = 8,
-  isNewRecord = true,
+  level,
+  mode,
+  score,
+  time,
+  wrongMoves,
+  isNewRecord 
 }: LevelCompletedProps) {
   const {theme} = useContext(GameThemeContext) 
   const navigate = useNavigate();

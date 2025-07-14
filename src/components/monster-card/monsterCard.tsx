@@ -4,20 +4,16 @@ import { Box, Typography, Chip } from "@mui/material"
 import { Lock, LockOpen, Psychology, Whatshot } from "@mui/icons-material"
 import { useMemo, useContext } from "react"
 import { GameThemeContext } from "@/providers/theme/themeContext"
+import { PlayerInfoContext } from "@/providers/player-info/playerInfoContext"
+import { useNavigate } from "react-router-dom"
+import { GameInfoContext } from "@/providers/game-info/gameInfo"
 
-interface MonsterLevelCardProps {
-  onMonsterSelect?: () => void
-  backgroundImage?: string
-  isUnlocked?: boolean
-}
 
-export default function MonsterLevelCard({
-  onMonsterSelect,
-  backgroundImage = "/monster.png",
-  isUnlocked = false,
-}: MonsterLevelCardProps) {
-  const { theme, mode } = useContext(GameThemeContext)
-
+export default function MonsterLevelCard() {
+  const { theme, mode } = useContext(GameThemeContext);
+  const {playerState, playerDispatch} = useContext(PlayerInfoContext);
+  const isUnlocked = useMemo(() => (playerState.monster.unlocked), [playerState]);
+  const navigate = useNavigate();
   const cardGradient = useMemo(
     () =>
       mode === "light"
@@ -42,9 +38,8 @@ export default function MonsterLevelCard({
   const glowColor = isUnlocked ? "rgba(255, 69, 0, 0.6)" : "rgba(128, 128, 128, 0.3)"
 
   const handleClick = () => {
-    if (isUnlocked && onMonsterSelect) {
-      onMonsterSelect()
-    }
+    playerDispatch({type: "CHANGE_CURRENT", payload:{level: "monster", modeName: "education"}})
+    navigate("/memory-game/monster-level");
   }
 
   return (
@@ -57,7 +52,7 @@ export default function MonsterLevelCard({
         borderRadius: 4,
         overflow: "hidden",
         cursor: isUnlocked ? "pointer" : "not-allowed",
-        backgroundImage: `url(${backgroundImage})`,
+        backgroundImage: `url(/logo.png)`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

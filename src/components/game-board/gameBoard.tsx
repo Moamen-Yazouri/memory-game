@@ -15,12 +15,12 @@ import LevelCompleted from "./components/level-completed/levelCompleted";
 import { getAllowedWrongs } from "./components/level-completed/utils/getAllowedWrongs";
 import GameOverModal from "./components/game-over/gameOver";
 import { getCardImage } from "../game-card/service/getImage.service";
+import GameLoader from "../loader/loader";
 
 const GameBoard = () => {
   const {gameInfo, gameState, gameDispatch }= useContext(GameInfoContext);
   const {playerState ,playerDispatch } = useContext(PlayerInfoContext);
   const allowedWrongs = useMemo(() => getAllowedWrongs(gameInfo.level!), [gameInfo.level]);
-  console.log(gameState.cards)
   const handleRetry = () => {
     gameDispatch({type: "RESTART_GAME", payload: {level: gameInfo.level!, mode: gameInfo.mode || null}});
   }
@@ -28,6 +28,12 @@ const GameBoard = () => {
   const handleOnMainMenu = () => {
     gameDispatch({type: "RESET_GAME"});
   }
+
+  useEffect(() => {
+      if(gameInfo.level && gameInfo.mode) {
+        gameDispatch({type: "INITIAL_GAME", payload: {level: gameInfo.level, mode: gameInfo.mode}})
+      }
+  }, [gameInfo.level, gameInfo.mode]);
   useEffect(() => {
     if(gameInfo.level !== playerState.currentInfo.level) {
       playerDispatch({type: "CHANGE_CURRENT", payload: {level: gameInfo.level!, modeName: gameInfo.mode!}})
@@ -73,6 +79,12 @@ const GameBoard = () => {
 
   if((!gameInfo.level || !gameInfo.mode) && (!playerState.currentInfo.level && !playerState.currentInfo.modeName)) {
     return <SelectionRequired />;
+  }
+
+  if(gameState.cards.length == 0) {
+        return (
+            <GameLoader />
+        )
   }
 
   if(gameState.isCompleted && gameInfo.level !== "monster") {

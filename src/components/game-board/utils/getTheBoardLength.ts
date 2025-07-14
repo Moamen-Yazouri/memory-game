@@ -21,8 +21,8 @@ export const getResponsiveColumns = (level: LevelsTypes) => {
       case 'veryHard': // 24 cards
         return { xs: 4, sm: 6, md: 6 } // 6x4, 4x6, 4x6
       case 'monster': // 32 cards
-        return { xs: 4, sm: 6, md: 8 } // 8x4, 6x5.33, 4x8
+        return { xs: 8, sm: 8, md: 8 } // 8x4, 6x5.33, 4x8
       default:
-        return { xs: 2, sm: 3, md: 4 }
+        return { xs: 4, sm: 6, md: 8 }
     }
   }
