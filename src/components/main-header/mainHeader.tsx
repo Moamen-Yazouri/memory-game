@@ -1,6 +1,3 @@
-"use client"
-
-import type React from "react"
 import {
   Box,
   Typography,
@@ -13,28 +10,19 @@ import {
   Divider,
   Switch,
   Button,
-  CircularProgress,
-} from "@mui/material"
+} from "@mui/material";
+
 import {
   KeyboardArrowDown,
-  Dashboard,
-  Home,
-  SportsEsports,
   LightMode,
   DarkMode,
   Logout,
   Login,
   PlayArrow,
-} from "@mui/icons-material"
-import { useState, useMemo, useContext } from "react"
-import { GameThemeContext } from "@/providers/theme/themeContext"
-import { AuthContext } from "@/providers/auth/authContext"
-import SmallLoader from "./components/smallLoader"
-import { useNavigate } from "react-router-dom"
-import authService from "@/service/auth.service"
-import { Page } from "./types"
-import { getInitials } from "./utils/getInitials"
-import { useHeader } from "./hook/useHeader"
+} from "@mui/icons-material";
+
+import SmallLoader from "./components/smallLoader";
+import { useHeader } from "./hook/useHeader";
 
 
 
@@ -59,7 +47,7 @@ export default function GameHeader() {
         handleGetStarted,
         toggleTheme,
     } = useHeader()
-  
+    console.log(user)
   const renderUserSection = () => {
     if (loading || loggingOut) {
       return <SmallLoader />
@@ -121,6 +109,9 @@ export default function GameHeader() {
           >
             Get Started
           </Button>
+          <IconButton onClick={toggleTheme}>
+            {mode === "light" ? <DarkMode /> : <LightMode />}
+          </IconButton>
         </Box>
       )
     }

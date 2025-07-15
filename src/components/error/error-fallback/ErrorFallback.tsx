@@ -1,6 +1,6 @@
 
 import { useContext, useMemo } from "react"
-import { Box, Typography, Container, Paper, Button, useTheme } from "@mui/material"
+import { Box, Typography, Container, Paper, Button } from "@mui/material"
 import { ErrorOutline, Refresh } from "@mui/icons-material"
 import { GameThemeContext } from "@/providers/theme/themeContext"
 
@@ -13,14 +13,14 @@ export default function ErrorFallback({
 message,
   handleRetry,
 }: ErrorFallbackProps) {
-  const {theme} = useContext(GameThemeContext)
-
+  const {theme, mode} = useContext(GameThemeContext)
+  console.log(mode)
   const gradient = useMemo(
     () =>
-      theme.palette.mode === "light"
+      mode === "light"
         ? "linear-gradient(135deg, #fef2f2 0%, #fee2e2 50%, #fecaca 100%)"
         : "linear-gradient(135deg, #4c1d1d 0%, #7f1d1d 50%, #991b1b 100%)",
-    [theme],
+    [],
   )
 
   

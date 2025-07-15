@@ -5,10 +5,14 @@ import { validationSchema } from "../validationSchema";
 import authService from "@/service/auth.service";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { IUser } from "@/@types";
+import { useContext } from "react";
+import { AuthContext } from "@/providers/auth/authContext";
 
 
 export const useSignIn = () => {
     const nav = useNavigate();
+    const {login} = useContext(AuthContext);
     const handleSubmit = (
         values: IFormValues,
         resetForm: () => void,
@@ -24,6 +28,13 @@ export const useSignIn = () => {
                 }
                 else {
                     toast.success(`Signed-in successfully with email: ${data.email}`);
+                    const user: IUser = {
+                        email: data.email!,
+                        id: data.uid,
+                        name: data.displayName!
+                    }
+                    console.log(user);
+                    login(user);
                     nav("mode-selection");
                 }
             }

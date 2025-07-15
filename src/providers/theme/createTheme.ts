@@ -51,7 +51,6 @@ export const getTheme = (mode: ThemeModes) =>
           body: {
             margin: 0,
             padding: 0,
-            overflowY: "scroll",
             backgroundImage: getBackgroundGradient(mode),
             backgroundBlendMode: "overlay",
             backgroundRepeat: "no-repeat",

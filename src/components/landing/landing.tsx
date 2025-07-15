@@ -1,54 +1,38 @@
-"use client"
+import {
+  Box,
+  Typography,
+  Button,
+  Container,
+  Stack,
+} from "@mui/material";
+import {
+  PlayArrow,
+} from "@mui/icons-material";
+import { useContext, useMemo } from "react";
+import { GameThemeContext } from "@/providers/theme/themeContext";
+import { useNavigate } from "react-router-dom";
 
-import { Box, Typography, Button, Container, useTheme, Stack, IconButton } from "@mui/material"
-import { PlayArrow, LightMode, DarkMode, SportsEsports } from "@mui/icons-material"
-import { useMemo } from "react"
-
-interface LandingPageProps {
-  onGetStarted?: () => void
-  onThemeToggle?: () => void
-}
-
-export default function LandingPage({ onGetStarted, onThemeToggle }: LandingPageProps) {
-  const theme = useTheme()
-
-  const backgroundGradient = useMemo(
-    () =>
-      theme.palette.mode === "light"
-        ? "linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.15) 25%, rgba(168, 85, 247, 0.1) 50%, rgba(236, 72, 153, 0.08) 75%, rgba(99, 102, 241, 0.1) 100%)"
-        : "linear-gradient(135deg, rgba(45, 27, 78, 0.6) 0%, rgba(26, 15, 46, 0.7) 25%, rgba(15, 5, 31, 0.6) 50%, rgba(88, 28, 135, 0.5) 75%, rgba(45, 27, 78, 0.6) 100%)",
-    [theme],
-  )
+export default function LandingPage() {
+  const { theme, mode } = useContext(GameThemeContext);
+  const navigate = useNavigate();
 
   const cardGradient = useMemo(
     () =>
-      theme.palette.mode === "light"
-        ? "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 25%, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0.8) 75%, rgba(255, 255, 255, 0.95) 100%)"
+      mode === "light"
+        ? "linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 25%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0.8) 75%, rgba(255,255,255,0.95) 100%)"
         : "linear-gradient(135deg, rgba(45, 27, 78, 0.95) 0%, rgba(26, 15, 46, 0.9) 25%, rgba(15, 5, 31, 0.95) 50%, rgba(88, 28, 135, 0.85) 75%, rgba(45, 27, 78, 0.95) 100%)",
-    [theme],
-  )
+    [theme]
+  );
 
   const handleGetStarted = () => {
-    if (onGetStarted) {
-      onGetStarted()
-    } else {
-      console.log("Getting started...")
-    }
-  }
-
-  const handleThemeToggle = () => {
-    if (onThemeToggle) {
-      onThemeToggle()
-    } else {
-      console.log("Toggling theme...")
-    }
-  }
+    navigate("/sign-up");
+  };
 
   return (
     <Box
       sx={{
         minHeight: "100vh",
-        background: backgroundGradient,
+        overflow: "hidden",
         backgroundAttachment: "fixed",
         display: "flex",
         alignItems: "center",
@@ -56,36 +40,7 @@ export default function LandingPage({ onGetStarted, onThemeToggle }: LandingPage
         position: "relative",
       }}
     >
-      {/* Theme Toggle Button */}
-      <IconButton
-        onClick={handleThemeToggle}
-        sx={{
-          position: "absolute",
-          top: 24,
-          right: 24,
-          backgroundImage: cardGradient,
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          border: `1px solid ${theme.palette.primary.main}25`,
-          boxShadow:
-            theme.palette.mode === "light"
-              ? `0 8px 32px ${theme.palette.primary.main}15`
-              : `0 8px 32px rgba(0, 0, 0, 0.4)`,
-          color: theme.palette.mode === "light" ? theme.palette.warning.main : theme.palette.info.main,
-          "&:hover": {
-            transform: "scale(1.05)",
-            boxShadow:
-              theme.palette.mode === "light"
-                ? `0 12px 40px ${theme.palette.primary.main}25`
-                : `0 12px 40px rgba(0, 0, 0, 0.6)`,
-          },
-          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-        }}
-      >
-        {theme.palette.mode === "light" ? <DarkMode /> : <LightMode />}
-      </IconButton>
-
-      <Container maxWidth="md">
+      <Container maxWidth="sm">
         <Box
           sx={{
             textAlign: "center",
@@ -94,23 +49,22 @@ export default function LandingPage({ onGetStarted, onThemeToggle }: LandingPage
             WebkitBackdropFilter: "blur(30px)",
             border: `1px solid ${theme.palette.primary.main}20`,
             borderRadius: 6,
-            p: { xs: 4, md: 8 },
+            p: { xs: 3, md: 6 }, 
             boxShadow:
-              theme.palette.mode === "light"
-                ? `0 20px 60px ${theme.palette.primary.main}15, inset 0 1px 0 rgba(255, 255, 255, 0.3)`
-                : `0 20px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1)`,
-            transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+              mode === "light"
+                ? `0 20px 60px ${theme.palette.primary.main}15, inset 0 1px 0 rgba(255,255,255,0.3)`
+                : `0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1)`,
+            transition: "all 0.4s ease",
             "&:hover": {
               transform: "translateY(-4px)",
               boxShadow:
-                theme.palette.mode === "light"
-                  ? `0 25px 80px ${theme.palette.primary.main}25, inset 0 1px 0 rgba(255, 255, 255, 0.4)`
-                  : `0 25px 80px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.15)`,
+                mode === "light"
+                  ? `0 25px 80px ${theme.palette.primary.main}25, inset 0 1px 0 rgba(255,255,255,0.4)`
+                  : `0 25px 80px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.15)`,
             },
           }}
         >
-          <Stack spacing={4} alignItems="center">
-            {/* Game Icon */}
+          <Stack spacing={2} alignItems="center">
             <Box
               sx={{
                 width: 80,
@@ -123,18 +77,21 @@ export default function LandingPage({ onGetStarted, onThemeToggle }: LandingPage
                 alignItems: "center",
                 justifyContent: "center",
                 boxShadow: `0 8px 32px ${theme.palette.primary.main}25`,
+                overflow: "hidden", 
               }}
             >
-              <SportsEsports
-                sx={{
-                  fontSize: 40,
-                  color: theme.palette.primary.main,
-                  filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))",
+              <img
+                src="/logo.png"
+                alt="Logo"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
                 }}
               />
             </Box>
 
-            {/* Hero Text */}
+
             <Stack spacing={2}>
               <Typography
                 variant="h2"
@@ -144,7 +101,7 @@ export default function LandingPage({ onGetStarted, onThemeToggle }: LandingPage
                   backgroundClip: "text",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
-                  fontSize: { xs: "2.5rem", md: "3.5rem" },
+                  fontSize: { xs: "2rem", md: "3rem" }, 
                   lineHeight: 1.2,
                 }}
               >
@@ -156,8 +113,8 @@ export default function LandingPage({ onGetStarted, onThemeToggle }: LandingPage
                 color="text.primary"
                 fontWeight={500}
                 sx={{
-                  fontSize: { xs: "1.2rem", md: "1.5rem" },
-                  maxWidth: "600px",
+                  fontSize: { xs: "1.1rem", md: "1.3rem" }, 
+                  maxWidth: "500px",
                   mx: "auto",
                 }}
               >
@@ -168,28 +125,26 @@ export default function LandingPage({ onGetStarted, onThemeToggle }: LandingPage
                 variant="body1"
                 color="text.secondary"
                 sx={{
-                  fontSize: { xs: "1rem", md: "1.1rem" },
-                  maxWidth: "500px",
+                  fontSize: { xs: "0.9rem", md: "1rem" }, 
+                  maxWidth: "400px", 
                   mx: "auto",
                   lineHeight: 1.6,
                 }}
               >
-                Test your memory skills, compete with friends, and unlock achievements in this beautifully designed card
-                matching game.
+                Test your memory skills, compete with friends, and unlock achievements in this beautifully designed card matching game.
               </Typography>
             </Stack>
 
-            {/* CTA Button */}
             <Button
               variant="contained"
               size="large"
               startIcon={<PlayArrow />}
               onClick={handleGetStarted}
               sx={{
-                py: 2,
-                px: 4,
+                py: 1.5, 
+                px: 3, 
                 borderRadius: 4,
-                fontSize: "1.2rem",
+                fontSize: "1.1rem", 
                 fontWeight: 600,
                 textTransform: "none",
                 background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
@@ -201,7 +156,7 @@ export default function LandingPage({ onGetStarted, onThemeToggle }: LandingPage
                   transform: "translateY(-2px) scale(1.02)",
                   boxShadow: `0 12px 40px ${theme.palette.primary.main}50`,
                 },
-                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                transition: "all 0.3s ease",
               }}
             >
               Get Started
@@ -210,7 +165,7 @@ export default function LandingPage({ onGetStarted, onThemeToggle }: LandingPage
             <Stack
               direction={{ xs: "column", sm: "row" }}
               spacing={3}
-              sx={{ mt: 4, opacity: 0.8 }}
+              sx={{ mt: 3, opacity: 0.8 }} 
               divider={
                 <Box
                   sx={{
@@ -235,45 +190,44 @@ export default function LandingPage({ onGetStarted, onThemeToggle }: LandingPage
         </Box>
       </Container>
 
+      
       <Box
         sx={{
           position: "absolute",
           top: "20%",
           left: "10%",
-          width: 60,
-          height: 60,
+          width: { xs: 30, sm: 40, md: 50 },
+          height: { xs: 30, sm: 40, md: 50 },
           borderRadius: "50%",
           background: `linear-gradient(135deg, ${theme.palette.primary.main}20, ${theme.palette.secondary.main}15)`,
           backdropFilter: "blur(10px)",
           animation: "float 6s ease-in-out infinite",
           "@keyframes float": {
             "0%, 100%": { transform: "translateY(0px)" },
-            "50%": { transform: "translateY(-20px)" },
+            "50%": { transform: "translateY(-12px)" },
           },
         }}
       />
-
       <Box
         sx={{
           position: "absolute",
           bottom: "30%",
           right: "15%",
-          width: 40,
-          height: 40,
+          width: { xs: 25, sm: 30, md: 40 },
+          height: { xs: 25, sm: 30, md: 40 },
           borderRadius: "50%",
           background: `linear-gradient(135deg, ${theme.palette.warning.main}20, ${theme.palette.error.main}15)`,
           backdropFilter: "blur(10px)",
           animation: "float 8s ease-in-out infinite reverse",
         }}
       />
-
       <Box
         sx={{
           position: "absolute",
           top: "60%",
           left: "5%",
-          width: 30,
-          height: 30,
+          width: { xs: 20, sm: 25, md: 30 },
+          height: { xs: 20, sm: 25, md: 30 },
           borderRadius: "50%",
           background: `linear-gradient(135deg, ${theme.palette.success.main}20, ${theme.palette.info.main}15)`,
           backdropFilter: "blur(10px)",
@@ -281,5 +235,5 @@ export default function LandingPage({ onGetStarted, onThemeToggle }: LandingPage
         }}
       />
     </Box>
-  )
+  );
 }

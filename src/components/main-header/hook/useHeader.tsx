@@ -18,7 +18,7 @@ export const useHeader = () => {
 
   const [loggingOut, setLoggingOut] = useState(false);
   const navigate = useNavigate();
-    
+    const {logout} = useContext(AuthContext);
   const headerGradient = useMemo(
     () =>
       mode === "light"
@@ -51,6 +51,7 @@ export const useHeader = () => {
         navigate("/sign-in");
         setLoggingOut(false);
     });
+    logout();
 
     handleClose();
   }

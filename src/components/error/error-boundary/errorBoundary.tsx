@@ -1,5 +1,6 @@
 import { Component, ErrorInfo, ReactNode } from "react";
 import ErrorFallback from "../error-fallback/ErrorFallback";
+import ThemeContextProvider from "@/providers/theme/themeContext";
 
 interface IProps{
     children: ReactNode;
@@ -40,7 +41,10 @@ class ErrorBoundary extends Component <IProps, IState>{
     render(){
         if(this.state.hasError){
             return (
-                <ErrorFallback handleRetry={this.handleRetry} message={this.state.errorMessage}/>
+                <ThemeContextProvider>
+
+                    <ErrorFallback handleRetry={this.handleRetry} message={this.state.errorMessage}/>
+                </ThemeContextProvider>
             );
         }
         return this.props.children;
