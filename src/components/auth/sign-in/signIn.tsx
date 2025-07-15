@@ -8,10 +8,12 @@ import {
 } from "@mui/material";
 import SignInForm from "./signInForm";
 import authService from "@/service/auth.service";
-import { use } from "react";
+import { use, useContext } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Google } from "@mui/icons-material";
 import { toast } from "sonner";
+import { AuthContext } from "@/providers/auth/authContext";
+import { IUser } from "@/@types";
 
 const getUser = authService.getLoggedUser();
 
@@ -19,9 +21,16 @@ export default function SignIn() {
   const theme = useTheme();
   const user = use(getUser);
   const navigate = useNavigate();
+  const {login} = useContext(AuthContext)
   const handleGoogleSignIn = async () => {
     const result = await authService.signInWithGoogle();
     if(typeof result === "object") {
+      const user: IUser = {
+        name: result.displayName!,
+        email: result.email!,
+        id: result.uid,
+      }
+      login(user);
       toast.success(`Successfully logged, ${result.email}`);
       navigate("/memory-game/mode-selection");
     }
@@ -45,6 +54,7 @@ export default function SignIn() {
           theme.palette.mode === "light" ? "#fdfdfd" : theme.palette.background.default,
       }}
     >
+      
       {
         user 
         ? (
@@ -56,60 +66,119 @@ export default function SignIn() {
         )
         : (
           <Container maxWidth="xs">
+            
             <Paper
-                elevation={6}
+              elevation={6}
+              sx={{
+                p: 3,
+                borderRadius: 3,
+                backgroundImage: gradient,
+                backdropFilter: "blur(10px)",
+                border: theme.palette.mode === "light"
+                  ? "1px solid rgba(139, 92, 246, 0.2)"
+                  : "1px solid rgba(139, 92, 246, 0.3)",
+                boxShadow: theme.palette.mode === "light"
+                  ? "0 8px 32px rgba(139, 92, 246, 0.15)"
+                  : "0 8px 32px rgba(0, 0, 0, 0.4)",
+              }}
+            >
+              <Box
                 sx={{
-                  p: 4,
-                  borderRadius: 3,
-                  backgroundImage: gradient,
-                  backdropFilter: "blur(10px)",
-                  border:
-                    theme.palette.mode === "light"
-                      ? "1px solid rgba(139, 92, 246, 0.2)"
-                      : "1px solid rgba(139, 92, 246, 0.3)",
-                  boxShadow:
-                    theme.palette.mode === "light"
-                      ? "0 8px 32px rgba(139, 92, 246, 0.15)"
-                      : "0 8px 32px rgba(0, 0, 0, 0.4)",
+                  display: "flex",
+                  justifyContent: "center",
+                  mb: 2,
                 }}
               >
-                <Typography variant="h5" align="center" gutterBottom color="text.primary">
-                  Sign In
+                <Box
+                  sx={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: "50%",
+                    backdropFilter: "blur(20px)",
+                    border: `2px solid ${theme.palette.primary.main}30`,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    boxShadow: `0 8px 32px ${theme.palette.primary.main}25`,
+                    overflow: "hidden",
+                  }}
+                >
+                  <img
+                    src="/logo.png"
+                    alt="Logo"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </Box>
+              </Box>
+
+              <Typography
+                variant="h5"
+                align="center"
+                gutterBottom
+                color="text.primary"
+                sx={{ mb: 1 }}
+              >
+                Sign In
+              </Typography>
+
+              <Box sx={{ mt: 1 }}>
+                <SignInForm />
+              </Box>
+
+              <Box sx={{ textAlign: "center", mt: 2 }}>
+                <Typography variant="body2" color="text.secondary" mb={1}>
+                  or
                 </Typography>
 
-                <Box sx={{ mt: 2 }}>
-                  <SignInForm />
-                </Box>
-
-                <Box sx={{ textAlign: "center", mt: 3 }}>
-                  <Typography variant="body2" color="text.secondary" mb={1}>
-                    or
-                  </Typography>
-                  
-                  <Button
-                      fullWidth
-                      variant="outlined"
-                      color="primary"
-                      startIcon={<Google />}
-                      onClick={handleGoogleSignIn}
-                      sx={{
-                      mt: 2,
-                      py: 1.5,
-                      fontWeight: 600,
-                      backgroundColor: theme.palette.mode === "light"
-                          ? "rgba(255,255,255,0.9)"
-                          : "rgba(255,255,255,0.06)",
-                      "&:hover": {
-                          backgroundColor: theme.palette.mode === "light"
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  color="primary"
+                  startIcon={<Google />}
+                  onClick={handleGoogleSignIn}
+                  sx={{
+                    py: 1.4,
+                    fontWeight: 600,
+                    backgroundColor:
+                      theme.palette.mode === "light"
+                        ? "rgba(255,255,255,0.9)"
+                        : "rgba(255,255,255,0.06)",
+                    "&:hover": {
+                      backgroundColor:
+                        theme.palette.mode === "light"
                           ? "rgba(255,255,255,1)"
-                          : "rgba(255,255,255,0.1)"
-                      }
-                      }}
-                  >
-                      Sign In with Google
-                  </Button>
-                </Box>
-              </Paper>
+                          : "rgba(255,255,255,0.1)",
+                    },
+                  }}
+                >
+                  Sign In with Google
+                </Button>
+              </Box>
+              <Box sx={{ mt: 2, textAlign: "center" }}>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  cursor: "pointer",
+                  fontWeight: 500,
+                  textDecoration: "underline",
+                  "&:hover": {
+                    color: theme.palette.primary.main,
+                  },
+                }}
+                onClick={() => {
+                  navigate("/sign-up");
+                }}
+              >
+                Do not hav an account?
+              </Typography>
+            </Box>
+            </Paper>
+
           </Container>
         )
       }

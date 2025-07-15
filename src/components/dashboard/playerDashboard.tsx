@@ -48,7 +48,7 @@ export default function MemoryGameDashboard() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const { toggleTheme, theme, mode } = useContext(GameThemeContext);
   const { playerState } = useContext(PlayerInfoContext);
-  const { user, loading } = useContext(AuthContext);
+  const { user, loading, logout } = useContext(AuthContext);
   const bg = useMemo(() => getBgGradients(mode), [mode]);
   const cardBg = useMemo(() => getCardBg(mode), [mode]);
   const sidebarBg = useMemo(() => getSidebarBg(mode), [mode]);  
@@ -65,7 +65,7 @@ export default function MemoryGameDashboard() {
     navigate(page);
   }
   const handleLogout = () => {
-    authService.logout()
+    authService.logout().then(() => logout());
     setSettingsOpen(false);
   }
   const handleThemeToggle = () => {

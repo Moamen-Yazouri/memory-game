@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 const useAuthContext = () => {
     const [user, setUser] = useState<IUser | null>(null);
     const [loading, setLoading] = useState(true);
+    
     useEffect(() =>{
 
         authService.getLoggedUser()
@@ -25,10 +26,17 @@ const useAuthContext = () => {
         });
         
     }, []);
-
+    const login = (data: IUser) => {
+        setUser(data); 
+    }
+    const logout = () => {
+        setUser(null);
+    }
     return {
         user,
         loading,
+        login,
+        logout
     }
 }
 

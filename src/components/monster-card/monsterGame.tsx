@@ -13,6 +13,7 @@ import GameOverModal from "../game-board/components/game-over/gameOver";
 import { getResponsiveColumns } from "../game-board/utils/getTheBoardLength";
 import GameHeader from "../game-board/components/game-header/gameheader";
 import GameLoader from "../loader/loader";
+import MonsterLevelCompleted from "./monsterCompleted";
 
 const MonsterGame = () => {
   const {gameInfo, gameState, gameDispatch }= useContext(GameInfoContext);
@@ -73,6 +74,17 @@ const responsiveColumns = useMemo(() => {
 
   if((!gameInfo.level || !gameInfo.mode) && (!playerState.currentInfo.level && !playerState.currentInfo.modeName)) {
     return <SelectionRequired />;
+  }
+
+  if(gameState.isCompleted) {
+    return (
+      <MonsterLevelCompleted
+        score = {gameState.score}
+        time = {gameState.time}
+        wrongMoves = {gameState.wrongMoves}
+        isNewRecord = {false}
+      />
+    )
   }
   
   return (
