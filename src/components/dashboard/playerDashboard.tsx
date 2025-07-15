@@ -25,56 +25,38 @@ import {
   Close,
   Home,
 } from "@mui/icons-material"
-import { useContext, useMemo, useState } from "react"
-import { GameThemeContext } from "@/providers/theme/themeContext"
-import { PlayerInfoContext } from "@/providers/player-info/playerInfoContext"
-import { getFinishedLevelsNumber, getFinishedNumber } from "./utils/getFinished"
-import authService from "@/service/auth.service"
-import { getLevelDescription, getModeDescription, getModeDetails, getModeDisplayName } from "./utils/getModeDetails"
+
+import { getLevelDescription, getModeDescription, getModeDisplayName } from "./utils/getModeDetails"
 import SettingsMenuItem from "./components/SettingsMenuItems"
-import { getBgGradients, getCardBg, getSidebarBg } from "./utils/getGradients"
 import { StatCard } from "./components/StateCard"
 import CompletedList from "./components/completedList"
-import { getTopScore } from "./utils/getTopScore"
-import { getFormatedlevel, getLevelPercentage } from "./utils/getDiplayLevel"
-import { getNextLevel } from "./utils/getNextLevel"
-import { useNavigate } from "react-router-dom"
-import { AuthContext } from "@/providers/auth/authContext"
-import { getInitials } from "./utils/formatName"
+import { getFormatedlevel } from "./utils/getDiplayLevel"
 import GameLoader from "../loader/loader"
+import { useDashboard } from "./hook/useDashboard"
 
 export default function MemoryGameDashboard() {
-  
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const { 
-    toggleTheme, 
-    theme, 
-    mode 
-  } = useContext(GameThemeContext);
-  const { playerState } = useContext(PlayerInfoContext);
-  const { user, loading, logout } = useContext(AuthContext);
-  const bg = useMemo(() => getBgGradients(mode), [mode]);
-  const cardBg = useMemo(() => getCardBg(mode), [mode]);
-  const sidebarBg = useMemo(() => getSidebarBg(mode), [mode]);  
-  const numberOfFinishedModes = useMemo(() => getFinishedNumber(playerState.finished), [playerState.finished]);
-  const numberOfFinishedlevels = useMemo(() => getFinishedLevelsNumber(playerState.finished), [playerState.finished]);
-  const topScore = useMemo(() => getTopScore(playerState.finished), [playerState.finished]);
-  const completedModes = getModeDetails(playerState.finished);
-  const nextLevel = useMemo(() => getNextLevel(playerState.currentInfo.level), [playerState.currentInfo]);
-  const progress = useMemo(() => getLevelPercentage(playerState.currentInfo.level), [playerState]);
-  const navigate = useNavigate();
-  const initials = useMemo(() => getInitials(user), [user]);
-  
-  const handleNavigate = (page: "/" | "/memory-game/mode-selection") => {
-    navigate(page);
-  }
-  const handleLogout = () => {
-    authService.logout().then(() => logout());
-    setSettingsOpen(false);
-  }
-  const handleThemeToggle = () => {
-    toggleTheme();
-  }
+  const {
+    settingsOpen,
+    theme,
+    mode,
+    bg,
+    cardBg,
+    sidebarBg,
+    numberOfFinishedModes,
+    numberOfFinishedlevels,
+    topScore,
+    completedModes,
+    nextLevel,
+    progress,
+    initials,
+    user,
+    loading,
+    playerState,
+    setSettingsOpen,
+    handleNavigate,
+    handleLogout,
+    handleThemeToggle,
+  } = useDashboard();
 
   if (loading) {
     return <GameLoader />
@@ -96,13 +78,13 @@ export default function MemoryGameDashboard() {
             <Box display="flex" alignItems="center" gap={1}>
               <Avatar
                 sx={{
-                  backgroundImage: "linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)", // purple gradient
+                  backgroundImage: "linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)", 
                   width: 40,
                   height: 40,
                   fontSize: 16,
                   fontWeight: "bold",
                   color: "white",
-                  boxShadow: "0 4px 16px rgba(124, 58, 237, 0.25)", // match purple shadow
+                  boxShadow: "0 4px 16px rgba(124, 58, 237, 0.25)", 
                 }}
                 alt={user?.name || "Player"}
               >

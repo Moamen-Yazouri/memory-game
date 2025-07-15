@@ -1,15 +1,24 @@
-"use client"
-
-import { Box, Typography, Container, Paper, Stack, Button, Divider, Chip, Avatar } from "@mui/material"
+import { 
+  Box, 
+  Typography, 
+  Container, 
+  Paper, 
+  Stack, 
+  Button, 
+  Divider, 
+  Chip, 
+  Avatar 
+} from "@mui/material";
 import { CheckCircle, Timer, TrendingUp, Dashboard, Refresh, EmojiEvents, Error, Replay } from "@mui/icons-material"
 import { useContext, useMemo } from "react"
 import { getDetails } from "./utils/getDetails"
-import { type GameModesTypes, Levels, type LevelsTypes } from "@/@types"
+import { GameModesTypes, LevelsTypes } from "@/@types"
 import { renderStars } from "./utils/levelStars"
 import { GameThemeContext } from "@/providers/theme/themeContext"
 import { useNavigate } from "react-router-dom"
 import { GameInfoContext } from "@/providers/game-info/gameInfo"
 import { getTheNextlevel } from "../../utils/getTheNextLevel"
+import { PlayerInfoContext } from "@/providers/player-info/playerInfoContext"
 
 interface LevelCompletedProps {
   level: Exclude<LevelsTypes, "monster">
@@ -33,7 +42,8 @@ export default function LevelCompleted({
   const { theme } = useContext(GameThemeContext);
   const navigate = useNavigate();
   const { gameDispatch } = useContext(GameInfoContext);
-  const {changeLevel} = useContext(GameInfoContext)
+  const {changeLevel} = useContext(GameInfoContext);
+  const {playerDispatch} = useContext(PlayerInfoContext);
   const backgroundGradient = useMemo(
     () =>
       theme.palette.mode === "light"
@@ -59,7 +69,7 @@ export default function LevelCompleted({
     if(nextLevel) {
       changeLevel(nextLevel);
       gameDispatch({type: "INITIAL_GAME", payload: {level: nextLevel, mode: mode}});
-      
+      playerDispatch({type: "CHANGE_CURRENT", payload: {level: nextLevel, modeName: mode}})
     }  
   }
 
@@ -105,7 +115,7 @@ export default function LevelCompleted({
           }}
         >
           <Stack spacing={3} alignItems="center">
-            {/* Success Icon */}
+            
             <Box
               sx={{
                 width: 60,

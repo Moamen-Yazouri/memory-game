@@ -1,4 +1,3 @@
-
 import Stack from '@mui/material/Stack'
 import { ICompletedMode } from '../types'
 import ModeCard from './modeCard'

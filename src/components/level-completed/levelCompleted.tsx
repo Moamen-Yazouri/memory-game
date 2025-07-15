@@ -122,7 +122,7 @@ export default function LevelCompleted({
           }}
         >
           <Stack spacing={3} alignItems="center">
-            {/* Success Icon */}
+
             <Box
               sx={{
                 width: 60,
@@ -146,7 +146,7 @@ export default function LevelCompleted({
               />
             </Box>
 
-            {/* Completion Message */}
+
             <Stack spacing={2} textAlign="center" sx={{ width: "100%" }}>
               <Typography
                 variant="h4"
@@ -162,9 +162,8 @@ export default function LevelCompleted({
                 Mission Accomplished!
               </Typography>
 
-              {/* Advanced Level & Mode Display */}
               <Stack direction="row" spacing={1} justifyContent="center" alignItems="center" flexWrap="wrap">
-                {/* Level Badge */}
+        
                 <Box
                   sx={{
                     display: "flex",
@@ -215,7 +214,6 @@ export default function LevelCompleted({
                   •
                 </Typography>
 
-                {/* Mode Badge */}
                 <Box
                   sx={{
                     display: "flex",
@@ -262,13 +260,11 @@ export default function LevelCompleted({
                 </Box>
               </Stack>
 
-              {/* Stars */}
               <Box display="flex" justifyContent="center" gap={0.5}>
                 {starsNumber}
               </Box>
             </Stack>
 
-            {/* Statistics - Compact Grid */}
             <Box
               sx={{
                 display: "grid",
@@ -361,7 +357,6 @@ export default function LevelCompleted({
               }}
             />
 
-            {/* Action Buttons - Compact */}
             <Stack direction="row" spacing={1.5} sx={{ width: "100%" }}>
               <Button
                 variant="contained"
