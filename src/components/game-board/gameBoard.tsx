@@ -16,7 +16,7 @@ import { getAllowedWrongs } from "./components/level-completed/utils/getAllowedW
 import GameOverModal from "./components/game-over/gameOver";
 import { getCardImage } from "../game-card/service/getImage.service";
 import GameLoader from "../loader/loader";
-import { getTheNextlevel } from "./utils/getTheNextLevel";
+
 
 const GameBoard = () => {
   const {gameInfo, gameState, gameDispatch }= useContext(GameInfoContext);
@@ -35,11 +35,7 @@ const GameBoard = () => {
         gameDispatch({type: "INITIAL_GAME", payload: {level: gameInfo.level, mode: gameInfo.mode}})
       }
   }, [gameInfo.level, gameInfo.mode]);
-  useEffect(() => {
-    if(gameInfo.level !== playerState.currentInfo.level) {
-      playerDispatch({type: "CHANGE_CURRENT", payload: {level: gameInfo.level!, modeName: gameInfo.mode!}})
-    }
-  }, [gameInfo]);
+
   
   useEffect(() => {
       
@@ -50,10 +46,6 @@ const GameBoard = () => {
             time: gameState.time,
             wrongMoves: gameState.wrongMoves,
           } 
-          const nextLevel = getTheNextlevel(gameInfo.level!);
-          if(nextLevel) {
-            playerDispatch({type: "CHANGE_CURRENT", payload: {level: nextLevel, modeName: gameInfo.mode!}})
-          }
           playerDispatch({type: "ADD_FINISHED", payload:{mode: gameInfo.mode!, level: finishedLevel}});
       }  
   }, [gameState.isCompleted]);

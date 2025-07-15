@@ -1,12 +1,15 @@
-import Box from '@mui/material/Box'
-import Paper from '@mui/material/Paper'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
-import React, { useContext } from 'react'
-import { renderStars } from '../utils/renderStars'
-import { formatTime } from '../utils/formatTime'
-import Chip from '@mui/material/Chip'
-import { calculateModeStars, getModeColor, getModeDescription, getModeDisplayName } from '../utils/getModeDetails'
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { useContext } from 'react';
+import { formatTime } from '../utils/formatTime';
+import Chip from '@mui/material/Chip';
+import { 
+    getModeColor, 
+    getModeDescription, 
+    getModeDisplayName, 
+} from '../utils/getModeDetails';
 import Avatar from '@mui/material/Avatar'
 import { ICompletedMode } from '../types'
 import { GameThemeContext } from '@/providers/theme/themeContext'
@@ -16,9 +19,8 @@ interface IProps {
 }
 const ModeCard = ({modeData}: IProps) => {
     const {mode, theme} = useContext(GameThemeContext);
-    const stars = calculateModeStars(modeData)
-    const modeColor = getModeColor(modeData.mode, theme)
-    const modeIcon = getModeIcon(modeData.mode)
+    const modeColor = getModeColor(modeData.mode, theme);
+    const modeIcon = getModeIcon(modeData.mode);
     return (
         <Paper
                 key={modeData.mode}
@@ -75,7 +77,6 @@ const ModeCard = ({modeData}: IProps) => {
 
                 <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
                     <Box display="flex" gap={0.5}>
-                    {renderStars(stars, theme)}
                     </Box>
                     <Typography variant="body2" color="text.secondary">
                     Avg Time: {formatTime(modeData.averageTime)}

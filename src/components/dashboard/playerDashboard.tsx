@@ -46,7 +46,11 @@ import GameLoader from "../loader/loader"
 export default function MemoryGameDashboard() {
   
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const { toggleTheme, theme, mode } = useContext(GameThemeContext);
+  const { 
+    toggleTheme, 
+    theme, 
+    mode 
+  } = useContext(GameThemeContext);
   const { playerState } = useContext(PlayerInfoContext);
   const { user, loading, logout } = useContext(AuthContext);
   const bg = useMemo(() => getBgGradients(mode), [mode]);
