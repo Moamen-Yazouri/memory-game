@@ -53,11 +53,11 @@ const getTotalWrongMoves = (finished: IFinishedLevel[]) => {
 export const calculateModeStars = (modeData: ICompletedMode) => {
     let stars = 1; 
 
-    if (modeData.totalScore > 50) stars++
+    if (modeData.totalWrongMoves > 50) stars++
 
     if (modeData.levelsCompleted >= 3) stars++
 
-    return Math.min(stars, 3)
+    return Math.min(stars, 3);
 }
 
 export const getModeDisplayName = (gameMode: GameModesTypes): string => {
