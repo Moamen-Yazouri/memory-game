@@ -28,8 +28,16 @@ export const reducer = (state: IState, action: Action) : IState=> {
                 const cards = getGameCards(action.payload.level, action.payload.mode);
                 return {
                     ...state,
+                    cards,
                     initialized: true,
-                    cards
+                    wrongMoves: 0,
+                    time: 0,
+                    score: 0,
+                    isOver: false,
+                    isGameActive: false,
+                    isCompleted: false,
+                    openCards: [],
+
                 }
         }
 

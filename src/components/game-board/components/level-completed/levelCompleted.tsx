@@ -9,6 +9,7 @@ import { renderStars } from "./utils/levelStars"
 import { GameThemeContext } from "@/providers/theme/themeContext"
 import { useNavigate } from "react-router-dom"
 import { GameInfoContext } from "@/providers/game-info/gameInfo"
+import { getTheNextlevel } from "../../utils/getTheNextLevel"
 
 interface LevelCompletedProps {
   level: Exclude<LevelsTypes, "monster">
@@ -29,10 +30,10 @@ export default function LevelCompleted({
   isNewRecord,
   onRetry,
 }: LevelCompletedProps) {
-  const { theme } = useContext(GameThemeContext)
-  const navigate = useNavigate()
-  const { changeLevel } = useContext(GameInfoContext)
-
+  const { theme } = useContext(GameThemeContext);
+  const navigate = useNavigate();
+  const { gameDispatch } = useContext(GameInfoContext);
+  const {changeLevel} = useContext(GameInfoContext)
   const backgroundGradient = useMemo(
     () =>
       theme.palette.mode === "light"
@@ -50,34 +51,29 @@ export default function LevelCompleted({
   )
 
   const handleRetry = () => {
-    if (onRetry) {
-      onRetry()
-    } else {
-      console.log("Retrying level...")
-    }
+    onRetry();
   }
 
   const handleContinue = () => {
-    const levels: LevelsTypes[] = Object.values(Levels)
-    const currentLevelIndex = levels.indexOf(level)
-    const nextLevel = levels[currentLevelIndex + 1]
-    changeLevel(nextLevel)
-    if (nextLevel) {
-      navigate(`/memory-game/game-play`)
-    }
+    const nextLevel = getTheNextlevel(level);
+    if(nextLevel) {
+      changeLevel(nextLevel);
+      gameDispatch({type: "INITIAL_GAME", payload: {level: nextLevel, mode: mode}});
+      
+    }  
   }
 
   const handleDashboard = () => {
-    navigate("/memory-game/dashboard")
+    navigate("/memory-game/dashboard");
   }
 
   const handleChangeMode = () => {
-    navigate("/memory-game/mode-selection")
+    navigate("/memory-game/mode-selection");
   }
 
-  const starsNumber = useMemo(() => renderStars(theme, level), [level])
-  const levelDetails = useMemo(() => getDetails(theme).levelDetails[level], [level])
-  const modeDetails = useMemo(() => getDetails(theme).modeDetails[mode], [mode])
+  const starsNumber = useMemo(() => renderStars(theme, level), [level]);
+  const levelDetails = useMemo(() => getDetails(theme).levelDetails[level], [level]);
+  const modeDetails = useMemo(() => getDetails(theme).modeDetails[mode], [mode]);
 
   return (
     <Box
@@ -133,7 +129,6 @@ export default function LevelCompleted({
               />
             </Box>
 
-            {/* Completion Message */}
             <Stack spacing={2} textAlign="center" sx={{ width: "100%" }}>
               <Typography
                 variant="h4"
@@ -149,9 +144,8 @@ export default function LevelCompleted({
                 Mission Accomplished!
               </Typography>
 
-              {/* Advanced Level & Mode Display */}
               <Stack direction="row" spacing={1} justifyContent="center" alignItems="center" flexWrap="wrap">
-                {/* Level Badge */}
+
                 <Box
                   sx={{
                     display: "flex",
@@ -202,7 +196,6 @@ export default function LevelCompleted({
                   •
                 </Typography>
 
-                {/* Mode Badge */}
                 <Box
                   sx={{
                     display: "flex",
@@ -249,13 +242,11 @@ export default function LevelCompleted({
                 </Box>
               </Stack>
 
-              {/* Stars */}
               <Box display="flex" justifyContent="center" gap={0.5}>
                 {starsNumber}
               </Box>
             </Stack>
 
-            {/* Statistics - Compact Grid */}
             <Box
               sx={{
                 display: "grid",
@@ -348,7 +339,7 @@ export default function LevelCompleted({
               }}
             />
 
-            {/* Action Buttons - Now with 4 buttons including Retry */}
+          
             <Stack direction="row" spacing={1} sx={{ width: "100%" }}>
               <Button
                 variant="outlined"
@@ -375,30 +366,34 @@ export default function LevelCompleted({
               >
                 Retry
               </Button>
+                {
+                  level !== "veryHard" && (
 
-              <Button
-                variant="contained"
-                size="medium"
-                startIcon={<TrendingUp />}
-                onClick={handleContinue}
-                sx={{
-                  flex: 1,
-                  py: 1.5,
-                  borderRadius: 2,
-                  fontSize: "0.8rem",
-                  fontWeight: 600,
-                  textTransform: "none",
-                  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-                  boxShadow: `0 4px 16px ${theme.palette.primary.main}40`,
-                  "&:hover": {
-                    transform: "translateY(-1px)",
-                    boxShadow: `0 6px 20px ${theme.palette.primary.main}50`,
-                  },
-                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                }}
-              >
-                Next
-              </Button>
+                    <Button
+                      variant="contained"
+                      size="medium"
+                      startIcon={<TrendingUp />}
+                      onClick={handleContinue}
+                      sx={{
+                        flex: 1,
+                        py: 1.5,
+                        borderRadius: 2,
+                        fontSize: "0.8rem",
+                        fontWeight: 600,
+                        textTransform: "none",
+                        background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                        boxShadow: `0 4px 16px ${theme.palette.primary.main}40`,
+                        "&:hover": {
+                          transform: "translateY(-1px)",
+                          boxShadow: `0 6px 20px ${theme.palette.primary.main}50`,
+                        },
+                        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                      }}
+                    >
+                      Next
+                    </Button>
+                  )
+                }
 
               <Button
                 variant="outlined"
