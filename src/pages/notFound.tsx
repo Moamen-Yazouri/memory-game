@@ -1,7 +1,8 @@
+import NotFound from "@/components/notFound/notFound"
 
 const NotFoundPage = () => {
   return (
-    <div>notFound</div>
+    <NotFound />
   )
 }
 

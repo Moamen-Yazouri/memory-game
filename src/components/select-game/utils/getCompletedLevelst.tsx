@@ -1,4 +1,8 @@
-import { GameModesTypes, IFinishedLevel, LevelsTypes } from "@/@types";
+import { 
+    GameModesTypes, 
+    IFinishedLevel, 
+    LevelsTypes 
+} from "@/@types";
 
 export const getCompletedAndUnlocked = (finished: Map<GameModesTypes, IFinishedLevel[]>) => {
     const completedLevels: Record<GameModesTypes, Partial<LevelsTypes[]>> = {

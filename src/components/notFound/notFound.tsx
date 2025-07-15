@@ -1,50 +1,30 @@
-import type React from "react"
-
-import { useMemo } from "react"
+import { useContext, useMemo } from "react";
 import {
   Box,
   Typography,
   Container,
   Paper,
   Button,
-  useTheme,
   Stack,
   IconButton,
-  TextField,
-  InputAdornment,
 } from "@mui/material"
 import {
   Home,
   ArrowBack,
-  Search,
-  Explore,
   DarkMode,
   LightMode,
   SentimentVeryDissatisfied,
   QuestionMark,
 } from "@mui/icons-material"
+import { GameThemeContext } from "@/providers/theme/themeContext"
+import { useNavigate } from "react-router-dom"
 
-interface NotFoundPageProps {
-  onGoHome?: () => void
-  onGoBack?: () => void
-  onSearch?: (query: string) => void
-  onToggleTheme?: () => void
-  isDarkMode?: boolean
-  searchQuery?: string
-  onSearchChange?: (query: string) => void
-}
 
-export default function NotFoundPage({
-  onGoHome,
-  onGoBack,
-  onSearch,
-  onToggleTheme,
-  isDarkMode = false,
-  searchQuery = "",
-  onSearchChange,
-}: NotFoundPageProps) {
-  const theme = useTheme()
 
+export default function NotFound() {
+  const {theme, mode, toggleTheme} = useContext(GameThemeContext);
+  const isDarkMode = mode === "dark";
+  const navigate = useNavigate();
   const gradient = useMemo(
     () =>
       theme.palette.mode === "light"
@@ -54,32 +34,16 @@ export default function NotFoundPage({
   )
 
   const handleGoHome = () => {
-    if (onGoHome) {
-      onGoHome()
-    } else {
-      window.location.href = "/"
-    }
+      navigate("/");
   }
 
   const handleGoBack = () => {
-    if (onGoBack) {
-      onGoBack()
-    } else {
-      window.history.back()
-    }
+    navigate(-1);
   }
 
-  const handleSearch = () => {
-    if (onSearch && searchQuery.trim()) {
-      onSearch(searchQuery.trim())
-    }
-  }
+  
 
-  const handleKeyPress = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter") {
-      handleSearch()
-    }
-  }
+  
 
   return (
     <Container
@@ -92,10 +56,10 @@ export default function NotFoundPage({
         position: "relative",
       }}
     >
-      {/* Theme Toggle Button */}
-      {onToggleTheme && (
+
+      {mode && (
         <IconButton
-          onClick={onToggleTheme}
+          onClick={toggleTheme}
           sx={{
             position: "absolute",
             top: 20,
@@ -133,7 +97,7 @@ export default function NotFoundPage({
           width: "100%",
         }}
       >
-        {/* 404 Visual */}
+      
         <Box sx={{ mb: 4 }}>
           <Box
             sx={{
@@ -208,7 +172,7 @@ export default function NotFoundPage({
           </Box>
         </Box>
 
-        {/* Title and Description */}
+        
         <Typography
           variant="h4"
           gutterBottom
@@ -237,52 +201,9 @@ export default function NotFoundPage({
           best of us!
         </Typography>
 
-        {/* Search Box */}
-        <Box sx={{ mb: 4 }}>
-          <TextField
-            fullWidth
-            placeholder="Search for what you're looking for..."
-            value={searchQuery}
-            onChange={(e) => onSearchChange?.(e.target.value)}
-            onKeyPress={handleKeyPress}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Search sx={{ color: theme.palette.text.secondary }} />
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={handleSearch}
-                    disabled={!searchQuery.trim()}
-                    sx={{
-                      minWidth: "auto",
-                      px: 2,
-                      borderRadius: 2,
-                    }}
-                  >
-                    Go
-                  </Button>
-                </InputAdornment>
-              ),
-            }}
-            sx={{
-              maxWidth: 400,
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 3,
-                backgroundColor: theme.palette.mode === "light" ? "rgba(255, 255, 255, 0.8)" : "rgba(0, 0, 0, 0.2)",
-                "&:hover": {
-                  backgroundColor: theme.palette.mode === "light" ? "rgba(255, 255, 255, 0.9)" : "rgba(0, 0, 0, 0.3)",
-                },
-              },
-            }}
-          />
-        </Box>
+        
 
-        {/* Action Buttons */}
+        
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2} justifyContent="center" sx={{ mb: 3 }}>
           <Button
             variant="contained"
@@ -335,36 +256,8 @@ export default function NotFoundPage({
             Go Back
           </Button>
 
-          <Button
-            variant="outlined"
-            size="large"
-            startIcon={<Explore />}
-            onClick={() => {
-              // You can customize this to show popular pages or sitemap
-              console.log("Explore clicked")
-            }}
-            sx={{
-              py: 1.5,
-              px: 3,
-              borderRadius: 3,
-              fontSize: "1rem",
-              fontWeight: 600,
-              textTransform: "none",
-              borderColor: theme.palette.text.secondary,
-              color: theme.palette.text.secondary,
-              "&:hover": {
-                borderColor: theme.palette.text.primary,
-                backgroundColor: `${theme.palette.text.secondary}08`,
-                transform: "translateY(-1px)",
-              },
-              transition: "all 0.3s ease",
-            }}
-          >
-            Explore
-          </Button>
         </Stack>
 
-        {/* Help Text */}
         <Box
           sx={{
             mt: 4,

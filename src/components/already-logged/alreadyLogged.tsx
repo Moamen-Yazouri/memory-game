@@ -1,6 +1,4 @@
-"use client";
-
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import {
   Box,
   Typography,
@@ -11,13 +9,17 @@ import {
   Stack,
 } from "@mui/material";
 import { LockOutlined, ArrowForward, Logout } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
+import { AuthContext } from "@/providers/auth/authContext";
 
 export default function AlreadyAuthenticated() {
   const theme = useTheme();
   const navigate = useNavigate();
   const auth = getAuth();
+  const {logout} = useContext(AuthContext);
+  const location = useLocation();
+  const from: string = location.state?.from || "/"; 
 
   const gradient = useMemo(
     () =>
@@ -28,13 +30,14 @@ export default function AlreadyAuthenticated() {
   );
 
   const handleGoToApp = () => {
-    navigate("/dashboard"); // adjust based on your main route
+    navigate("/memory-game/dashboard"); 
   };
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigate("/sign-in"); // or redirect to your landing/login page
+      logout();
+      navigate("/sign-in"); 
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -111,7 +114,11 @@ export default function AlreadyAuthenticated() {
             fontSize: "1.1rem",
           }}
         >
-          You’re already signed in. No need to access the login page.
+          {
+            from === "/sign-in" 
+            ? "You’re already signed in. No need to access the login page"
+            : "You’re already signed in. No need to access the sign-up page"
+          }
         </Typography>
 
         <Stack spacing={2}>

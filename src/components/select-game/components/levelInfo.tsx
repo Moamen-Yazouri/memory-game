@@ -1,6 +1,4 @@
-
-
-import type React from "react";
+import React from "react";
 import { Box } from "@mui/material";
 import { useState } from "react";
 import CardStatsOverlay from "./cardStatesOverlay";

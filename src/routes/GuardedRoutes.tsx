@@ -7,7 +7,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 const GuardedRoutes = () => {
     const [isAuth, setIsAuth] = useState(false);
     const [loading, setLoading] = useState(true);
-    const location = useLocation()
+    const location = useLocation();
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if(user) {

@@ -1,5 +1,3 @@
-"use client"
-
 import { useMemo } from "react"
 import { 
     Box, 
@@ -19,10 +17,9 @@ import {
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
-
 export default function Unauthenticated() {
   const theme = useTheme()
-    // const navigate = useNavigate();
+  const navigate = useNavigate();
   const gradient = useMemo(
     () =>
       theme.palette.mode === "light"
@@ -32,15 +29,12 @@ export default function Unauthenticated() {
   );
 
   const handleSignIn = () => {
-    // navigate("/sign-in");
+    navigate("/sign-in");
   }
-  const handleGoogleSignIn = () => {
-
-  }
-
+  
 
   const handleSignUp = () => {
-    // navigate("/sign-up");
+    navigate("/sign-up");
   }
 
   return (
@@ -187,28 +181,6 @@ export default function Unauthenticated() {
         </Divider>
 
     
-        <Stack direction="row" spacing={2} justifyContent="center">
-          <Button
-            variant="outlined"
-            startIcon={<Google />}
-            onClick={handleGoogleSignIn}
-            sx={{
-              flex: 1,
-              py: 1.2,
-              borderRadius: 3,
-              textTransform: "none",
-              borderColor: theme.palette.secondary.main,
-              color: theme.palette.secondary.main,
-              "&:hover": {
-                borderColor: theme.palette.secondary.dark,
-                backgroundColor: `${theme.palette.secondary.main}08`,
-              },
-            }}
-          >
-            Google
-          </Button>
-        </Stack>
-
         <Typography
           variant="caption"
           color="text.secondary"
