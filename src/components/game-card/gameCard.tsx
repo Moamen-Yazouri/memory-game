@@ -1,36 +1,131 @@
-import Card from '@mui/material/Card';
-import CardActionArea from '@mui/material/CardActionArea';
-import CardContent from '@mui/material/CardContent';
-import { useTheme } from '@mui/material/styles';
+import { 
+  Box, 
+  Card, 
+  CardContent, 
+} from "@mui/material";
 
-// interface IProps extends ICardGame {};
+import type { IGameCard } from "@/@types";
+import React from "react";
+import useGameBoard from "./hook/useGameBoard";
 
-const GameCard = () => {
-    const theme = useTheme();
-    const gradient = theme.palette.mode === "light" ?
-      "linear-gradient(135deg,rgb(204, 188, 222) 0%,rgb(186, 171, 192) 100%)"
-      : "linear-gradient(135deg, #230739 0%, #3d1561 50%, #5c3a8d 100%)" 
 
-    return (
-        <Card sx={{
-            width: "fit-content"
-        }}>
-        <CardActionArea>
+interface IProps extends IGameCard {
+  imageUrl: string;
+};
+
+const GameCard = (props: IProps) => {
+  const {
+    cardStyles,
+    handleFlipped,
+    handleMouseEnter,
+    handleMouseLeave,
+  } = useGameBoard({...props});
+
+  return (
+    <Box
+      onClick={handleFlipped}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      sx={{
+        width: "100%",
+        maxWidth: 180,
+        height: "100%",
+        cursor: "pointer",
+        perspective: "1000px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Box
+        sx={{
+          width: "100%",
+          height: "100%",
+          position: "relative",
+          transformStyle: "preserve-3d",
+          transform: props.isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
+          transition: "transform 0.4s ease-out, box-shadow 0.2s ease-out",
+          willChange: "transform",
+          borderRadius: { xs: 1, sm: 1.5, md: 2 },
+          boxShadow: cardStyles.shadow,
+          "&:hover": {
+            transform: props.isFlipped 
+              ? "rotateY(180deg) translateZ(5px)" 
+              : "rotateY(0deg) translateZ(30px)",
+          },
+        }}
+      >
+        <Card
+          sx={{
+            position: "absolute",
+            inset: 0,
+            backfaceVisibility: "hidden",
+            borderRadius: { xs: 1, sm: 1.5, md: 2 },
+            overflow: "hidden",
+            zIndex: 2,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            border: cardStyles.frontBorder,
+            transform: "translateZ(0)",
+          }}
+        >
           <CardContent
             sx={{
-              width: 100,
-              height: 100,
+              width: "100%",
+              height: "100%",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              backgroundImage: gradient,
+              backgroundImage: cardStyles.gradient,
+              fontSize: {
+                xs: "1.2rem",
+                sm: "1.5rem",
+                md: "1.8rem",
+                lg: "2rem",
+              },
+              padding: "0 !important",
+              margin: 0,
             }}
           >
-            {/* Add some visible content here */}
+            ❓
           </CardContent>
-        </CardActionArea>
-      </Card>
-    )
-}
+        </Card>
 
-export default GameCard;
+        <Card
+          sx={{
+            position: "absolute",
+            inset: 0,
+            backfaceVisibility: "hidden",
+            borderRadius: { xs: 1, sm: 1.5, md: 2 },
+            overflow: "hidden",
+            backgroundColor: cardStyles.backBg,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1,
+            border: cardStyles.backBorder,
+            transform: "rotateY(180deg) translateZ(0)",
+          }}
+        >
+          <Box
+            component="img"
+            src={props.imageUrl}
+            alt={`Card ${props.value}`}
+            loading="lazy"
+            sx={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+              borderRadius: { xs: 0.5, sm: 1, md: 1.5 },
+              imageRendering: "auto",
+            }}
+          />
+        </Card>
+      </Box>
+    </Box>
+  );
+};
+
+export default React.memo(GameCard);

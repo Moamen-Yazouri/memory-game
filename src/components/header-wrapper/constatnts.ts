@@ -1,0 +1,1 @@
+export const AllowHeader = ["/memory-game/mode-selection", "/"];

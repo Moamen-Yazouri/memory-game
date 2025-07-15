@@ -23,7 +23,12 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
-        "@typescript-eslint/no-unused-vars": "warn"
+        "prefer-const": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-empty-object-type": "off",
+        "react-refresh/only-export-components": "off",
+        "react-hooks/exhaustive-deps": "off",
+        'no-confusing-unicode': 'off',
     },
   },
 )

@@ -1,15 +1,18 @@
 import './App.css';
-import SignInForm from './components/auth/sign-in/signIn';
+import AppRoutes from './routes/AppRoutes';
+
+
+
+
+
+
 
 
 function App() {
-  
-
+    
   return (
-    <>
-        <SignInForm />
-    </>
+    <AppRoutes />
   )
 }
 
-export default App
+export default App;

@@ -10,7 +10,7 @@ export interface IUserInfo {
     email: string,
 }
 
-enum GameModes {
+export enum GameModes {
     Education = 'education',
     Emotional = 'emotional',
     Events = "events",
@@ -19,33 +19,52 @@ enum GameModes {
 
 export type GameModesTypes = `${GameModes}`;
 
-enum Levels {
+export enum Levels {
     Easy = 'easy',
     Medium = 'medium',
     Hard = 'hard',
+    VeryHard = 'veryHard',
+    Monster = 'monster'
 }
 
 export type LevelsTypes = `${Levels}`;
 
-export interface ICurrentMode {
+export interface ICurrent {
     modeName: GameModesTypes,
     level: LevelsTypes,
 }
 
 export interface IFinishedLevel {
-    level: string,
+    level: LevelsTypes,
     score: number,
     time: number,
-    attempt: number,
+    wrongMoves: number,
 }
 
-export type FinishedModes = Partial<Record<GameModesTypes, IFinishedLevel>>;
+
+
+export type CompletedDB = {
+  [mode in GameModesTypes]: Partial<Record<LevelsTypes, IFinishedLevel>>
+};
 
 export interface IMonster {
     unlocked: boolean,
     score: number,
-    attempts: number,
+    wrongMoves: number,
     time: number,
 }
 
+export interface IGameCard {
+    id: number,
+    value: number,
+    isFlipped: boolean,
+    isMatched: boolean,
+    imageUrl: string,
+}
+
+export interface IUser {
+    id: string,
+    name: string,
+    email: string,
+}
 
