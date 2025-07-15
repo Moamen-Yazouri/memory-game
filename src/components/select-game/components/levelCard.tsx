@@ -4,6 +4,9 @@ import { GameThemeContext } from "@/providers/theme/themeContext";
 import { useContext, useMemo } from "react";
 import { Box, Chip, Typography } from "@mui/material";
 import { CheckCircle, Lock } from "@mui/icons-material";
+import { getLevelDetails } from "../utils/getLevelDetails";
+import { PlayerInfoContext } from "@/providers/player-info/playerInfoContext";
+import MemoryCardWithOverlay from "./levelInfo";
 
 export interface IProps {
     level: IGameLevel;
@@ -21,16 +24,30 @@ const LevelCard = ({
         handleLevelSelect,
     }: IProps) => {
     const {mode, theme} = useContext(GameThemeContext);
-    const isUnlocked = selectedMode ? isLevelUnlocked(selectedMode, level.id) : false
-    const isCompleted = selectedMode ? isLevelCompleted(selectedMode, level.id) : false
+    const {playerState} = useContext(PlayerInfoContext);
+    const isUnlocked = selectedMode ? isLevelUnlocked(selectedMode, level.id) : false;
+    const isCompleted = selectedMode ? isLevelCompleted(selectedMode, level.id) : false;
       const cardGradient = useMemo(() => (
       mode === "light"
         ? "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 25%, rgba(248, 250, 252, 0.90) 50%, rgba(241, 245, 249, 0.80) 75%, rgba(255, 255, 255, 0.95) 100%)"
         : "linear-gradient(135deg, rgba(45, 27, 78, 0.95) 0%, rgba(35, 20, 60, 0.90) 25%, rgba(25, 15, 45, 0.95) 50%, rgba(30, 18, 55, 0.85) 75%, rgba(45, 27, 78, 0.95) 100%)"
 
   ), [mode]);
-    return (
-      <Box
+
+    const details = useMemo(() => {
+      if(isCompleted) {
+        const finished = playerState.finished.get(selectedMode);
+        const levelDetails = getLevelDetails(level.id, finished!);
+        return levelDetails;
+      }
+      else {
+        return null;
+      }
+    }, [isCompleted]);
+
+      
+     const Notoverlayed = 
+     <Box
         onClick={() => isUnlocked && handleLevelSelect(level.id)}
         sx={{
           position: "relative",
@@ -93,7 +110,17 @@ const LevelCard = ({
           </Typography>
         </Box>
       </Box>
-    )
+      if(isCompleted) {
+        
+        return (
+          <MemoryCardWithOverlay {...details!}>
+            {Notoverlayed}
+          </MemoryCardWithOverlay>
+        )
+      }
+      else {
+        return (Notoverlayed);
+      }
 }
 
 export default LevelCard;

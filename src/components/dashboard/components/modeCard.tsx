@@ -15,7 +15,7 @@ import { ICompletedMode } from '../types'
 import { GameThemeContext } from '@/providers/theme/themeContext'
 import { getModeIcon } from '../utils/getModeIcon'
 interface IProps {
-    modeData: ICompletedMode
+    modeData: ICompletedMode;
 }
 const ModeCard = ({modeData}: IProps) => {
     const {mode, theme} = useContext(GameThemeContext);
@@ -23,24 +23,24 @@ const ModeCard = ({modeData}: IProps) => {
     const modeIcon = getModeIcon(modeData.mode);
     return (
         <Paper
-                key={modeData.mode}
-                elevation={0}
-                sx={{
-                    p: 3,
-                    borderRadius: 2,
-                    backgroundImage:
-                    mode === "light"
-                        ? "linear-gradient(135deg, rgba(76, 175, 80, 0.08) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(76, 175, 80, 0.05) 100%)"
-                        : "linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(45, 27, 78, 0.9) 50%, rgba(76, 175, 80, 0.1) 100%)",
-                    backdropFilter: "blur(15px)",
-                    WebkitBackdropFilter: "blur(15px)",
-                    border: `1px solid ${modeColor}30`,
-                    boxShadow: mode === "light" ? `0 4px 16px ${modeColor}10` : `0 4px 16px rgba(0, 0, 0, 0.3)`,
-                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                    "&:hover": {
-                    transform: "translateY(-2px)",
-                    boxShadow: mode === "light" ? `0 8px 25px ${modeColor}20` : `0 8px 25px rgba(0, 0, 0, 0.4)`,
-                    },
+            key={modeData.mode}
+            elevation={0}
+            sx={{
+                p: 3,
+                borderRadius: 2,
+                backgroundImage:
+                mode === "light"
+                    ? "linear-gradient(135deg, rgba(76, 175, 80, 0.08) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(76, 175, 80, 0.05) 100%)"
+                    : "linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(45, 27, 78, 0.9) 50%, rgba(76, 175, 80, 0.1) 100%)",
+                backdropFilter: "blur(15px)",
+                WebkitBackdropFilter: "blur(15px)",
+                border: `1px solid ${modeColor}30`,
+                boxShadow: mode === "light" ? `0 4px 16px ${modeColor}10` : `0 4px 16px rgba(0, 0, 0, 0.3)`,
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                "&:hover": {
+                transform: "translateY(-2px)",
+                boxShadow: mode === "light" ? `0 8px 25px ${modeColor}20` : `0 8px 25px rgba(0, 0, 0, 0.4)`,
+                },
                 }}
                 >
                 <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
