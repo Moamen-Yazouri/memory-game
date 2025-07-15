@@ -14,7 +14,7 @@ message,
   handleRetry,
 }: ErrorFallbackProps) {
   const {theme, mode} = useContext(GameThemeContext)
-  console.log(mode)
+  
   const gradient = useMemo(
     () =>
       mode === "light"

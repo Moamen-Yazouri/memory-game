@@ -55,7 +55,7 @@ const ModeCard = ({ gameMode, handleModeSelect }: IProps) => {
           left: 0,
           right: 0,
           bottom: 0,
-          background: cardGradient, // ✅ use background instead of backgroundImage
+          background: cardGradient, 
           backdropFilter: "blur(10px)",
           WebkitBackdropFilter: "blur(10px)",
           border: `1px solid ${gameMode.color}30`,

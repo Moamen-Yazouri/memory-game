@@ -1,5 +1,3 @@
-"use client";
-
 import type React from "react";
 import { Box, Typography, Stack, Chip } from "@mui/material";
 import { Timer, Error, Star, EmojiEvents } from "@mui/icons-material";

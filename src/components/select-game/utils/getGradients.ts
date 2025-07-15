@@ -1,4 +1,3 @@
-
 export const getBackgroundGradient = (mode: string) => {
     if(mode === "light") {
         return "linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.12) 25%, rgba(168, 85, 247, 0.08) 50%, rgba(236, 72, 153, 0.06) 75%, rgba(99, 102, 241, 0.08) 100%)"
