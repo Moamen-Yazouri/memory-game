@@ -1,4 +1,4 @@
-import { ThemeModes } from "@/@types"
+import { ThemeModes } from "@/@types";
 
 export const getGradients = (mode: ThemeModes) => {
   const isLight = mode === "light";

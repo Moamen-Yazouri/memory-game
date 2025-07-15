@@ -1,9 +1,9 @@
-import { GameThemeContext } from "@/providers/theme/themeContext"
-import { Typography } from "@mui/material"
-import Avatar from "@mui/material/Avatar"
-import Box from "@mui/material/Box"
-import Stack from "@mui/material/Stack"
-import { useContext } from "react"
+import { GameThemeContext } from "@/providers/theme/themeContext";
+import { Typography } from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import { useContext } from "react";
 interface IProps {
     icon: React.ReactNode
     title: string

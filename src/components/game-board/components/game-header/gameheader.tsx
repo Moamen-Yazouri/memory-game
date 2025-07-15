@@ -1,9 +1,24 @@
-"use client"
 
 import type React from "react"
 
-import { Box, Typography, IconButton, Paper, Chip, Stack, Divider, useTheme } from "@mui/material"
-import { RestartAlt, EmojiEvents, Close, Star, Home, Psychology, Whatshot } from "@mui/icons-material"
+import { Box,
+  Typography,
+  IconButton, 
+  Paper, 
+  Chip, 
+  Stack, 
+  Divider, 
+  useTheme 
+} from "@mui/material";
+import { 
+  RestartAlt, 
+  EmojiEvents, 
+  Close, 
+  Star, 
+  Home, 
+  Psychology, 
+  Whatshot 
+} from "@mui/icons-material";
 import { useContext } from "react"
 import { GameInfoContext } from "@/providers/game-info/gameInfo"
 import GameTimer from "./timer"
@@ -181,7 +196,7 @@ const GameHeader = () => {
               : "linear-gradient(45deg, rgba(139, 92, 246, 0.03), rgba(6, 182, 212, 0.02))",
           pointerEvents: "none",
         },
-        // Monster level flame effects
+        
         ...(isMonsterLevel && {
           "&::after": {
             content: '""',
@@ -204,7 +219,7 @@ const GameHeader = () => {
         }),
       }}
     >
-      {/* Monster level additional flame effects */}
+      
       {isMonsterLevel && (
         <>
           <Box
@@ -251,7 +266,7 @@ const GameHeader = () => {
         alignItems="center"
         sx={{ position: "relative", zIndex: 2 }}
       >
-        {/* Left Section */}
+
         <Stack direction="row" spacing={2} alignItems="center">
           <IconButton
             onClick={handleBackToMenu}
@@ -355,7 +370,7 @@ const GameHeader = () => {
           </Box>
         </Stack>
 
-        {/* Center Stats */}
+        
         <Stack
           direction="row"
           spacing={{ xs: 1, sm: 2 }}
@@ -412,7 +427,7 @@ const GameHeader = () => {
           <GameTimer />
         </Stack>
 
-        {/* Right Controls */}
+        
         <Stack direction="row" spacing={1} alignItems="center">
           <IconButton
             onClick={handleRestart}

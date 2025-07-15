@@ -1,4 +1,12 @@
-import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile, User} from "firebase/auth";
+import { 
+    createUserWithEmailAndPassword, 
+    GoogleAuthProvider, 
+    signInWithEmailAndPassword, 
+    signInWithPopup, 
+    signOut, 
+    updateProfile, 
+    User
+} from "firebase/auth";
 import {auth} from "../firebase/firebase";
 import { FirebaseError } from "firebase/app";
 

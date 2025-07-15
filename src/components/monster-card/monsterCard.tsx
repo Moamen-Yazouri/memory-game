@@ -97,7 +97,7 @@ export default function MonsterLevelCard() {
         animation: isUnlocked ? "pulse 3s ease-in-out infinite" : "none",
       }}
     >
-      {/* Background Overlay */}
+     
       <Box
         className="monster-overlay"
         sx={{
@@ -112,7 +112,6 @@ export default function MonsterLevelCard() {
         }}
       />
 
-      {/* Glow Effect */}
       {isUnlocked && (
         <Box
           className="monster-glow"
@@ -133,7 +132,6 @@ export default function MonsterLevelCard() {
         />
       )}
 
-      {/* Flame Effects */}
       {isUnlocked && (
         <>
           <Box
@@ -171,7 +169,6 @@ export default function MonsterLevelCard() {
         </>
       )}
 
-      {/* Glass overlay for content */}
       <Box
         sx={{
           position: "absolute",
@@ -188,7 +185,6 @@ export default function MonsterLevelCard() {
         }}
       />
 
-      {/* Lock Status Indicator */}
       <Box
         sx={{
           position: "absolute",
@@ -227,7 +223,7 @@ export default function MonsterLevelCard() {
         )}
       </Box>
 
-      {/* Content */}
+
       <Box
         sx={{
           position: "relative",
@@ -241,7 +237,7 @@ export default function MonsterLevelCard() {
           textAlign: "center",
         }}
       >
-        {/* Monster Icon */}
+
         <Box
           sx={{
             width: 80,
@@ -295,7 +291,6 @@ export default function MonsterLevelCard() {
           )}
         </Box>
 
-        {/* Title */}
         <Typography
           variant="h4"
           fontWeight={700}
@@ -319,7 +314,6 @@ export default function MonsterLevelCard() {
           Monster Level
         </Typography>
 
-        {/* Description */}
         <Typography
           variant="body1"
           sx={{
@@ -332,7 +326,7 @@ export default function MonsterLevelCard() {
           {isUnlocked ? "Ultimate Challenge Awaits" : "Locked - Complete other modes"}
         </Typography>
 
-        {/* Status Chip */}
+        
         <Chip
           label={isUnlocked ? "UNLOCKED" : "LOCKED"}
           size="small"
@@ -354,7 +348,7 @@ export default function MonsterLevelCard() {
           }}
         />
 
-        {/* Difficulty Indicator */}
+
         {isUnlocked && (
           <Box
             sx={{

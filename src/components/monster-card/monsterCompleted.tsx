@@ -9,7 +9,15 @@ import {
     Chip, 
     Avatar 
 } from "@mui/material";
-import { Timer, Dashboard, Refresh, EmojiEvents, Error, Psychology, Whatshot } from "@mui/icons-material"
+import { 
+  Timer, 
+  Dashboard, 
+  Refresh, 
+  EmojiEvents, 
+  Error, 
+  Psychology, 
+  Whatshot 
+} from "@mui/icons-material"
 import { useContext, useMemo } from "react"
 import { GameThemeContext } from "@/providers/theme/themeContext"
 import { useNavigate } from "react-router-dom"
@@ -24,7 +32,7 @@ interface IProps {
 
 export default function MonsterLevelCompleted({ score , time, wrongMoves, isNewRecord }: IProps) {
   const { theme } = useContext(GameThemeContext);
-  const {gameDispatch, gameState} = useContext(GameInfoContext);
+  const { gameDispatch } = useContext(GameInfoContext);
   const navigate = useNavigate();
 
   const backgroundGradient = useMemo(
@@ -118,7 +126,7 @@ export default function MonsterLevelCompleted({ score , time, wrongMoves, isNewR
           }}
         >
           <Stack spacing={3} alignItems="center">
-            {/* Monster Success Icon */}
+
             <Box
               sx={{
                 width: 80,
@@ -378,7 +386,6 @@ export default function MonsterLevelCompleted({ score , time, wrongMoves, isNewR
               }}
             />
 
-            {/* Action Buttons */}
             <Stack direction="row" spacing={1.5} sx={{ width: "100%" }}>
               <Button
                 variant="contained"
