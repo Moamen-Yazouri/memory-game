@@ -12,8 +12,7 @@ import {
 import { 
     Login, 
     PersonAdd, 
-    LockOutlined, 
-    Google,  
+    LockOutlined,  
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
