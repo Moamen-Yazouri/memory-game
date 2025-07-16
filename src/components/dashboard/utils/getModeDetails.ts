@@ -1,4 +1,4 @@
-import { GameModesTypes, IFinishedLevel, Levels, LevelsTypes } from "@/@types";
+import { GameModesTypes, IFinishedLevel, LevelsTypes } from "@/@types";
 import { ICompletedMode } from "../types";
 import { Theme } from "@mui/material";
 

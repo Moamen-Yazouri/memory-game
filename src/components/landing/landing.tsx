@@ -11,6 +11,7 @@ import {
 import { useContext, useMemo } from "react";
 import { GameThemeContext } from "@/providers/theme/themeContext";
 import { useNavigate } from "react-router-dom";
+import GameFooter from "./footer";
 
 export default function LandingPage() {
   const { theme, mode } = useContext(GameThemeContext);
@@ -38,6 +39,9 @@ export default function LandingPage() {
         alignItems: "center",
         justifyContent: "center",
         position: "relative",
+        flexDirection: "column",
+        gap: 2,
+        mt: 2
       }}
     >
       <Container maxWidth="sm">
@@ -56,7 +60,6 @@ export default function LandingPage() {
                 : `0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1)`,
             transition: "all 0.4s ease",
             "&:hover": {
-              transform: "translateY(-4px)",
               boxShadow:
                 mode === "light"
                   ? `0 25px 80px ${theme.palette.primary.main}25, inset 0 1px 0 rgba(255,255,255,0.4)`
@@ -234,6 +237,8 @@ export default function LandingPage() {
           animation: "float 10s ease-in-out infinite",
         }}
       />
+      <GameFooter />
     </Box>
+    
   );
 }

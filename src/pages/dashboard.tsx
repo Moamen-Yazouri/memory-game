@@ -1,4 +1,5 @@
 import MemoryGameDashboard from "@/components/dashboard/playerDashboard";
+import routeHOC from "@/routes/HOCs/routeHOC";
 
 
 const Dashboard = () => {
@@ -7,4 +8,7 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard;
+const withHOC = routeHOC({
+  title: "Memory Game | Player Dashboard",
+});
+export default withHOC(Dashboard);

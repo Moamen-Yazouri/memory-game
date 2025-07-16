@@ -1,12 +1,10 @@
-"use client"
-
 import { Box, Typography, Chip } from "@mui/material"
 import { Lock, LockOpen, Psychology, Whatshot } from "@mui/icons-material"
 import { useMemo, useContext } from "react"
 import { GameThemeContext } from "@/providers/theme/themeContext"
 import { PlayerInfoContext } from "@/providers/player-info/playerInfoContext"
 import { useNavigate } from "react-router-dom"
-import { GameInfoContext } from "@/providers/game-info/gameInfo"
+
 
 
 export default function MonsterLevelCard() {
