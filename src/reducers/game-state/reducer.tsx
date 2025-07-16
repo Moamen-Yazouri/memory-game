@@ -20,11 +20,14 @@ export type Action =
     {type: "RESTART_GAME", payload: {level: LevelsTypes, mode: GameModesTypes | null}} |
     {type: "HANDLE_TIME", payload: number}  |
     {type: "RESET_GAME"} |
-    {type: "GAME_OVER"} 
+    {type: "GAME_OVER"} |
+    {type: "SHOW_ALL"} |
+    {type: "HIDE_ALL"} 
 
 export const reducer = (state: IState, action: Action) : IState=> {
     switch(action.type) {
         case "INITIAL_GAME": {
+                
                 const cards = getGameCards(action.payload.level, action.payload.mode);
                 return {
                     ...state,
@@ -166,6 +169,21 @@ export const reducer = (state: IState, action: Action) : IState=> {
                 isGameActive: false,
                 isOver: true,
 
+            }
+        }
+
+        case "SHOW_ALL": {
+            const newCards = state.cards.map((c) => ({...c, isFlipped: true}))
+            return {
+                ...state,
+                cards: newCards
+            }
+        }
+        case "HIDE_ALL": {
+            const newCards = state.cards.map((c) => ({...c, isFlipped: false}))
+            return {
+                ...state,
+                cards: newCards
             }
         }
     }
