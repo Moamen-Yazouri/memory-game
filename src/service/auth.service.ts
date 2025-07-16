@@ -41,7 +41,7 @@ class AuthService {
             const result = await signInWithPopup(auth, this.provider);
             const user = result.user;
 
-            return user.email;
+            return user;
 
             
         } catch {

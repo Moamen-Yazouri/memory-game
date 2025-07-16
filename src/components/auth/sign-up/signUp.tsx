@@ -1,27 +1,48 @@
-import { use, useMemo } from "react";
+import { use, useContext, useMemo } from "react";
 import {
   Box,
   Typography,
   Container,
   Paper,
   useTheme,
+  Button,
 } from "@mui/material";
 import SignUpForm from "./signUpForm";
 import authService from "@/service/auth.service";
 import { Navigate, useNavigate } from "react-router-dom";
+import { Google } from "@mui/icons-material";
+import { IUser } from "@/@types";
+import { AuthContext } from "@/providers/auth/authContext";
+import { toast } from "sonner";
 
 const getUser = authService.getLoggedUser();
 
 export default function SignUp() {
   const theme = useTheme();
   const user = use(getUser);
+  const {login} = useContext(AuthContext)
   const navigate = useNavigate();
   const gradient = useMemo(() => (
     theme.palette.mode === "light"
       ? "linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 50%, #ddd6fe 100%)"
       : "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%)"
   ), [theme]);
-
+  const handleGoogleSignUp = async () => {
+    const result = await authService.signUpWithGoogle();
+    if(typeof result === "object") {
+      const user: IUser = {
+        name: result.displayName!,
+        email: result.email!,
+        id: result.uid,
+      }
+      login(user);
+      toast.success(`Account created successfully, ${result.email}`);
+      navigate("/memory-game/mode-selection");
+    }
+    else {
+      toast.error(result);
+    }
+  }
   return (
     <Container
       maxWidth="xs"
@@ -89,6 +110,29 @@ export default function SignUp() {
           <Box sx={{ mt: 1.5 }}>
             <SignUpForm />
           </Box>
+            
+            <Button
+                fullWidth
+                variant="outlined"
+                color="primary"
+                startIcon={<Google />}
+                onClick={handleGoogleSignUp}
+                sx={{
+                mt: 2,
+                py: 1.5,
+                fontWeight: 600,
+                backgroundColor: theme.palette.mode === "light"
+                    ? "rgba(255,255,255,0.9)"
+                    : "rgba(255,255,255,0.06)",
+                "&:hover": {
+                    backgroundColor: theme.palette.mode === "light"
+                    ? "rgba(255,255,255,1)"
+                    : "rgba(255,255,255,0.1)"
+                }
+                }}
+            >
+                Sign Up with Google
+            </Button>
           <Box sx={{ mt: 2, textAlign: "center" }}>
               <Typography
                 variant="body2"

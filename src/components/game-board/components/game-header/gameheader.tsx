@@ -1,4 +1,3 @@
-
 import type React from "react"
 
 import { Box,
@@ -10,6 +9,7 @@ import { Box,
   Divider, 
   useTheme 
 } from "@mui/material";
+
 import { 
   RestartAlt, 
   EmojiEvents, 
@@ -19,10 +19,11 @@ import {
   Psychology, 
   Whatshot 
 } from "@mui/icons-material";
-import { useContext } from "react"
-import { GameInfoContext } from "@/providers/game-info/gameInfo"
-import GameTimer from "./timer"
-import { useNavigate } from "react-router-dom"
+
+import { useContext } from "react";
+import { GameInfoContext } from "@/providers/game-info/gameInfo";
+import GameTimer from "./timer";
+import { useNavigate } from "react-router-dom";
 
 const GameHeader = () => {
   const theme = useTheme()
@@ -64,7 +65,7 @@ const GameHeader = () => {
   const glowColor = "rgba(255, 69, 0, 0.6)"
 
   const glassStyle = isMonsterLevel
-    ? // Monster level glass style
+    ? 
       theme.palette.mode === "dark"
       ? {
           background: `
@@ -112,7 +113,7 @@ const GameHeader = () => {
             `,
           animation: "monsterGlow 3s ease-in-out infinite alternate",
         }
-    : // Regular glass style
+    : 
       theme.palette.mode === "dark"
       ? {
           background: `
