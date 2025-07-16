@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { Page } from "../types";
 import authService from "@/service/auth.service";
 import { getInitials } from "../utils/getInitials";
+import { toast } from "sonner";
 export const useHeader = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -45,15 +46,17 @@ export const useHeader = () => {
 
   const handleLogout = () => {
     setLoggingOut(true);
-
     authService.logout()
     .then(() => {
         navigate("/sign-in");
-        setLoggingOut(false);
-    });
-    logout();
-
-    handleClose();
+        logout();
+      })
+      .catch(() => toast.error("Something went wrong"))
+    .finally(() => {
+      setLoggingOut(false);
+      handleClose();
+    })
+    
   }
 
   const handleLogin = () => {

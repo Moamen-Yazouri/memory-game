@@ -47,7 +47,7 @@ export default function GameHeader() {
         handleGetStarted,
         toggleTheme,
     } = useHeader()
-    console.log(user)
+
   const renderUserSection = () => {
     if (loading || loggingOut) {
       return <SmallLoader />
