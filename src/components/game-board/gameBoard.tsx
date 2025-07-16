@@ -17,12 +17,15 @@ import GameOverModal from "./components/game-over/gameOver";
 import { getCardImage } from "../game-card/service/getImage.service";
 import GameLoader from "../loader/loader";
 import { getTheNextlevel } from "./utils/getTheNextLevel";
+import { getShowTime } from "./utils/getShowTime";
+import { toast } from "sonner";
 
 
 const GameBoard = () => {
   const {gameInfo, gameState, gameDispatch }= useContext(GameInfoContext);
   const {playerState ,playerDispatch } = useContext(PlayerInfoContext);
   const allowedWrongs = useMemo(() => getAllowedWrongs(gameInfo.level!), [gameInfo.level]);
+  const showTime = useMemo(() => getShowTime(gameState.cards.length), [gameState.cards])
   const handleRetry = () => {
     gameDispatch({type: "RESTART_GAME", payload: {level: gameInfo.level!, mode: gameInfo.mode || null}});
   }
@@ -32,10 +35,25 @@ const GameBoard = () => {
   }
 
   useEffect(() => {
-      if(gameInfo.level && gameInfo.mode) {
-        gameDispatch({type: "INITIAL_GAME", payload: {level: gameInfo.level, mode: gameInfo.mode}})
+      let timeout: NodeJS.Timeout;
+      if(gameInfo.level && gameInfo.mode && !gameState.initialized) {
+        gameDispatch({type: "INITIAL_GAME", payload: {level: gameInfo.level, mode: gameInfo.mode}});
       }
-  }, [gameInfo.level, gameInfo.mode]);
+      if(gameState.initialized) {
+        gameDispatch({type: "SHOW_ALL"});
+        toast.info("Take a quick look... the challenge starts soon!");
+        timeout = setTimeout(() => {
+          toast.dismiss();
+          gameDispatch({type: "HIDE_ALL"});
+          toast.success("Your turn! Let’s see how good your memory is.");
+        }, showTime)
+      }
+      return () => {
+        if(timeout) {
+          clearTimeout(timeout);
+        }
+      }
+  }, [gameInfo.level, gameInfo.mode, gameState.initialized]);
 
   
   useEffect(() => {

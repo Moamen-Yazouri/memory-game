@@ -12,10 +12,13 @@ const useGameBoard = ({isMatched, isFlipped, id}: IProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const theme = useTheme();
   const { gameDispatch, gameState } = useContext(GameInfoContext);
-
+  const isAllFlipped = useMemo(() => {
+    const allFlipped = gameState.cards.every((c) => c.isFlipped);
+    return allFlipped;
+  }, [gameState.cards])
 
   const handleFlipped = useCallback(() => {
-    if (isMatched || gameState.openCards.length === 2) return;
+    if (isMatched || gameState.openCards.length === 2 || isAllFlipped) return;
 
     gameDispatch({ type: "FLIPP_CARD", payload: id });
   }, [isMatched, gameDispatch, id, gameState.openCards.length]);
