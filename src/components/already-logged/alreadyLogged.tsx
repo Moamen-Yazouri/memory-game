@@ -1,4 +1,3 @@
-"use client";
 
 import { useMemo } from "react";
 import {
@@ -12,13 +11,12 @@ import {
 } from "@mui/material";
 import { LockOutlined, ArrowForward, Menu } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { getAuth } from "firebase/auth";
+
 
 export default function AlreadyAuthenticated() {
   const theme = useTheme();
   const navigate = useNavigate();
-  const auth = getAuth();
-
+  
   const gradient = useMemo(
     () =>
       theme.palette.mode === "light"
