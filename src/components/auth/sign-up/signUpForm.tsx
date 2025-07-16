@@ -6,6 +6,7 @@ import { useTheme } from "@mui/material";
 import { useMemo } from "react";
 import { Google } from "@mui/icons-material";
 import authService from "@/service/auth.service";
+import SmallLoader from "@/components/main-header/components/smallLoader";
 
 
 const SignUpForm = () => {
@@ -37,13 +38,14 @@ const SignUpForm = () => {
         value={formik}
     >
                 
-        <Form>
+        <Form> 
             <CustomField
                 name="fullName"
                 label="Full Name"
                 type="text"
                 isPassword={false}
                 sx={inputStyles}
+                disabled={formik.isSubmitting}
             />
 
                 <CustomField
@@ -52,6 +54,7 @@ const SignUpForm = () => {
                 type="email"
                 isPassword={false}
                 sx={inputStyles}
+                disabled={formik.isSubmitting}
                 />
 
             <CustomField
@@ -60,6 +63,7 @@ const SignUpForm = () => {
                 type="password"
                 isPassword={true}
                 sx={inputStyles}
+                disabled={formik.isSubmitting}
                 />
 
             <Button
@@ -75,8 +79,9 @@ const SignUpForm = () => {
                     ? "0 4px 16px rgba(139, 92, 246, 0.3)"
                     : "0 4px 16px rgba(139, 92, 246, 0.4)"
                 }}
+                disabled={formik.isSubmitting}
             >
-                Sign Up
+                {formik.isSubmitting ? <SmallLoader isSignIn={true}/> : "Sign Up"}
             </Button>
 
             <Button

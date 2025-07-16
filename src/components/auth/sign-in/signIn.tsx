@@ -174,7 +174,7 @@ export default function SignIn() {
                   navigate("/sign-up");
                 }}
               >
-                Do not hav an account?
+                Do not have an account?
               </Typography>
             </Box>
             </Paper>

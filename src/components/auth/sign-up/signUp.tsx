@@ -54,7 +54,7 @@ export default function SignUp() {
               : "0 8px 32px rgba(0, 0, 0, 0.4)",
           }}
         >
-          {/* Logo */}
+
           <Box sx={{ display: "flex", justifyContent: "center", mb: 1.5 }}>
             <Box
               sx={{
