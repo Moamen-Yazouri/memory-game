@@ -4,8 +4,6 @@ import { Form, FormikProvider } from "formik"
 import { useSignUp } from "./hook/useSignUp";
 import { useTheme } from "@mui/material";
 import { useMemo } from "react";
-import { Google } from "@mui/icons-material";
-import authService from "@/service/auth.service";
 import SmallLoader from "@/components/main-header/components/smallLoader";
 
 
@@ -28,9 +26,7 @@ const SignUpForm = () => {
         }
     ), [theme]);
 
-    const handleGoogleSignUp = () => {
-        authService.signUpWithGoogle();
-    }
+    
         
   
   return (
@@ -84,28 +80,6 @@ const SignUpForm = () => {
                 {formik.isSubmitting ? <SmallLoader isSignIn={true}/> : "Sign Up"}
             </Button>
 
-            <Button
-                fullWidth
-                variant="outlined"
-                color="primary"
-                startIcon={<Google />}
-                onClick={handleGoogleSignUp}
-                sx={{
-                mt: 2,
-                py: 1.5,
-                fontWeight: 600,
-                backgroundColor: theme.palette.mode === "light"
-                    ? "rgba(255,255,255,0.9)"
-                    : "rgba(255,255,255,0.06)",
-                "&:hover": {
-                    backgroundColor: theme.palette.mode === "light"
-                    ? "rgba(255,255,255,1)"
-                    : "rgba(255,255,255,0.1)"
-                }
-                }}
-            >
-                Sign Up with Google
-            </Button>
         </Form>
     </FormikProvider>
   )
