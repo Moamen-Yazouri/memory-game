@@ -6,6 +6,7 @@ export const getFormatedlevel = (level: LevelsTypes) => {
 
 export const getLevelPercentage = (level: LevelsTypes) => {
     const levels: LevelsTypes[] = Object.values(Levels);
-    const percentage = (((levels.indexOf(level) + 1) / levels.length) * 100);
+    const number = level === "easy" ? levels.indexOf(level)  : levels.indexOf(level) + 1;
+    const percentage = (((number) / levels.length) * 100);
     return percentage;
 } 

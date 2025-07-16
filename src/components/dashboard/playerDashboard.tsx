@@ -211,7 +211,7 @@ export default function MemoryGameDashboard() {
 
           <Stack spacing={2}>
             <Typography variant="h6" fontWeight={600}>
-              Completed Game Modes
+              Modes progress
             </Typography>
             <CompletedList completedModes={completedModes}/>
           </Stack>

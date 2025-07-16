@@ -33,7 +33,7 @@ export const useDashboard = () => {
   const progress = useMemo(() => getLevelPercentage(playerState.currentInfo.level), [playerState]);
   const navigate = useNavigate();
   const initials = useMemo(() => getInitials(user), [user]);
-  
+  console.log(playerState)
   const handleNavigate = (page: "/" | "/memory-game/mode-selection") => {
     navigate(page);
   }
