@@ -10,9 +10,9 @@ import {
   useTheme,
   Stack,
 } from "@mui/material";
-import { LockOutlined, ArrowForward, Logout, MenuOpen, Menu } from "@mui/icons-material";
+import { LockOutlined, ArrowForward, Menu } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { getAuth, signOut } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 
 export default function AlreadyAuthenticated() {
   const theme = useTheme();
