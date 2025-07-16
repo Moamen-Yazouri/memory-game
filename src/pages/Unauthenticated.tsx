@@ -1,4 +1,5 @@
 import Unauthenticated from "@/components/unauthnticated/unauthenticated";
+import routeHOC from "@/routes/HOCs/routeHOC";
 
 const UnauthenticatedPage = () => {
   return (
@@ -6,4 +7,7 @@ const UnauthenticatedPage = () => {
   )
 }
 
-export default UnauthenticatedPage;
+const withHOC = routeHOC({
+  title: "Memory Game | Login Required",
+});
+export default withHOC(UnauthenticatedPage);
