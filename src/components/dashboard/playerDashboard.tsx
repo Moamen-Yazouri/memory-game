@@ -33,6 +33,7 @@ import CompletedList from "./components/completedList"
 import { getFormatedlevel } from "./utils/getDiplayLevel"
 import GameLoader from "../loader/loader"
 import { useDashboard } from "./hook/useDashboard"
+import SmallLoader from "../main-header/components/smallLoader"
 
 export default function MemoryGameDashboard() {
   const {
@@ -52,6 +53,7 @@ export default function MemoryGameDashboard() {
     user,
     loading,
     playerState,
+    isLoggingOut,
     setSettingsOpen,
     handleNavigate,
     handleLogout,
@@ -375,7 +377,7 @@ export default function MemoryGameDashboard() {
                   transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
-                Logout
+                {isLoggingOut ? <SmallLoader isSignIn={true}/> : "Logout"}
               </Button>
             </Box>
           </Stack>

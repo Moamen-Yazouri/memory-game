@@ -1,4 +1,6 @@
-import { useContext, useMemo } from "react";
+"use client";
+
+import { useMemo } from "react";
 import {
   Box,
   Typography,
@@ -8,18 +10,14 @@ import {
   useTheme,
   Stack,
 } from "@mui/material";
-import { LockOutlined, ArrowForward, Logout } from "@mui/icons-material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { LockOutlined, ArrowForward, Logout, MenuOpen, Menu } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
-import { AuthContext } from "@/providers/auth/authContext";
 
 export default function AlreadyAuthenticated() {
   const theme = useTheme();
   const navigate = useNavigate();
   const auth = getAuth();
-  const {logout} = useContext(AuthContext);
-  const location = useLocation();
-  const from: string = location.state?.from || "/"; 
 
   const gradient = useMemo(
     () =>
@@ -30,18 +28,10 @@ export default function AlreadyAuthenticated() {
   );
 
   const handleGoToApp = () => {
-    navigate("/memory-game/dashboard"); 
+    navigate("/memory-game/dashboard");
   };
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      logout();
-      navigate("/sign-in"); 
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
+  
 
   return (
     <Container
@@ -114,11 +104,7 @@ export default function AlreadyAuthenticated() {
             fontSize: "1.1rem",
           }}
         >
-          {
-            from === "/sign-in" 
-            ? "You’re already signed in. No need to access the login page"
-            : "You’re already signed in. No need to access the sign-up page"
-          }
+          You’re already signed in. No need to access the login page.
         </Typography>
 
         <Stack spacing={2}>
@@ -144,29 +130,38 @@ export default function AlreadyAuthenticated() {
           >
             Go to Dashboard
           </Button>
-
           <Button
             variant="outlined"
             size="large"
-            startIcon={<Logout />}
-            onClick={handleLogout}
+            startIcon={<Menu/>}
+            onClick={() => navigate("/memory-game/mode-selection")}
             sx={{
               py: 1.5,
               borderRadius: 3,
               fontSize: "1rem",
               fontWeight: 600,
               textTransform: "none",
-              borderColor: theme.palette.error.main,
-              color: theme.palette.error.main,
-              "&:hover": {
-                backgroundColor: `${theme.palette.error.main}08`,
-                borderColor: theme.palette.error.dark,
-              },
+              color: theme.palette.primary.main,
+              border: `1px solid ${theme.palette.primary.main}60`,
+              backgroundColor:
+                theme.palette.mode === "light"
+                  ? "rgba(255, 255, 255, 0.4)"
+                  : "rgba(255, 255, 255, 0.05)",
+              backdropFilter: "blur(12px)",
               transition: "all 0.3s ease",
+              "&:hover": {
+                backgroundColor:
+                  theme.palette.mode === "light"
+                    ? "rgba(255, 255, 255, 0.6)"
+                    : "rgba(255, 255, 255, 0.1)",
+                boxShadow: `0 0 12px ${theme.palette.primary.main}40`,
+                transform: "translateY(-2px)",
+              },
             }}
           >
-            Logout
+            Main Menu
           </Button>
+
         </Stack>
       </Paper>
     </Container>

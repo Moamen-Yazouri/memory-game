@@ -64,7 +64,6 @@ export const PlayerInfoProvider = (props: IProps) => {
                     id.current = user.uid;        
                     const info = await playerInfoService.getPlayerInfo(id.current);
                     if(info) {
-                        console.log("initialized")
                         playerDispatch({type: "INITIAL_INFO", payload: info});
                     }
                     initialized.current = true;
@@ -92,7 +91,6 @@ export const PlayerInfoProvider = (props: IProps) => {
             const playerInfoRef = ref(db, `users/${id.current}/playerInfo`);
             try {
                 await set(playerInfoRef, infoForDB);
-                console.log("Synced");
             }
             catch(e) {
                 console.error(e);

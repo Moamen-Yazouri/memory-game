@@ -11,10 +11,12 @@ import { getLevelPercentage } from "../utils/getDiplayLevel";
 import { useNavigate } from "react-router-dom";
 import { getInitials } from "../utils/formatName";
 import authService from "@/service/auth.service";
+import { toast } from "sonner";
 
 export const useDashboard = () => {
       
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { 
     toggleTheme, 
     theme, 
@@ -33,13 +35,21 @@ export const useDashboard = () => {
   const progress = useMemo(() => getLevelPercentage(playerState.currentInfo.level), [playerState]);
   const navigate = useNavigate();
   const initials = useMemo(() => getInitials(user), [user]);
-  console.log(playerState)
+
   const handleNavigate = (page: "/" | "/memory-game/mode-selection") => {
     navigate(page);
   }
   const handleLogout = () => {
-    authService.logout().then(() => logout());
-    setSettingsOpen(false);
+    setIsLoggingOut(true);
+    authService.logout()
+    .then(() => logout())
+    .catch(() => toast.error("Something went wrong!"))
+    .finally(() => {
+        setIsLoggingOut(false);
+        navigate("/sign-in");
+        setSettingsOpen(false);
+    });
+    
   }
   const handleThemeToggle = () => {
     toggleTheme();
@@ -61,6 +71,7 @@ export const useDashboard = () => {
     user,
     loading,
     playerState,
+    isLoggingOut,
     setSettingsOpen,
     handleNavigate,
     handleLogout,
