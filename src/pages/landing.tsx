@@ -1,9 +1,12 @@
 import LandingPage from "@/components/landing/landing";
+import routeHOC from "@/routes/HOCs/routeHOC";
 
 const Landing = () => {
   return (
     <LandingPage />
   )
 }
-
-export default Landing;
+const withHOC = routeHOC({
+  title: "Memory Game",
+});
+export default withHOC(Landing);

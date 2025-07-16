@@ -1,5 +1,6 @@
 import GameLoader from "@/components/loader/loader";
 import SelectGame from "@/components/select-game/selectGame";
+import routeHOC from "@/routes/HOCs/routeHOC";
 import { Suspense } from "react";
 
 const SelectModePage = () => {
@@ -9,5 +10,7 @@ const SelectModePage = () => {
     </Suspense>
   )
 }
-
-export default SelectModePage;
+const withHOC = routeHOC({
+  title: "Memory Game | Select Game",
+});
+export default withHOC(SelectModePage);
