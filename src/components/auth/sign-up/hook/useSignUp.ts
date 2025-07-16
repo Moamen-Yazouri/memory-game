@@ -12,7 +12,7 @@ import { useContext } from "react";
 export const useSignUp = () => {
     const navigate = useNavigate();
     const {login} = useContext(AuthContext);
-    
+
     const handleSignUp = (
          values: IFormValues,
         resetForm: () => void,
@@ -33,11 +33,10 @@ export const useSignUp = () => {
                 }
                 login(user);
                 navigate("/memory-game/mode-selection");
+                resetForm();
             }
             setSubmitting(false);
-            resetForm();
         })
-        resetForm();
     }
 
     const formik = useFormik<IFormValues>({
