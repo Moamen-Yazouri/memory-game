@@ -4,8 +4,6 @@ import { Form, FormikProvider } from "formik"
 import { useSignUp } from "./hook/useSignUp";
 import { useTheme } from "@mui/material";
 import { useMemo } from "react";
-import { Google } from "@mui/icons-material";
-import authService from "@/service/auth.service";
 import SmallLoader from "@/components/main-header/components/smallLoader";
 
 
