@@ -35,7 +35,7 @@ export const useSignIn = () => {
                     }
                     console.log(user);
                     login(user);
-                    nav("mode-selection");
+                    nav("/memory-game/mode-selection");
                 }
             }
         )

@@ -70,17 +70,8 @@ class AuthService {
             return userCredintials.user;
         }
         catch (error: unknown){
-            if(error instanceof FirebaseError) {
-                if(
-                    error.code === "auth/wrong-password" || 
-                    error.code === "auth/user-not-found"
-
-                ) {
-                    return "Invalid credintials";
-                }
-                else {
-                    return "Something went wrong!";    
-                }
+            if(error instanceof FirebaseError || error instanceof Error) {
+                return "Invalid Credentials";
             }
             else {
                 return "Something went wrong!";
