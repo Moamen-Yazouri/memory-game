@@ -22,6 +22,7 @@ export const getFinishedNumber = (finished: Map<GameModesTypes, IFinishedLevel[]
 
 export const getFinishedLevelsNumber = (finished: Map<GameModesTypes, IFinishedLevel[]>) => {
     const finishedLevels = [...finished.values()];
-    const number = finishedLevels.length;
+    const number = finishedLevels.reduce((curr, acc) => curr + acc.length, 0)
+
     return number;
 }

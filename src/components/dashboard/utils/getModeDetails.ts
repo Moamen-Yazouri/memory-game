@@ -5,7 +5,9 @@ import { Theme } from "@mui/material";
 export const getModeDetails = (finished: Map<GameModesTypes, IFinishedLevel[]>) => {
     const completedDetails: ICompletedMode[] = [];
     for(const [key, value] of finished.entries()) {
-        
+            if(getTotalScore(value) == 0) {
+                continue;
+            }
             const completed: ICompletedMode = {
                 mode: key,
                 totalScore: getTotalScore(value),
