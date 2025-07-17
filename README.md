@@ -1,69 +1,40 @@
-# React + TypeScript + Vite
+# 🧠 Memory Cards Game
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A fun and interactive memory game built entirely with **React** to strengthen my skills in `useReducer`, `Context API`, and full-stack integration using **Firebase**. Designed with a responsive and modern UI using **MUI** and **Tailwind CSS**, the game supports light/dark modes and tracks user progress in real-time.
 
-Currently, two official plugins are available:
+## 🔗 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+👉 [Play the game on Vercel](https://memory-game-red-kappa.vercel.app/)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Features
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- 🧠 Memory matching gameplay with multiple levels and categories
+- ⚛️ Built with **pure React** using:
+  - `useReducer` for game state management
+  - `Context API` for global state (theme, user, etc.)
+- 🔥 **Firebase** integration:
+  - Authentication (Google login)
+  - Realtime Database for user stats
+- 🎨 Styling with **Tailwind CSS** and **MUI**
+- 🌗 **Dark/Light theme toggle**
+- 📝 Forms handled by **Formik** and validated with **Yup**
+- 📱 Fully responsive and accessible UI
+- ☁️ Deployed on **Vercel**
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🛠️ Tech Stack
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+| Technology     | Description                          |
+|----------------|--------------------------------------|
+| ⚛️ React       | Frontend library                     |
+| 🧵 Tailwind CSS| Utility-first CSS framework          |
+| 🎨 MUI         | UI components                        |
+| 🔥 Firebase    | Backend (Auth + Realtime DB)         |
+| 📝 Formik      | Form state management                |
+| ✅ Yup         | Form validation                      |
+| ⚙️ Vercel      | Deployment platform                  |
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
